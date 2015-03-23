@@ -1,0 +1,187 @@
+package com.hydom.task.ebean;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+/**
+ * 工单表：通过taskId与远端进行数据交互
+ * 
+ * @author www.hydom.cn [heou]
+ * 
+ */
+@Entity
+@Table(name = "t_task")
+public class Task {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	@Column
+	private String taskId;// 工单ID，对应于文档中的taskID
+	@Column
+	private Integer lineNo; // 行号
+	@Column
+	private Integer inLineNo;// 行内号
+	@Lob
+	private String metricPoint;// 切分后用户答题数据
+	@Column
+	private long recycle;// 超时时间:以ms为单位
+	@Column
+	private Integer matchNum;// 分配上限，默认来源系统配置
+	@Column
+	private Integer matchedNum;// 已分配的人数
+	@Column
+	private Integer resultNum;// 返回了识别结果的人数
+	@Column
+	private Double accuracy;// 指定的正确比例
+	@Column
+	private Integer state;// 工单状态：
+	@Column
+	private String result;// 计算出的正确结果
+	@Column
+	private Double ration;// 实际的正确比例
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createTime;// 生成时间
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date finishTime;// 完成时间:在统计结果时由系统填充
+
+	@Column
+	private boolean visible = true; // 逻辑删除标记
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
+	}
+
+	public Integer getLineNo() {
+		return lineNo;
+	}
+
+	public void setLineNo(Integer lineNo) {
+		this.lineNo = lineNo;
+	}
+
+	public Integer getInLineNo() {
+		return inLineNo;
+	}
+
+	public void setInLineNo(Integer inLineNo) {
+		this.inLineNo = inLineNo;
+	}
+
+	public String getMetricPoint() {
+		return metricPoint;
+	}
+
+	public void setMetricPoint(String metricPoint) {
+		this.metricPoint = metricPoint;
+	}
+
+	public long getRecycle() {
+		return recycle;
+	}
+
+	public void setRecycle(long recycle) {
+		this.recycle = recycle;
+	}
+
+	public Integer getMatchNum() {
+		return matchNum;
+	}
+
+	public void setMatchNum(Integer matchNum) {
+		this.matchNum = matchNum;
+	}
+
+	public Integer getMatchedNum() {
+		return matchedNum;
+	}
+
+	public void setMatchedNum(Integer matchedNum) {
+		this.matchedNum = matchedNum;
+	}
+
+	public Integer getResultNum() {
+		return resultNum;
+	}
+
+	public void setResultNum(Integer resultNum) {
+		this.resultNum = resultNum;
+	}
+
+	public Double getAccuracy() {
+		return accuracy;
+	}
+
+	public void setAccuracy(Double accuracy) {
+		this.accuracy = accuracy;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+
+	public Double getRation() {
+		return ration;
+	}
+
+	public void setRation(Double ration) {
+		this.ration = ration;
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getFinishTime() {
+		return finishTime;
+	}
+
+	public void setFinishTime(Date finishTime) {
+		this.finishTime = finishTime;
+	}
+
+}

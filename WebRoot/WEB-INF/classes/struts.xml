@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.action.extension" value="action" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<constant name="struts.ui.theme" value="simple" />
+
+	<!--  页面屏蔽导向action 	-->
+	<package name="forward" namespace="/error" extends="struts-default">
+		<action name="fileNotFound">
+			<result>/WEB-INF/page/forward/error404.jsp</result>
+		</action>
+	</package>
+
+	<include file="account.xml"></include>
+	<include file="credit.xml"></include>
+	<include file="client.xml"></include>
+	<include file="task.xml"></include>
+
+</struts>

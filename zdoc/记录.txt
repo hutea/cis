@@ -1,0 +1,9 @@
+公式插件：mathjax/jaxedit/mathquill/jmeditor
+
+每日push： git push origin master
+Font Awesome:一套绝佳的图标字体库和CSS框架  http://fontawesome.dashgame.com/
+
+系统出现如下错误：warning: LF will be replaced by CRLF
+$ git config --gobal core.autocrlf false  
+
+bigint:922337 2036 854775807
