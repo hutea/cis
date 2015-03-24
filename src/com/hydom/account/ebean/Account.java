@@ -34,7 +34,9 @@ public class Account {
 	private String backaccount;// /银行帐号
 	@Column
 	private String pay;// 支付宝帐号
-
+	@Column
+	private double score;// 用户的总积分
+	@Column
 	private Integer state;// 0=休息一下，1=识别中
 
 	public Account() {
@@ -53,6 +55,14 @@ public class Account {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public double getScore() {
+		return score;
+	}
+
+	public void setScore(double score) {
+		this.score = score;
 	}
 
 	public String getUsername() {

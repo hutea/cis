@@ -32,6 +32,7 @@ public class DataServer {
 	private int matchNum;// 分配上限
 	private double accuracy;// 正确率
 	private String recycleType;// 回收类型：超时回收
+	private String jsonstr ;
 	private InputStream inputStream;
 
 	/**

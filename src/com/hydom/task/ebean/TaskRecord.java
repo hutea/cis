@@ -42,7 +42,11 @@ public class TaskRecord {
 	@Column
 	private Integer identState;// 用户识别状态：0=识别超时，1=在规定时间识别
 	@Column
+	private Double score;// 本次识别得分
+	@Column
 	private String result;// 用户识别结果
+	@Column
+	private Integer sign;// 识别结果计算：1=用户识别正确；2=用户识别错误
 
 	public Integer getIdentState() {
 		return identState;
@@ -52,8 +56,24 @@ public class TaskRecord {
 		this.identState = identState;
 	}
 
+	public Integer getSign() {
+		return sign;
+	}
+
+	public void setSign(Integer sign) {
+		this.sign = sign;
+	}
+
 	public Long getId() {
 		return id;
+	}
+
+	public Double getScore() {
+		return score;
+	}
+
+	public void setScore(Double score) {
+		this.score = score;
 	}
 
 	public void setId(Long id) {

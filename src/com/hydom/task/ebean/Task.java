@@ -53,6 +53,11 @@ public class Task {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date finishTime;// 完成时间:在统计结果时由系统填充
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date matchFirstTime; // 分配给第一个用户的时间
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date matchLastTime; // 分配给最后一个用户的时间
+
 	@Column
 	private boolean visible = true; // 逻辑删除标记
 
@@ -70,6 +75,22 @@ public class Task {
 
 	public void setTaskId(String taskId) {
 		this.taskId = taskId;
+	}
+
+	public Date getMatchFirstTime() {
+		return matchFirstTime;
+	}
+
+	public void setMatchFirstTime(Date matchFirstTime) {
+		this.matchFirstTime = matchFirstTime;
+	}
+
+	public Date getMatchLastTime() {
+		return matchLastTime;
+	}
+
+	public void setMatchLastTime(Date matchLastTime) {
+		this.matchLastTime = matchLastTime;
 	}
 
 	public Integer getLineNo() {

@@ -12,11 +12,22 @@ public class AccountServiceBean extends DAOSupport<Account> implements AccountSe
 	public Account findByUP(String username, String password) {
 		try {
 			return (Account) em.createQuery(
-					"select * from Account o where o.username=?1 and o.passworkd=?2").setParameter(
-					1, username).setParameter(2, password).getSingleResult();
+					"select o from Account o where o.username=?1 and o.passworkd=?2")
+					.setParameter(1, username).setParameter(2, password)
+					.getSingleResult();
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
+	@Override
+	public Account findByUsername(String username) {
+		try {
+			return (Account) em
+					.createQuery("select o from Account o where o.username=?1")
+					.setParameter(1, username).getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

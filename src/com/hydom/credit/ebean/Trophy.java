@@ -32,7 +32,9 @@ public class Trophy {
 	@Column
 	private String image;// 奖品图片地址
 	@Column
-	private Boolean visible;
+	private String type;// 奖品类别
+	@Column
+	private Boolean visible = true;
 
 	public Long getId() {
 		return id;
@@ -40,6 +42,14 @@ public class Trophy {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getName() {
