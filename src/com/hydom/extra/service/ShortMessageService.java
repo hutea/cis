@@ -15,7 +15,7 @@ public interface ShortMessageService extends DAO<ShortMessage> {
 	 *            : 短信完整内容
 	 * @return
 	 */
-	public void sendCode(String phone, String code, String content);
+	public boolean sendCode(String phone, String code, String content);
 
 	/**
 	 * 

@@ -3,10 +3,13 @@ package com.hydom.credit.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.hydom.credit.ebean.TrophyRecord;
 import com.hydom.dao.DAOSupport;
 import com.hydom.util.HelperUtil;
 
+@Service
 public class TrophyRecordServiceBean extends DAOSupport<TrophyRecord> implements
 		TrophyRecordService {
 

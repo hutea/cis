@@ -12,7 +12,6 @@ import com.hydom.dao.DAOSupport;
 import com.hydom.extra.ebean.ShortMessage;
 import com.hydom.extra.ebean.ShortMessageRecode;
 import com.hydom.util.HttpSender;
-import com.hydom.util.StringGenerator;
 
 @Service
 public class ShortMessageServiceBean extends DAOSupport<ShortMessage> implements
@@ -22,15 +21,16 @@ public class ShortMessageServiceBean extends DAOSupport<ShortMessage> implements
 	private ShortMessageRecordService shortMessageRecordService;
 
 	@Override
-	public void sendCode(String phone, String code, String content) {
+	public boolean sendCode(String phone, String code, String content) {
 		// String path =
 		// "http://222.76.210.200:9999/sms.aspx?action=send&userid=402&account=jyhh&
 		// password=123456&mobile=13882162641&content=111111";
+		
 		String path = "http://222.76.210.200:9999/sms.aspx";// 地址
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("action", "send");
 		params.put("userid", "402");
-		params.put("acount", "jyhh");
+		params.put("account", "jyhh");
 		params.put("password", "123456");
 		params.put("mobile", phone);// 接受人电话
 		params.put("content", content);// 短信内容
@@ -41,6 +41,15 @@ public class ShortMessageServiceBean extends DAOSupport<ShortMessage> implements
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		/** *************保存短信发送记录START************* */
+		ShortMessageRecode smr = new ShortMessageRecode();
+		smr.setContent(content);
+		smr.setCode(code);
+		smr.setPhone(phone);
+		smr.setSendTime(sendTime);
+		smr.setResult(sendResult);
+		shortMessageRecordService.save(smr);
+		/** *************保存短信发送记录END*************** */
 		if (sendResult) {
 			ShortMessage sm = this.find(phone);
 			if (sm == null) {// 插入新记录
@@ -57,15 +66,7 @@ public class ShortMessageServiceBean extends DAOSupport<ShortMessage> implements
 				this.update(sm);
 			}
 		}
-		/** *************保存短信发送记录START************* */
-		ShortMessageRecode smr = new ShortMessageRecode();
-		smr.setContent(content);
-		smr.setCode(code);
-		smr.setPhone(phone);
-		smr.setSendTime(sendTime);
-		smr.setResult(sendResult);
-		shortMessageRecordService.save(smr);
-		/** *************保存短信发送记录END*************** */
+		return sendResult;
 	}
 
 	@Override

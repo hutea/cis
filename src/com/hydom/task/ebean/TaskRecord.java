@@ -34,7 +34,7 @@ public class TaskRecord {
 	private Task task;
 	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
 	@JoinColumn(name = "accout_id")
-	private Account acount;// 分配给的用户
+	private Account account;// 分配给的用户
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date matchTime;// 分配时间
 	@Temporal(TemporalType.TIMESTAMP)
@@ -47,6 +47,16 @@ public class TaskRecord {
 	private String result;// 用户识别结果
 	@Column
 	private Integer sign;// 识别结果计算：1=用户识别正确；2=用户识别错误
+	@Column
+	private boolean visible = true; // 逻辑删除标记
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
 
 	public Integer getIdentState() {
 		return identState;
@@ -88,14 +98,6 @@ public class TaskRecord {
 		this.task = task;
 	}
 
-	public Account getAcount() {
-		return acount;
-	}
-
-	public void setAcount(Account acount) {
-		this.acount = acount;
-	}
-
 	public Date getMatchTime() {
 		return matchTime;
 	}
@@ -118,6 +120,14 @@ public class TaskRecord {
 
 	public void setResult(String result) {
 		this.result = result;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 }

@@ -29,6 +29,7 @@ public class HttpSender {
 			url.append(URLEncoder.encode(entry.getValue(), encoding));
 			url.append("&");
 		}
+
 		url.deleteCharAt(url.length() - 1);
 		HttpURLConnection conn = (HttpURLConnection) new URL(url.toString())
 				.openConnection();
@@ -37,17 +38,14 @@ public class HttpSender {
 		if (conn.getResponseCode() == 200) {
 			InputStream in = conn.getInputStream();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in,
-					"gbk"));
+					"UTF-8"));
 			String str = bufferedReader.readLine();
 			StringBuffer sb = new StringBuffer(str);
 			while (str != null) {
 				str = bufferedReader.readLine();
 				sb.append(str);
 			}
-			int start = sb.indexOf("=") + 1;
-			int end = sb.indexOf("&");
-			int result = Integer.parseInt(sb.substring(start, end));
-			if (result == 0) {
+			if (sb.toString().contains("<returnstatus>Success</returnstatus>")) {
 				return true;
 			} else {
 				return false;
@@ -55,4 +53,5 @@ public class HttpSender {
 		}
 		return false;
 	}
+
 }

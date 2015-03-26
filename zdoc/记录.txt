@@ -7,3 +7,27 @@ Font Awesome:一套绝佳的图标字体库和CSS框架  http://fontawesome.dashgame.com/
 $ git config --gobal core.autocrlf false  
 
 bigint:922337 2036 854775807
+
+发送短信：http://localhost:8080/cis/app/send_code.action?phone=18328539781
+
+注册：localhost:8080/cis/app/signup.action?username=18328539781&password=123456&code=2758
+
+登录：http://localhost:8080/cis/app/signin.action?username=18328539781&password=123456
+{"uid":1,"result":1,"username":"18328539781"}
+
+获取分配题目：http://localhost:8080/cis/app/fetch_note.action?uid=1
+{"tid":5,"image":"{...}","mathtime":"2015-03-25 16:04:41"}
+
+提交识别结果：http://localhost:8080/cis/app/post_note.action?tid=5&restult_str=123
+{"result":1}
+
+休息一下：http://localhost:8080/cis/app/break_note.action?uid=1
+{"result":1}
+
+同步识别结果：http://localhost:8080/cis/app/syn_note.action?uid=1&sign=1
+{"list":[{"sign":1,"post_time":"2015-03-25 16:40:01","image":1}]}
+
+获取所有奖品列表:http://localhost:8080/cis/app/list_trophy.action?uid=1
+{"list":[{"tid":11,"name":"充值卡","detail":"50元","stock":20,"score":1000,"type":"1","image":"..."},{"tid":12,"name":"移动电源","detail":"电量100000mah","stock":10,"score":2000,"type":"1","image":".。。"}]}
+
+

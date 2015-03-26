@@ -32,8 +32,8 @@ import com.hydom.extra.service.SystemConfigService;
 import com.hydom.task.ebean.Task;
 import com.hydom.task.ebean.TaskRecord;
 import com.hydom.task.service.TaskRecordService;
+import com.hydom.util.HttpSender;
 import com.hydom.util.StringGenerator;
-import com.sun.mail.handlers.message_rfc822;
 
 /**
  * 负责与客户端进行数据交互
@@ -67,7 +67,7 @@ public class AppServer {
 	private String newpwd;// 新密码
 	private String code;
 	private long uid;// 用户ID
-	private String tid;// 任务ID[对应于TaskRecord ID]
+	private Long tid;// 任务ID[对应于TaskRecord ID]
 	private String result_str;// 识别结果串
 	private int sign;// 识别的结果类型：1=正确 0=错误
 	private int num;// 兑换奖品的数量
@@ -131,13 +131,20 @@ public class AppServer {
 	 * @return
 	 */
 	public String fetchNote() {
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		TaskRecord taskRecord = taskRecordService.fetchTaskRecord(uid);
-		dataMap.put("tid", taskRecord.getId());
-		dataMap.put("image", taskRecord.getTask().getMetricPoint());
-		dataMap.put("timeout", taskRecord.getTask().getRecycle());
-		dataMap.put("mathtime", sdf.format(taskRecord.getMatchTime()));
+		if (taskRecord != null) {
+			dataMap.put("tid", taskRecord.getId());
+			dataMap.put("image", taskRecord.getTask().getMetricPoint());
+			dataMap.put("timeout", taskRecord.getTask().getRecycleTime());
+			dataMap.put("mathtime", sdf.format(taskRecord.getMatchTime()));
+		} else {
+			dataMap.put("tid", "");
+			dataMap.put("image", "");
+			dataMap.put("timeout", "");
+			dataMap.put("mathtime", "");
+		}
 		// String data =
 		// "{'x':234,'y':1346},{'x':232,'y':1347},{'x':-1,'y':0},{'x':229,'y':1345},{'x':229,'y':1347},{'x':229,'y':1347},{'x':230,'y':1347},{'x':230,'y':1347},{'x':230,'y':1347},{'x':231,'y':1347},{'x':236,'y':1346},{'x':241,'y':1345},{'x':262,'y':1339},{'x':273,'y':1337},{'x':275,'y':1337},{'x':275,'y':1338},{'x':271,'y':1342},{'x':-1,'y':0},{'x':247,'y':1348},{'x':246,'y':1354},{'x':248,'y':1361},{'x':249,'y':1368},{'x':250,'y':1384},{'x':250,'y':1402},{'x':249,'y':1405},{'x':242,'y':1399},{'x':238,'y':1394},{'x':235,'y':1388},{'x':233,'y':1382},{'x':-1,'y':0},{'x':261,'y':1353},{'x':261,'y':1355},{'x':261,'y':1358},{'x':260,'y':1364},{'x':260,'y':1370},{'x':260,'y':1375},{'x':261,'y':1380},{'x':262,'y':1384},{'x':266,'y':1388},{'x':268,'y':1389},{'x':271,'y':1387},{'x':271,'y':1377},{'x':270,'y':1374},{'x':268,'y':1373},{'x':263,'y':1373},{'x':259,'y':1374},{'x':249,'y':1378},{'x':-1,'y':0},{'x':226,'y':1349},{'x':228,'y':1350},{'x':228,'y':1350},{'x':228,'y':1350},{'x':227,'y':1351},{'x':226,'y':1353},{'x':218,'y':1362},{'x':204,'y':1380},{'x':204,'y':1382},{'x':229,'y':1392},{'x':229,'y':1392},{'x':229,'y':1392},{'x':229,'y':1393},{'x':228,'y':1393},{'x':-1,'y':0},{'x':176,'y':1360},{'x':188,'y':1365},{'x':197,'y':1370},{'x':200,'y':1373},{'x':192,'y':1399},{'x':187,'y':1406},{'x':191,'y':1407},{'x':195,'y':1407},{'x':199,'y':1407},{'x':205,'y':1406},{'x':209,'y':1405},{'x':214,'y':1402},{'x':-1,'y':0},{'x':296,'y':1354},{'x':299,'y':1355},{'x':299,'y':1356},{'x':288,'y':1366},{'x':283,'y':1371},{'x':278,'y':1378},{'x':280,'y':1379},{'x':289,'y':1382},{'x':300,'y':1383},{'x':302,'y':1384},{'x':303,'y':1385},{'x':304,'y':1386},{'x':303,'y':1387},{'x':-1,'y':0},{'x':311,'y':1346},{'x':314,'y':1346},{'x':317,'y':1346},{'x':325,'y':1350},{'x':327,'y':1354},{'x':326,'y':1357},{'x':321,'y':1364},{'x':312,'y':1370},{'x':306,'y':1372},{'x':317,'y':1375},{'x':326,'y':1380},{'x':329,'y':1383},{'x':331,'y':1386},{'x':330,'y':1387},{'x':326,'y':1391},{'x':323,'y':1393},{'x':318,'y':1394},{'x':303,'y':1395},{'x':294,'y':1395},{'x':-1,'y':0}";
 		dataFillStream(dataMap);
@@ -155,8 +162,9 @@ public class AppServer {
 			TaskRecord entity = taskRecordService.find(tid);
 			entity.setResult(result_str);
 			entity.setPostTime(new Date());
-			boolean overtime = System.currentTimeMillis()
-					- entity.getMatchTime().getTime() > entity.getTask().getRecycle();
+			boolean overtime = entity.getPostTime().getTime()
+					- entity.getMatchTime().getTime() > entity.getTask().getRecycleTime();
+			System.out.println(overtime);
 			if (overtime) {// 超时
 				entity.setIdentState(0);// 设置状态为：超时
 				taskRecordService.update(entity);
@@ -167,6 +175,7 @@ public class AppServer {
 				dataMap.put("result", 1);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			dataMap.put("result", "0");
 		}
 		dataFillStream(dataMap);
@@ -224,18 +233,21 @@ public class AppServer {
 	 */
 	public String listTrophy() {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		List<Trophy> trophys = trophyService.list();
+		Account account = accountService.find(uid);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		for (Trophy tr : trophys) {
-			Map<String, Object> map = new LinkedHashMap<String, Object>();
-			map.put("tid", tr.getId());
-			map.put("name", tr.getName());
-			map.put("detail", tr.getDetail());
-			map.put("stock", tr.getStock());
-			map.put("score", tr.getScore());
-			map.put("type", tr.getType());
-			map.put("image", tr.getImage());
-			list.add(map);
+		if (account != null) {
+			List<Trophy> trophys = trophyService.list();
+			for (Trophy tr : trophys) {
+				Map<String, Object> map = new LinkedHashMap<String, Object>();
+				map.put("tid", tr.getId());
+				map.put("name", tr.getName());
+				map.put("detail", tr.getDetail());
+				map.put("stock", tr.getStock());
+				map.put("score", tr.getScore());
+				map.put("type", tr.getType());
+				map.put("image", tr.getImage());
+				list.add(map);
+			}
 		}
 		dataMap.put("list", list);
 		dataFillStream(dataMap);
@@ -494,12 +506,20 @@ public class AppServer {
 	public String sendCode() {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String smscode = StringGenerator.SerialNumber(4);
 			String smsconent = "本次验证码为：" + smscode;
-			shortMessageService.sendCode(phone, smscode, smsconent);
-			dataMap.put("result", 1);
+			boolean sendresult = shortMessageService.sendCode(phone, smscode, smsconent);
+			if (sendresult) {
+				dataMap.put("code", smscode);
+				dataMap.put("sendtime", sdf.format(new Date()));
+			} else {
+				dataMap.put("code", "");
+				dataMap.put("sendtime", "");
+			}
 		} catch (Exception e) {
-			dataMap.put("result", 0);
+			dataMap.put("code", "");
+			dataMap.put("sendtime", "");
 		}
 		dataFillStream(dataMap);
 		return "success";
@@ -513,6 +533,20 @@ public class AppServer {
 	}
 
 	public static void main(String[] args) {
+		String path = "http://222.76.210.200:9999/sms.aspx";// 地址
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("action", "send");
+		params.put("userid", "402");
+		params.put("account", "jyhh");
+		params.put("password", "123456");
+		params.put("mobile", "18328539781");// 接受人电话
+		params.put("content", "123456");// 短信内容
+		boolean sendResult = false;
+		try {
+			sendResult = HttpSender.sendGetRequest(path, params, "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// Map<String, Object> data = new HashMap<String, Object>();
 		// data.put("result", "1");
@@ -571,6 +605,118 @@ public class AppServer {
 
 	public void setInputStream(InputStream inputStream) {
 		this.inputStream = inputStream;
+	}
+
+	public String getOripwd() {
+		return oripwd;
+	}
+
+	public void setOripwd(String oripwd) {
+		this.oripwd = oripwd;
+	}
+
+	public String getNewpwd() {
+		return newpwd;
+	}
+
+	public void setNewpwd(String newpwd) {
+		this.newpwd = newpwd;
+	}
+
+	public long getUid() {
+		return uid;
+	}
+
+	public void setUid(long uid) {
+		this.uid = uid;
+	}
+
+	public Long getTid() {
+		return tid;
+	}
+
+	public void setTid(Long tid) {
+		this.tid = tid;
+	}
+
+	public String getResult_str() {
+		return result_str;
+	}
+
+	public void setResult_str(String resultStr) {
+		result_str = resultStr;
+	}
+
+	public int getSign() {
+		return sign;
+	}
+
+	public void setSign(int sign) {
+		this.sign = sign;
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getBackname() {
+		return backname;
+	}
+
+	public void setBackname(String backname) {
+		this.backname = backname;
+	}
+
+	public String getBackaccount() {
+		return backaccount;
+	}
+
+	public void setBackaccount(String backaccount) {
+		this.backaccount = backaccount;
+	}
+
+	public String getPay() {
+		return pay;
+	}
+
+	public void setPay(String pay) {
+		this.pay = pay;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 }

@@ -38,6 +38,8 @@ public class Account {
 	private double score;// 用户的总积分
 	@Column
 	private Integer state;// 0=休息一下，1=识别中
+	@Column
+	private Boolean visible=true;
 
 	public Account() {
 
@@ -83,6 +85,14 @@ public class Account {
 
 	public String getPhone() {
 		return phone;
+	}
+
+	public Boolean getVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
 	}
 
 	public void setPhone(String phone) {

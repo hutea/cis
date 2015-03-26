@@ -19,7 +19,7 @@
 
 	<include file="account.xml"></include>
 	<include file="credit.xml"></include>
-	<include file="client.xml"></include>
 	<include file="task.xml"></include>
+	<include file="server.xml"></include>
 
 </struts>
