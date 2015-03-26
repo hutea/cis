@@ -17,7 +17,7 @@
                        
                         <li <c:if test="${param.m==1||m==1}">class="active parent"</c:if>  class="parent" ><a href=""><i class="fa fa-suitcase"></i> <span>工单管理</span></a>
                             <ul class="children">
-  								<li><a href='<s:url action="task_list" namespace="/manage/task" />?m=1'>工单分配</a></li> 
+  								<li><a href='<s:url action="job_list" namespace="/manage/task" />?m=1'>工单分配</a></li> 
                             </ul>
                         </li>
                         <li <c:if test="${param.m==2||m==2}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-edit"></i> <span>用户管理</span></a>

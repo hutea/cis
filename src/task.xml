@@ -5,8 +5,17 @@
 <struts>
 
 	<package name="task" namespace="/manage/task" extends="struts-default">
+		<action name="job_list" class="jobAction" method="list">
+			<result>/WEB-INF/page/task/job_list.jsp</result>
+		</action>
 		<action name="task_list" class="taskAction" method="list">
 			<result>/WEB-INF/page/task/task_list.jsp</result>
+		</action>
+		<action name="task_show" class="taskAction" method="show">
+			<result>/WEB-INF/page/task/task_show.jsp</result>
+		</action>
+		<action name="taskrecord_list" class="taskRecordAction" method="list">
+			<result>/WEB-INF/page/task/taskrecord_list.jsp</result>
 		</action>
 	</package>
 </struts>

@@ -9,11 +9,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head lang="en">
     <meta charset="UTF-8">
     <title>智慧教育</title>
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resource/mathjax/ace.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/bootstrap.min.css" type="text/css">
     <script type="text/javascript" src="${pageContext.request.contextPath}/resource/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resource/bootstrap.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resource/mathjax/MathJax.js?config=TeX-AMS_HTML-full"></script>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resource/mathjax/ace.min.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resource/mathjax/mathquill.css">
     <script type="text/javascript" src="${pageContext.request.contextPath}/resource/mathjax/mathquill.js"></script>
 	<script type="text/javascript">

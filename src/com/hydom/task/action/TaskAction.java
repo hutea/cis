@@ -29,30 +29,36 @@ public class TaskAction {
 	private String queryContent;
 
 	public String list() {
-		request = ServletActionContext.getRequest();
-		PageView<Task> pageView = new PageView<Task>(maxresult, page);
-		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
-		orderby.put("id", "asc");
-		StringBuffer jpql = new StringBuffer("o.visible=?1 ");
-		List<Object> params = new ArrayList<Object>();
-		params.add(true);
-		if (queryContent != null && !"".equals(querytype)) {
-			if (querytype.equals("1")) {
-				jpql.append(" and o.person like?" + (params.size() + 1));
-				params.add("%" + queryContent + "%");
-			}
-			if (querytype.equals("2")) {
-				jpql.append(" and o.number like?" + (params.size() + 1));
-				params.add("%" + queryContent + "%");
-			}
-
-		}
-		pageView.setQueryResult(TaskService.getScrollData(pageView.getFirstResult(), maxresult,
-				jpql.toString(), params.toArray(), orderby));
-		request.setAttribute("pageView", pageView);
+//		request = ServletActionContext.getRequest();
+//		PageView<Task> pageView = new PageView<Task>(maxresult, page);
+//		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
+//		orderby.put("id", "asc");
+//		StringBuffer jpql = new StringBuffer("o.visible=?1 ");
+//		List<Object> params = new ArrayList<Object>();
+//		params.add(true);
+//		if (queryContent != null && !"".equals(querytype)) {
+//			if (querytype.equals("1")) {
+//				jpql.append(" and o.person like?" + (params.size() + 1));
+//				params.add("%" + queryContent + "%");
+//			}
+//			if (querytype.equals("2")) {
+//				jpql.append(" and o.number like?" + (params.size() + 1));
+//				params.add("%" + queryContent + "%");
+//			}
+//
+//		}
+//		pageView.setQueryResult(TaskService.getScrollData(pageView.getFirstResult(), maxresult,
+//				jpql.toString(), params.toArray(), orderby));
+//		request.setAttribute("pageView", pageView);
 		return "success";
 	}
 
+	public String show(){
+		
+		
+		return "success";
+	}
+	
 	public int getPage() {
 		return page;
 	}
