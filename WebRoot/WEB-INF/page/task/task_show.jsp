@@ -32,20 +32,16 @@
 	</head>
 
 
-	<body>
+	<body style="background-color: white;">
 		
 
-		<div>	
+		<div style="border: 1px solid #e3d3ee;width: 400px;height: 300px;">
+			原笔迹
+		</div>	
 		<hr/>
 		<div>
 			计算出的正确结果：
-		    <div class="main">
-		        <div class="content" style="height: 150px;padding-left: 50px;padding-top: 100px;">
-		  			<div id="mathquill-editor" class="mathquill-editor" style="width:1000px;font-size: 50px;white-space:nowrap;overflow-x:scroll " >\frac{d}{dx}\sqrt{x}     B</div>
-		        </div>
-		    </div>
         </div>
-		</div>
 		<hr/>
 		<div>
 			用户识别结果：
@@ -53,7 +49,7 @@
         </div>
 		</div>
 		
-			<script type="text/javascript">
+	<script type="text/javascript">
 	$(document).ready(function(){
 		//$("#mathquill-editor").mathquill('editor');
 	});

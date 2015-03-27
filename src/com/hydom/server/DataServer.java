@@ -44,7 +44,6 @@ public class DataServer {
 	public String assignTaskQuestion() {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
-
 			Gson gson = new Gson();
 			TaskData taskData = gson.fromJson(jsonStr, TaskData.class);
 			Date currentTime = new Date();
@@ -86,17 +85,15 @@ public class DataServer {
 	}
 
 	/**
-	 * 工单反馈：手动调用
+	 * 工单反馈：手工调用
+	 * 
 	 * @return
 	 */
-	public String backTaskByQuestion(){
-		
+	public String backTaskByQuestion() {
 		
 		return "success";
 	}
-	
-	
-	
+
 	/**
 	 * 回收工单
 	 */

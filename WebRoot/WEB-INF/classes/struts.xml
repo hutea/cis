@@ -11,9 +11,17 @@
 	<constant name="struts.ui.theme" value="simple" />
 
 	<!--  页面屏蔽导向action 	-->
-	<package name="forward" namespace="/error" extends="struts-default">
-		<action name="fileNotFound">
-			<result>/WEB-INF/page/forward/error404.jsp</result>
+	<package name="forward" namespace="/" extends="struts-default">
+		<action name="signup" class="accountAction" method="signup">
+			<result>/signup.jsp</result>
+		</action>
+		<action name="signin" class="accountAction" method="signin">
+			<result type="redirectAction">
+				<param name="actionName">index</param>
+			</result>
+		</action>
+		<action name="index">
+			<result>/WEB-INF/page/common/index.jsp</result>
 		</action>
 	</package>
 

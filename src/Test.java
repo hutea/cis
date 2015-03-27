@@ -1,34 +1,66 @@
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 public class Test {
 	// <line x1="1" y1="100" x2="20" y2="1000"
 	// style="stroke:rgb(99,99,99);stroke-width:2" />
+
 	public static void main(String[] args) {
-		String data = "{'x':234,'y':1346},{'x':232,'y':1347},{'x':-1,'y':0},{'x':229,'y':1345},{'x':229,'y':1347},{'x':229,'y':1347},{'x':230,'y':1347},{'x':230,'y':1347},{'x':230,'y':1347},{'x':231,'y':1347},{'x':236,'y':1346},{'x':241,'y':1345},{'x':262,'y':1339},{'x':273,'y':1337},{'x':275,'y':1337},{'x':275,'y':1338},{'x':271,'y':1342},{'x':-1,'y':0},{'x':247,'y':1348},{'x':246,'y':1354},{'x':248,'y':1361},{'x':249,'y':1368},{'x':250,'y':1384},{'x':250,'y':1402},{'x':249,'y':1405},{'x':242,'y':1399},{'x':238,'y':1394},{'x':235,'y':1388},{'x':233,'y':1382},{'x':-1,'y':0},{'x':261,'y':1353},{'x':261,'y':1355},{'x':261,'y':1358},{'x':260,'y':1364},{'x':260,'y':1370},{'x':260,'y':1375},{'x':261,'y':1380},{'x':262,'y':1384},{'x':266,'y':1388},{'x':268,'y':1389},{'x':271,'y':1387},{'x':271,'y':1377},{'x':270,'y':1374},{'x':268,'y':1373},{'x':263,'y':1373},{'x':259,'y':1374},{'x':249,'y':1378},{'x':-1,'y':0},{'x':226,'y':1349},{'x':228,'y':1350},{'x':228,'y':1350},{'x':228,'y':1350},{'x':227,'y':1351},{'x':226,'y':1353},{'x':218,'y':1362},{'x':204,'y':1380},{'x':204,'y':1382},{'x':229,'y':1392},{'x':229,'y':1392},{'x':229,'y':1392},{'x':229,'y':1393},{'x':228,'y':1393},{'x':-1,'y':0},{'x':176,'y':1360},{'x':188,'y':1365},{'x':197,'y':1370},{'x':200,'y':1373},{'x':192,'y':1399},{'x':187,'y':1406},{'x':191,'y':1407},{'x':195,'y':1407},{'x':199,'y':1407},{'x':205,'y':1406},{'x':209,'y':1405},{'x':214,'y':1402},{'x':-1,'y':0},{'x':296,'y':1354},{'x':299,'y':1355},{'x':299,'y':1356},{'x':288,'y':1366},{'x':283,'y':1371},{'x':278,'y':1378},{'x':280,'y':1379},{'x':289,'y':1382},{'x':300,'y':1383},{'x':302,'y':1384},{'x':303,'y':1385},{'x':304,'y':1386},{'x':303,'y':1387},{'x':-1,'y':0},{'x':311,'y':1346},{'x':314,'y':1346},{'x':317,'y':1346},{'x':325,'y':1350},{'x':327,'y':1354},{'x':326,'y':1357},{'x':321,'y':1364},{'x':312,'y':1370},{'x':306,'y':1372},{'x':317,'y':1375},{'x':326,'y':1380},{'x':329,'y':1383},{'x':331,'y':1386},{'x':330,'y':1387},{'x':326,'y':1391},{'x':323,'y':1393},{'x':318,'y':1394},{'x':303,'y':1395},{'x':294,'y':1395},{'x':-1,'y':0}";
-		String[] arys = data.split(",\\{'x':-1,'y':0\\}");
-		for (String ary : arys) {// 每笔
-			// System.out.println(ary);
-			if(ary.startsWith(",")){
-				ary =ary.replaceFirst(",", "");
-			}
-			//System.out.println("-------"+ary);
-			String[] ss = ary.split("\\},");
-			String p1 = "-1,0";
-			int i=0;
-			for (String s : ss) {// 点
-				String p2 = s.replace("{'x':", "").replace("'y':", "").replace("}", "");
-				String[] xy1 = p1.split(",");
-				String[] xy2 = p2.split(",");
-				//System.out.println(p1+"---"+p2);
-				//System.out.println(xy1[0]+" "+xy1[1]+"---"+xy2[0]+""+xy2[1]);
-				
-				
-				String line = "<line x1=\"" + xy1[0] + "\" y1=\"" + xy1[1] + "\""+" x2=\""+xy2[0]+"\" y2=\""+xy2[1]+"\"  style=\"stroke:rgb(99,99,99);stroke-width:2\" />";
-				if(i>0){
-					System.out.println(line); 
-				}
-				i++;
-				p1 = p2;
-			}
+		String data = getdata().replaceAll("},", "}#");
+		String[] str = data.split("#");
+		List<Map<String, Integer>> list = new ArrayList<Map<String, Integer>>();
+		for (String s : str) {
+			System.out.println(s);
+			String[] xy = s.split(",");
+
+			String[] x = xy[0].split(":");
+			String[] y = xy[1].split(":");
+			Map<String, Integer> map = new LinkedHashMap<String, Integer>();
+			map.put("x", Integer.parseInt(x[1]));
+			map.put("y", Integer.parseInt(y[1].substring(0, y[1].length()-1)));
+			list.add(map);
 		}
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		dataMap.put("list", list);
+		Gson gson = new Gson();
+		String json = gson.toJson(dataMap);
+		System.out.println(json);
+	}
+
+	public static String getdata() {
+		return "{\"x\":234,\"y\":1346},{\"x\":232,\"y\":1347}";
+	}
+
+	public static void test() {
+		String json = "{start: 0, pageCount: 2, dataList: [{\"STRPRODUCTCODE\":\"DWJ100\",\"STRVERSIONXZTEXT\":\"初始安装包\",\"STRPRODUCTNAME\":\"对外经贸查询系统\",\"STRVERSIONTYPE\":\"10\",\"STRVERSIONID\":\"V1                                      \",\"STRVERSIONCODE\":\"1.0.2.1018\",\"LINE_NUM\":1,\"STRVERSIONXZ\":\"10\",\"LIMIT\":1,\"NUMSHOWORDER\":1,\"STRVERSIONLOG\":\"修复1个bug，增加2个功能\",\"STRVERSIONTYPETEXT\":\"标准版\",\"DATRELEASEDATE\":\"2013-9-28 10:47:26\",\"STRVERSIONFY\":\"10万人民币\",\"STRSUPPORTOS\":\"Windows 2003/Windows 2008\",\"STRDELFLG\":\"0\"}"
+				+ ",{\"STRPRODUCTCODE\":\"DWJ100\",\"STRVERSIONXZTEXT\":\"初始安装包\",\"STRPRODUCTNAME\":\"对外经贸查询系统\",\"STRVERSIONTYPE\":\"10\",\"STRVERSIONID\":\"V1                                      \",\"STRVERSIONCODE\":\"1.0.2.1018\",\"LINE_NUM\":1,\"STRVERSIONXZ\":\"10\",\"LIMIT\":1,\"NUMSHOWORDER\":1,\"STRVERSIONLOG\":\"修复1个bug，增加2个功能\",\"STRVERSIONTYPETEXT\":\"标准版\",\"DATRELEASEDATE\":\"2013-9-28 10:47:26\",\"STRVERSIONFY\":\"10万人民币\",\"STRSUPPORTOS\":\"Windows 2003/Windows 2008\",\"STRDELFLG\":\"0\"}"
+				+ "]}";
+		Gson gson = new Gson();
+		JsonParser parser = new JsonParser();
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		JsonObject jsonObject = parser.parse(json).getAsJsonObject();
+		JsonArray jsonArray = jsonObject.getAsJsonArray("dataList");
+		Type type = new TypeToken<Map<String, String>>() {
+		}.getType();
+		for (int i = 0; i < jsonArray.size(); i++) {
+			JsonElement el = jsonArray.get(i);
+			Map<String, String> tmp = gson.fromJson(el, type);
+			list.add(tmp);
+			System.out.println(tmp.get("STRPRODUCTCODE"));
+		}
+		jsonObject.remove("dataList");
+		jsonObject.add("dataList", parser.parse(gson.toJson(list)).getAsJsonArray());
+		System.out.println(gson.toJson(jsonObject));
 	}
 }

@@ -11,9 +11,9 @@
                         </div>
                     </div><!-- media -->
                     
-                    <h5 class="leftpanel-title">Navigation</h5>
+                    <h3 class="leftpanel-title">Navigation</h3>
                     <ul class="nav nav-pills nav-stacked">
-                        <li <c:if test="${param.m==0||m==0}">class="active"</c:if>><a href="index.html"><i class="fa fa-home"></i> <span>首页</span></a></li>
+                        <li <c:if test="${param.m==0||m==0}">class="active"</c:if>><a href="<s:url action="index" namespace="/" />"><i class="fa fa-home"></i> <span>首页</span></a></li>
                        
                         <li <c:if test="${param.m==1||m==1}">class="active parent"</c:if>  class="parent" ><a href=""><i class="fa fa-suitcase"></i> <span>工单管理</span></a>
                             <ul class="children">
@@ -22,7 +22,7 @@
                         </li>
                         <li <c:if test="${param.m==2||m==2}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-edit"></i> <span>用户管理</span></a>
                             <ul class="children">
-                                <li><a href="code-editor.html">帐户管理</a></li>
+                                <li><a href='<s:url action="user_list" namespace="/manage/account" />?m=2'>用户查看</a></li>
                                 <li><a href="general-forms.html">积分详细</a></li>
                                 <li><a href="general-forms.html">积分管理</a></li>
                             </ul>

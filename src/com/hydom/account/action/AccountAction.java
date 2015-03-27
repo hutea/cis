@@ -1,6 +1,5 @@
 package com.hydom.account.action;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import javax.annotation.Resource;
@@ -15,16 +14,22 @@ import com.hydom.account.service.AccountService;
 public class AccountAction {
 	@Resource
 	private AccountService accountService;
-
+	
 	private InputStream inputStream;
 
-	public String signup() {
+	public String userList() {
+		return "success";
+	}
 
-		try {
-			//inputStream = new ByteArrayInputStream(data.getBytes("UTF-8"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public String list() {
+		return "success";
+	}
+
+	public String signup() {
+		return "success";
+	}
+
+	public String signin() {
 		return "success";
 	}
 

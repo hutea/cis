@@ -19,14 +19,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/select2.css" rel="stylesheet" />
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
-
+		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
+        <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
-        	
+    	function show(tid,uid) {
+	   	   	 var url ="${pageContext.request.contextPath}/manage/task/task_show.action";
+	   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'task_'+tid});
+   	 	}
         </script>
     </head>
 
@@ -83,7 +87,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 		 <td>2015-03-28 15:45:56</td> 
                                 		 <td>2015-03-28 16:05:56</td> 
                                 		 <td>6</td> 
-                                		 <td><a href='<s:url action="task_list" namespace="/manage/task" />'>查看</a> 
+                                		 <td><a href='javascript:show(1,12)' >查看</a> 
                                 		 <a href='<s:url action="taskrecord_list" namespace="/manage/task" />'>详细</a>
                                 		 </td> 
                                 	</tr>

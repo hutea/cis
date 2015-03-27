@@ -15,8 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.hydom.account.ebean.Account;
-
 /**
  * 工单表：通过taskId与远端进行数据交互
  * 
@@ -42,7 +40,13 @@ public class Task {
 	@Column
 	private Integer matchNum;// 分配上限，默认来源系统配置
 	@Column
-	private Integer matchedNum=0;// 已分配的人数
+	private Integer matchedNum = 0;// 已分配的人数
+	@Column
+	private Integer initNum ;// 分配初值，由系统设定
+	@Column
+	private Integer postNum;// 要达到的提交数：由分配初值对此进行累加
+	@Column
+	private Integer canNum;// 可分配，起始值=initNum，后面通过计算设定
 	@Column
 	private Integer resultNum;// 返回了识别结果的人数
 	@Column
@@ -66,120 +70,173 @@ public class Task {
 	private Job job;// 
 	@Column
 	private boolean visible = true; // 逻辑删除标记
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getTaskId() {
 		return taskId;
 	}
+
 	public void setTaskId(String taskId) {
 		this.taskId = taskId;
 	}
+
 	public Integer getLineNo() {
 		return lineNo;
 	}
+
 	public void setLineNo(Integer lineNo) {
 		this.lineNo = lineNo;
 	}
+
 	public Integer getInLineNo() {
 		return inLineNo;
 	}
+
 	public void setInLineNo(Integer inLineNo) {
 		this.inLineNo = inLineNo;
 	}
+
 	public String getMetricPoint() {
 		return metricPoint;
 	}
+
 	public void setMetricPoint(String metricPoint) {
 		this.metricPoint = metricPoint;
 	}
+
 	public Long getRecycleTime() {
 		return recycleTime;
 	}
+
 	public void setRecycleTime(Long recycleTime) {
 		this.recycleTime = recycleTime;
 	}
+
 	public Integer getMatchNum() {
 		return matchNum;
 	}
+
 	public void setMatchNum(Integer matchNum) {
 		this.matchNum = matchNum;
 	}
+
 	public Integer getMatchedNum() {
 		return matchedNum;
 	}
+
 	public void setMatchedNum(Integer matchedNum) {
 		this.matchedNum = matchedNum;
 	}
+
 	public Integer getResultNum() {
 		return resultNum;
 	}
+
 	public void setResultNum(Integer resultNum) {
 		this.resultNum = resultNum;
 	}
+
 	public Double getAccuracy() {
 		return accuracy;
 	}
+
 	public void setAccuracy(Double accuracy) {
 		this.accuracy = accuracy;
 	}
+
 	public Integer getRecycleType() {
 		return recycleType;
 	}
+
 	public void setRecycleType(Integer recycleType) {
 		this.recycleType = recycleType;
 	}
+
 	public String getResult() {
 		return result;
 	}
+
 	public void setResult(String result) {
 		this.result = result;
 	}
+
 	public Double getRation() {
 		return ration;
 	}
+
 	public void setRation(Double ration) {
 		this.ration = ration;
 	}
+
 	public Date getCreateTime() {
 		return createTime;
 	}
+
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+
 	public Date getFinishTime() {
 		return finishTime;
 	}
+
 	public void setFinishTime(Date finishTime) {
 		this.finishTime = finishTime;
 	}
+
 	public Date getMatchFirstTime() {
 		return matchFirstTime;
 	}
+
 	public void setMatchFirstTime(Date matchFirstTime) {
 		this.matchFirstTime = matchFirstTime;
 	}
+
 	public Date getMatchLastTime() {
 		return matchLastTime;
 	}
+
 	public void setMatchLastTime(Date matchLastTime) {
 		this.matchLastTime = matchLastTime;
 	}
+
 	public Job getJob() {
 		return job;
 	}
+
 	public void setJob(Job job) {
 		this.job = job;
 	}
+
 	public boolean isVisible() {
 		return visible;
 	}
+
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
 
-	
+	public Integer getInitNum() {
+		return initNum;
+	}
+
+	public void setInitNum(Integer initNum) {
+		this.initNum = initNum;
+	}
+
+	public Integer getCanNum() {
+		return canNum;
+	}
+
+	public void setCanNum(Integer canNum) {
+		this.canNum = canNum;
+	}
+
 }

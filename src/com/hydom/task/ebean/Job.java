@@ -24,7 +24,9 @@ public class Job {
 	@Column
 	private Double accuracy;
 	@Column
-	private Integer matchNum;
+	private Integer matchNum;// 分配上限
+	@Column
+	private Integer initNum;// 分配初值，由系统设定
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;// 生成时间
 	@Temporal(TemporalType.TIMESTAMP)
@@ -39,7 +41,8 @@ public class Job {
 	private boolean feedback = false;// 是否将此工单结果进行了反馈
 	@Column
 	private Integer taskCount; // 所拥有的task总数
-
+	@Column
+	private Integer taskFinishCount; // task完成数
 	@Column
 	private boolean visible = true; // 逻辑删除标记
 
@@ -145,6 +148,22 @@ public class Job {
 
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+	}
+
+	public Integer getInitNum() {
+		return initNum;
+	}
+
+	public void setInitNum(Integer initNum) {
+		this.initNum = initNum;
+	}
+
+	public Integer getTaskFinishCount() {
+		return taskFinishCount;
+	}
+
+	public void setTaskFinishCount(Integer taskFinishCount) {
+		this.taskFinishCount = taskFinishCount;
 	}
 
 }

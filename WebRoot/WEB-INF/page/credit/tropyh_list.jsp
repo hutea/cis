@@ -14,15 +14,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         <meta name="author" content="">
         <title>Chain Responsive Bootstrap3 Admin</title>
+        <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/select2.css" rel="stylesheet" />
-
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
+		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
+        <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+    	function show(tid,uid) {
+	   	   	 var url ="${pageContext.request.contextPath}/manage/task/task_show.action";
+	   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'task_'+tid});
+   	 	}
+        </script>
     </head>
 
     <body>
@@ -43,53 +52,46 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>job list</li>
+                                    <li>trophy list</li>
                                 </ul>
-                                <h4>工单管理</h4>
+                                <h4>奖品查看</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                        
-                        <div class="row row-stat">
-                               <!-- code block hydom -->
-                                	
-                              <table class="table table-bordered mb30">
-                                <thead>
-                                  <tr>
+                       <s:form action="task_list" namespace="/manage/task" method="post" id="pageList"> 
+                         <s:hidden name="page" />
+                         <s:hidden name="m" />
+                         <div>查询区</div>
+    					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
+							 <tr>
                                     <th>#</th>
                                     <th>奖品名称</th>
+                                    <th>价值</th>
+                                    <th>库存</th>
+                                    <th>已兑换数量</th>
                                     <th>兑换积分</th>
                                     <th>状态</th>
-                                    <th>兑换方式</th>
-                                    <th>库存</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
+                                    <th>类别</th>
+                                    <th>操作</th>
+                              </tr>
+                              <tr>
                                     <td>1</td>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              
+                                    <td>充值卡</td>
+                                    <td>100元</td>
+                                    <td>68</td>
+                                    <td>105</td>
+                                    <td>1000</td>
+                                    <td>可以兑换</td>
+                                    <td>充值卡</td>
+                                    <td>详细</td>
+                              </tr>
+						 </table>
+						</s:form>
+                       	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
                             <!-- code block hydom -->
-                        </div><!-- row -->
+                        
                         
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" style="position:fixed;bottom:0;width:85%">

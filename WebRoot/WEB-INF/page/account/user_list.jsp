@@ -52,9 +52,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>job list</li>
+                                    <li>user list</li>
                                 </ul>
-                                <h4>工单管理</h4>
+                                <h4>用户查看</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
@@ -63,41 +63,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                        <s:form action="task_list" namespace="/manage/task" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
-                         <div>查询区
+ 						 <div>查询区
                          	<ul style="list-style-type: decimal;">
-                         		<li>taskId</li>
-                         		<li>生成时间</li>
-                         		<li>完成时间</li>
+                         		<li>用户Id</li>
+                         		<li>注册时间</li>
+                         		<li>最近登录</li>
                          	</ul>
-                         
                          </div>
+						 
     					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
 							 <tr>
                                     <th>#</th>
-                                    <th>行号</th>
-                                    <th>行内号</th>
-                                    <th>已分配次数</th>
-                                    <th>分配上限</th>
-                                    <th>正确比例/实际比例</th>
-                                    <th>分配时间</th>
-                                    <th>完成时间</th>
-                                    <th>超时时间</th>
+                                    <th>帐户ID</th>
+                                    <th>积分</th>
+                                    <th>最近一月识别数</th>
+                                    <th>识别总数</th>
+                                    <th>正确率</th>
+                                    <th>平均处理速度</th>
+                                    <th>最近登录</th>
                                     <th>操作</th>
                               </tr>
-                              <tr>
-                           		 <td>1</td> 
-                           		 <td>2</td> 
-                           		 <td>1</td> 
-                           		 <td>3</td> 
-                           		 <td>6</td> 
-                           		 <td>65%/70%</td> 
-                           		 <td>2015-03-28 15:45:56</td> 
-                           		 <td>2015-03-28 16:05:56</td> 
-                           		 <td>6</td> 
-                           		 <td><a href='javascript:show(1,12)' >查看</a> 
-                           		 <a href='<s:url action="task_list" namespace="/manage/task" />'>详细</a>
-                           		 </td> 
-                           	  </tr>
+                          	  <tr>
+                          		 	 <td>1</td> 
+                          			 <td>12345</td> 
+                          			 <td>1200</td> 
+                          			 <td>245</td> 
+                          			 <td>8562</td> 
+                          			 <td>80%</td> 
+                          			 <td>15s</td> 
+                          			 <td>2015-04-05 15:25:36</td> 
+                          			 <td><a href=''>详细</a></td> 
+                          	  </tr>
 						 </table>
 						</s:form>
                        	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
@@ -131,6 +127,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
-
+	
     </body>
 </html>

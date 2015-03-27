@@ -29,7 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script type="text/javascript">
 	    	function show(tid,uid) {
 		   	   	 var url ="${pageContext.request.contextPath}/manage/task/task_show.action";
-		   		 art.dialog.open(url,{width:300 ,height: 500 , title: '区块笔迹',id:'task_'+tid});
+		   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'task_'+tid});
 	   	 	}
         </script>
     </head>
@@ -52,7 +52,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>task list</li>
+                                    <li>task record list</li>
                                 </ul>
                                 <h4>区块分配详细</h4>
                             </div>

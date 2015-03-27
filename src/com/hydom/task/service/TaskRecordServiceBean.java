@@ -29,7 +29,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		try {
 			Task task = (Task) em
 					.createQuery(
-							"select t from Task t where t.matchedNum<t.matchNum and t.id not in (select r.task.id from TaskRecord r where r.account.id=?1) order by t.id asc")
+							"select t from Task t where t.matchedNum<t.matchNum and t.canNum>0 and t.id not in (select r.task.id from TaskRecord r where r.account.id=?1) order by t.id asc")
 					.setParameter(1, accountId).setMaxResults(1).getSingleResult();
 			TaskRecord taskRecord = new TaskRecord();
 			Date currentTime = new Date();
@@ -41,6 +41,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 			account.setState(1);// 设置用户状态为1，表示在识别中
 			accountService.update(account);
 			task.setMatchedNum(task.getMatchedNum() + 1);// 对已分配人数+1
+			task.setCanNum(task.getCanNum() - 1);// 对可分配人数-1
 			Job job = task.getJob();
 			if (task.getMatchFirstTime() == null) {
 				task.setMatchFirstTime(currentTime);// 设置第一个用户的分配时间
@@ -60,12 +61,37 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		}
 	}
 
+	public int processTaskRecord(long tid, String result_str) {
+		int result = 1;
+		Date postTime = new Date();
+		TaskRecord entity = this.find(tid);
+		entity.setResult(result_str);
+		entity.setPostTime(postTime);
+		boolean overtime = entity.getPostTime().getTime()
+				- entity.getMatchTime().getTime() > entity.getTask().getRecycleTime();
+		System.out.println(overtime);
+		if (overtime) {// 超时
+			entity.setIdentState(0);// 设置状态为：超时
+			result = 8;
+			this.update(entity);
+			return result;
+		} 
+		entity.setIdentState(1);
+		int postCount = 0 ;//查出本区块所有提交数
+		if(){
+			
+			
+		}
+		/*		 */
+		//
+		return result;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TaskRecord> listTaskRecord(long accountId, int sign) {
 		return em.createQuery(
 				"select t from TaskRecord t where t.account.id=?1 and t.sign=?2")
 				.setParameter(1, accountId).setParameter(2, sign).getResultList();
-
 	}
 }
