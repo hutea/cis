@@ -25,7 +25,7 @@ public class ShortMessageServiceBean extends DAOSupport<ShortMessage> implements
 		// String path =
 		// "http://222.76.210.200:9999/sms.aspx?action=send&userid=402&account=jyhh&
 		// password=123456&mobile=13882162641&content=111111";
-		
+
 		String path = "http://222.76.210.200:9999/sms.aspx";// 地址
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("action", "send");
@@ -37,9 +37,15 @@ public class ShortMessageServiceBean extends DAOSupport<ShortMessage> implements
 		boolean sendResult = false;
 		Date sendTime = new Date();
 		try {
-			sendResult = HttpSender.sendGetRequest(path, params, "UTF-8");
+			String result = HttpSender.sendGetRequest(path, params, "UTF-8");
+			if (result.toString().contains("<returnstatus>Success</returnstatus>")) {
+				sendResult = true;
+			} else {
+				sendResult = false;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			sendResult = false;
 		}
 		/** *************保存短信发送记录START************* */
 		ShortMessageRecode smr = new ShortMessageRecode();

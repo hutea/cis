@@ -42,7 +42,7 @@ public class Task {
 	@Column
 	private Integer matchedNum = 0;// 已分配的人数
 	@Column
-	private Integer initNum ;// 分配初值，由系统设定
+	private Integer initNum;// 分配初值，由系统设定
 	@Column
 	private Integer postNum;// 要达到的提交数：由分配初值对此进行累加
 	@Column
@@ -89,6 +89,14 @@ public class Task {
 
 	public Integer getLineNo() {
 		return lineNo;
+	}
+
+	public Integer getPostNum() {
+		return postNum;
+	}
+
+	public void setPostNum(Integer postNum) {
+		this.postNum = postNum;
 	}
 
 	public void setLineNo(Integer lineNo) {

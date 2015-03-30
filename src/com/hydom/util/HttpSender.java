@@ -1,17 +1,26 @@
 package com.hydom.util;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 public class HttpSender {
 
 	/**
-	 * 发送Http请求
+	 * 发送httpGet请求
 	 * 
 	 * @param path
 	 * @param params
@@ -19,7 +28,7 @@ public class HttpSender {
 	 * @return
 	 * @throws Exception
 	 */
-	public static boolean sendGetRequest(String path, Map<String, String> params,
+	public static String sendGetRequest(String path, Map<String, String> params,
 			String encoding) throws Exception {
 		StringBuffer url = new StringBuffer(path);
 		url.append("?");
@@ -29,7 +38,6 @@ public class HttpSender {
 			url.append(URLEncoder.encode(entry.getValue(), encoding));
 			url.append("&");
 		}
-
 		url.deleteCharAt(url.length() - 1);
 		HttpURLConnection conn = (HttpURLConnection) new URL(url.toString())
 				.openConnection();
@@ -37,21 +45,36 @@ public class HttpSender {
 		conn.setRequestMethod("GET");
 		if (conn.getResponseCode() == 200) {
 			InputStream in = conn.getInputStream();
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in,
-					"UTF-8"));
-			String str = bufferedReader.readLine();
-			StringBuffer sb = new StringBuffer(str);
-			while (str != null) {
-				str = bufferedReader.readLine();
-				sb.append(str);
-			}
-			if (sb.toString().contains("<returnstatus>Success</returnstatus>")) {
-				return true;
-			} else {
-				return false;
-			}
+			String result = IOUtils.toString(in);
+			System.out.println("com.hydom.util.HttpSender:sendGetRequst-->" + result);
+			return result;
+		} else {
+			throw new Exception("connection fail");
 		}
-		return false;
+	}
+
+	/**
+	 * 提交数据到服务器
+	 * 
+	 * @param path
+	 *            请求路径
+	 * @param params
+	 *            请求参数 key为参数名,value为参数值
+	 * @param encode
+	 *            编码
+	 */
+	public static InputStream postFromHttpClient(String path, Map<String, String> params,
+			String encode) throws Exception {
+		List<NameValuePair> formparams = new ArrayList<NameValuePair>();// 用于存放请求参数
+		for (Map.Entry<String, String> entry : params.entrySet()) {
+			formparams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+		}
+		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, encode);
+		HttpPost httppost = new HttpPost(path);
+		httppost.setEntity(entity);
+		HttpClient httpclient = new DefaultHttpClient();// 看作是浏览器
+		HttpResponse response = httpclient.execute(httppost);// 发送post请求
+		return response.getEntity().getContent();
 	}
 
 }

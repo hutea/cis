@@ -111,7 +111,7 @@ public class AppServer {
 		if (account != null) { // µÇÂ¼³É¹¦
 			dataMap.put("result", 1);
 			dataMap.put("username", account.getUsername());
-			dataMap.put("sname", account.getNickname());
+			dataMap.put("nickname", account.getNickname());
 			dataMap.put("uid", account.getId());
 		} else {
 			dataMap.put("result", 0);

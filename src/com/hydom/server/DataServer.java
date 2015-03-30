@@ -85,7 +85,7 @@ public class DataServer {
 	}
 
 	/**
-	 * 工单反馈：手工调用
+	 * 工单反馈：手工调用【测试】
 	 * 
 	 * @return
 	 */
@@ -113,9 +113,9 @@ public class DataServer {
 			map.put("inLineNo", task.getInLineNo());
 			map.put("originalData", task.getResult());
 			if (task.getRation() < task.getAccuracy()) {// 实际正确比例小于设定的正确比例
-				map.put("originalData", 1);// 表示要纠正
+				map.put("status", 1);// 表示要纠正
 			} else {
-				map.put("originalData", 0);
+				map.put("status", 0);
 			}
 			content.add(map);
 			task.setRecycleType(Integer.parseInt(recycleType));// 设置工单状态 ：1=超时回收
