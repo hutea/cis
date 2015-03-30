@@ -17,6 +17,12 @@
 				<param name="inputName">inputStream</param>
 			</result>
 		</action>
+		<action name="signout" class="appServer" method="signout">
+			<result type="stream">
+				<param name="contentType">text/html</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
 		<action name="fetch_note" class="appServer" method="fetchNote">
 			<result type="stream">
 				<param name="contentType">text/html</param>
@@ -120,7 +126,7 @@
 			</result>
 		</action>
 	</package>
-	
+
 	<package name="dataserver" namespace="/data" extends="struts-default">
 		<action name="assignTaskQuestion" class="dataServer" method="assignTaskQuestion">
 			<result type="stream">
@@ -128,7 +134,15 @@
 				<param name="inputName">inputStream</param>
 			</result>
 		</action>
-		<action name="recycleTaskByQuestion" class="dataServer" method="recycleTaskByQuestion">
+		<action name="recycleTaskByQuestion" class="dataServer"
+			method="recycleTaskByQuestion">
+			<result type="stream">
+				<param name="contentType">text/html</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
+		<!-- 工单反馈，测试调用  -->
+		<action name="backTaskByQuestion" class="dataServer" method="backTaskByQuestion">
 			<result type="stream">
 				<param name="contentType">text/html</param>
 				<param name="inputName">inputStream</param>

@@ -64,6 +64,7 @@ public class DataServer {
 					metricPoint.append(obj + ",");
 				}
 				metricPoint.deleteCharAt(metricPoint.length() - 1);
+				
 				/** 拼装metricPoint字串 END **/
 				task.setLineNo(Integer.parseInt((String) map.get("lineNo")));// 设置行号
 				task.setInLineNo(Integer.parseInt((String) map.get("inLineNo")));// 设置行内号

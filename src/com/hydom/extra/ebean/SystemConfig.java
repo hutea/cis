@@ -3,10 +3,11 @@ package com.hydom.extra.ebean;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
- * 基本配置信息： id=about：关于、id=manual：积分说明、id=phone：客户电话、 id=taskcount:分配上限
+ * 基本配置信息： id=about：关于、id=manual：积分说明、id=phone：客户电话、 id=math：(int->分配上限、double=percent：正确比例、long=overtime：超时时间)、
  * 
  * @author www.hydom.cn [heou]
  * 
@@ -23,10 +24,14 @@ public class SystemConfig {
 	@Column
 	private Integer valueInt; // int值
 	@Column
-	private Double valueDouble; // int值
+	private Short valueShort; // short值
 	@Column
+	private Long valueLong; // long值
+	@Column
+	private Double valueDouble; // double值
+	@Lob
 	private String valueText;// 纯文本
-	@Column
+	@Lob
 	private String valueContent;// 内容
 
 	public String getId() {
@@ -35,6 +40,14 @@ public class SystemConfig {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public Short getValueShort() {
+		return valueShort;
+	}
+
+	public void setValueShort(Short valueShort) {
+		this.valueShort = valueShort;
 	}
 
 	public Integer getValueInt() {
@@ -67,6 +80,14 @@ public class SystemConfig {
 
 	public void setValueContent(String valueContent) {
 		this.valueContent = valueContent;
+	}
+
+	public Long getValueLong() {
+		return valueLong;
+	}
+
+	public void setValueLong(Long valueLong) {
+		this.valueLong = valueLong;
 	}
 
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="extra" namespace="/manage/extra" extends="struts-default">
+		<action name="config_show" class="systemConfigAction" method="show">
+			<result>/WEB-INF/page/extra/systemconfig_show.jsp</result>
+		</action>
+		<action name="config_editUI" class="systemConfigAction" method="editUI">
+			<result>/WEB-INF/page/extra/systemconfig_edit.jsp</result>
+		</action>
+		<action name="config_edit" class="systemConfigAction" method="edit">
+			<result type="redirectAction">
+				<param name="actionName">config_show?scid=${scid}</param>
+			</result>
+		</action>
+	</package>
+</struts>

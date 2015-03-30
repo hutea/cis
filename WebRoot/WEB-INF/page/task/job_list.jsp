@@ -26,12 +26,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
-        <script type="text/javascript">
-    	function show(tid,uid) {
-	   	   	 var url ="${pageContext.request.contextPath}/manage/task/task_show.action";
-	   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'task_'+tid});
-   	 	}
-        </script>
     </head>
 
     <body>
@@ -74,27 +68,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
 							 <tr>
                                     <th>#</th>
-                                    <th>行号</th>
-                                    <th>行内号</th>
-                                    <th>已分配次数</th>
-                                    <th>分配上限</th>
-                                    <th>正确比例/实际比例</th>
-                                    <th>分配时间</th>
+                                    <th>taskId</th>
+                                    <th>区块数</th>
+                                    <th>区块完成数</th>
+                                    <th>生成时间</th>
                                     <th>完成时间</th>
-                                    <th>超时时间</th>
+                                    <th>反馈结果</th>
                                     <th>操作</th>
                               </tr>
                               <tr>
                            		 <td>1</td> 
-                           		 <td>2</td> 
-                           		 <td>1</td> 
-                           		 <td>3</td> 
-                           		 <td>6</td> 
-                           		 <td>65%/70%</td> 
+                           		 <td>ef3d23243a3</td> 
+                           		 <td>10</td> 
+                           		 <td>8</td> 
                            		 <td>2015-03-28 15:45:56</td> 
                            		 <td>2015-03-28 16:05:56</td> 
-                           		 <td>6</td> 
-                           		 <td><a href='javascript:show(1,12)' >查看</a> 
+                           		 <td>反馈成功</td> 
+                           		 <td>
                            		 <a href='<s:url action="task_list" namespace="/manage/task" />'>详细</a>
                            		 </td> 
                            	  </tr>

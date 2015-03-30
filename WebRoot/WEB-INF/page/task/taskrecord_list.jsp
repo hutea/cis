@@ -87,12 +87,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 		 </td> 
                                 	</tr>
 						 </table>
-						 <div>说明
-						 	<ul style="list-style-type: decimal;">
-						 		<li>分配时间：指给第一个用户分配的时间</li>
-						 		<li>完成时间：指计算出结果的时间</li>
-						 	</ul>
-						 </div>
 						</s:form>
                        	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
                             <!-- code block hydom -->

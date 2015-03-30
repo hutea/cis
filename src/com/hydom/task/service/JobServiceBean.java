@@ -109,6 +109,5 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 			e.printStackTrace();
 			return false;
 		}
-
 	}
 }

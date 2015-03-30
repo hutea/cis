@@ -1,11 +1,15 @@
 package com.hydom.account.ebean;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * 帐户表：用户、管理员共用此表，通过type区别
@@ -37,9 +41,13 @@ public class Account {
 	@Column
 	private double score;// 用户的总积分
 	@Column
-	private Integer state;// 0=休息一下，1=识别中
+	private Integer state;// 0=休息一下，1=识别中，2=注销
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastSigninTime;// 最后登录时间
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastSignoutTime;// 最后登录时间
 	@Column
-	private Boolean visible=true;
+	private Boolean visible = true;
 
 	public Account() {
 
@@ -53,6 +61,22 @@ public class Account {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Date getLastSigninTime() {
+		return lastSigninTime;
+	}
+
+	public void setLastSigninTime(Date lastSigninTime) {
+		this.lastSigninTime = lastSigninTime;
+	}
+
+	public Date getLastSignoutTime() {
+		return lastSignoutTime;
+	}
+
+	public void setLastSignoutTime(Date lastSignoutTime) {
+		this.lastSignoutTime = lastSignoutTime;
 	}
 
 	public void setId(Long id) {

@@ -123,9 +123,23 @@ public class AppServer {
 		return "success";
 	}
 
+	public String signout() {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Account account = accountService.findByUP(username, password);
+		if (account != null) { // 注销成功
+			account.setState(2);// 设置状态为注销
+			account.setLastSignoutTime(new Date());
+			accountService.update(account);
+			dataMap.put("result", 1);
+		} else {
+			dataMap.put("result", 0);
+		}
+		dataFillStream(dataMap);
+		return "success";
+	}
+
 	/**
 	 * 获取分配的题目
-	 * 
 	 * @return
 	 */
 	public String fetchNote() {
@@ -134,7 +148,7 @@ public class AppServer {
 		TaskRecord taskRecord = taskRecordService.fetchTaskRecord(uid);
 		if (taskRecord != null) {
 			dataMap.put("tid", taskRecord.getId());
-			//处理MetricPoint对象
+			// 处理MetricPoint对象
 			String[] data = taskRecord.getTask().getMetricPoint().replaceAll("},", "}#")
 					.split("#");
 			List<Map<String, Integer>> list = new ArrayList<Map<String, Integer>>();
@@ -169,8 +183,7 @@ public class AppServer {
 	 */
 	public String postNote() {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		
-		
+
 		try {
 			TaskRecord entity = taskRecordService.find(tid);
 			entity.setResult(result_str);

@@ -29,5 +29,6 @@
 	<include file="credit.xml"></include>
 	<include file="task.xml"></include>
 	<include file="server.xml"></include>
+	<include file="extra.xml"></include>
 
 </struts>

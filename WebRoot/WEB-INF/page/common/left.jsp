@@ -33,7 +33,7 @@
   								<li><a href='<s:url action="trophy_addUI" namespace="/manage/credit" />?m=3'>奖品添加</a></li> 
                             </ul>
                         </li>
-                        <li class="parent"><a href=""><i class="fa fa-file-text"></i> <span>系统管理</span></a>
+                        <li <c:if test="${param.m==4||m==4}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-file-text"></i> <span>系统管理</span></a>
                             <ul class="children">
                                 <li><a href="notfound.html">意见反馈</a></li>
                                 <li><a href="blank.html">系统帐号</a></li>
@@ -41,12 +41,12 @@
                                 <li><a href="blank.html">App版本管理</a></li>
                             </ul>
                         </li>
-                        <li class="parent"><a href=""><i class="fa fa-file-text"></i> <span>系统设置</span></a>
+                        <li <c:if test="${param.m==5||m==5}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-file-text"></i> <span>系统设置</span></a>
                             <ul class="children">
-                                <li><a href="notfound.html">工单设置</a></li>
-                                <li><a href="blank.html">奖品添加</a></li>
-                                <li><a href="blank.html">关于我们</a></li>
-                                <li><a href="blank.html">客户电话</a></li>
+                                <li><a href='<s:url action="config_show" namespace="/manage/extra" />?scid=match&m=5'>工单设置</a></li>
+                                <li><a href='<s:url action="config_show" namespace="/manage/extra" />?scid=manual&m=5'>积分说明</a></li>
+                                <li><a href='<s:url action="config_show" namespace="/manage/extra" />?scid=about&m=5'>关于我们</a></li>
+                                <li><a href='<s:url action="config_show" namespace="/manage/extra" />?scid=phone&m=5'>客户电话</a></li>
                             </ul>
                         </li>
                         
