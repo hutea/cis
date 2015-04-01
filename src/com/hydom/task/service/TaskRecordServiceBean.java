@@ -61,6 +61,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		}
 	}
 
+	@Override
 	public int processTaskRecord(long tid, String result_str) {
 		int result = 1;
 		Date postTime = new Date();
@@ -70,7 +71,6 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		entity.setPostTime(postTime);
 		boolean overtime = entity.getPostTime().getTime()
 				- entity.getMatchTime().getTime() > entity.getTask().getRecycleTime();
-		System.out.println(overtime);
 		if (overtime) {// 超时
 			entity.setIdentState(0);// 设置状态为：超时
 			result = 8;
@@ -80,42 +80,48 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 			return result;
 		}
 		entity.setIdentState(1);
-		int postCount = 0;// 查出本区块所有提交数
+		int postCount = this.countPostNum(task.getId());// 查出本区块所有提交数
 		if (postCount >= task.getPostNum()) {// 实际提交数达到指定的提交数
 			Object[] countResult = this.countResult(task.getId());
-			int samePerson = (Integer) countResult[1];// 计算出相同答案的人数
+			int samePerson = ((Long) countResult[1]).intValue();// 计算出相同答案的人数
 			double currentPercent = (double) (samePerson / task.getMatchedNum());// 当前比例
 			if (currentPercent >= task.getAccuracy()) {// 达到正确比例
+				System.out.println("---->达到正确比例");
 				task.setResult((String) countResult[0]);// 设置结果
 				task.setRation(currentPercent);// 设置：计算实际比例
+				task.setFinishTime(new Date());// 设置完成时间
 				Job job = task.getJob();
 				job.setTaskFinishCount(job.getTaskFinishCount() + 1);// 对任务区块完成数+1
 				taskService.update(task);
 				jobService.update(job);
+				jobService.postJob(job.getId());// 反馈工单
 			}
 			if (task.getMatchedNum() >= task.getMatchNum()) {// 已分配人数达到分配上限
+				System.out.println("---->已分配人数达到分配上限");
 				task.setResult((String) countResult[0]);// 设置结果：当前结果
 				task.setRation(currentPercent);// 设置：计算实际比例
+				task.setFinishTime(new Date());// 设置完成时间
 				Job job = task.getJob();
 				job.setTaskFinishCount(job.getTaskFinishCount() + 1);// 对任务区块完成数+1
 				taskService.update(task);
 				jobService.update(job);
-
+				jobService.postJob(job.getId());// 反馈工单
 			}
 			/* 未达到指定比例并且已分配人数未达到分配上限：计算可再次进行分配的人数 */
 			long moreNum = Math
 					.round((task.getAccuracy() * task.getMatchedNum() + samePerson)
 							/ (task.getAccuracy() + 1));
 			int canNum = (int) moreNum;
-			if ((moreNum + task.getMatchedNum()) > task.getMatchNum()) {// （再次分配人数+已分配人数）没有达到分配上限
+			if ((moreNum + task.getMatchedNum()) > task.getMatchNum()) {// （再次分配人数+已分配人数）>分配上限
 				canNum = task.getMatchNum() - task.getMatchedNum();
 			}
+			System.out.println("canNum="+canNum+" postNum="+task.getPostNum()); 
 			task.setCanNum(canNum);// 设置再次分配的人数
 			task.setPostNum(task.getPostNum() + canNum);// 设置提交总数应达到的值
 			task.setResultNum(task.getResultNum() + 1);// 对返回了识别结果的人数+1
 			taskService.update(task);
-
 		} else {
+			System.out.println("---->实际提交数未达到指定的提交数");
 			task.setResultNum(task.getResultNum() + 1);// 对返回了识别结果的人数+1
 			taskService.update(task);
 		}
@@ -124,16 +130,33 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 	}
 
 	/**
+	 * 计算出某区块（task）所有提交数
+	 * 
+	 * @param tid
+	 *            :task Id
+	 * @return
+	 */
+	private int countPostNum(long tid) {
+		Long count = (Long) em
+				.createQuery(
+						"select count(t.id) from TaskRecord t where t.task.id=?1 and t.identState=?2 and t.postTime is not null")
+				.setParameter(1, tid).setParameter(2, 1).getSingleResult();
+		return count.intValue();
+	}
+
+	/**
 	 * 计算出相同结果最多的结果内容及人数
 	 * 
 	 * @param tid
-	 * @return：数组{result内容,人数
+	 *            ：task Id
+	 * @return：数组{相同结果的内容,相同结果的人数｝
 	 */
 	private Object[] countResult(long tid) {
 		Object obj = em
 				.createQuery(
 						"select t.result,count(t.id) from TaskRecord t where t.task.id=?1 and t.identState=?2 group by result having(count(t.id)>=1) order by count(t.id) desc")
-				.setParameter(1, tid).setParameter(2, 1).getSingleResult();
+				.setParameter(1, tid).setParameter(2, 1).setMaxResults(1)
+				.getSingleResult();
 		return (Object[]) obj;
 	}
 

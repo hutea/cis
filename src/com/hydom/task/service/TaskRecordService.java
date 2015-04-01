@@ -13,7 +13,7 @@ public interface TaskRecordService extends DAO<TaskRecord> {
 	 *            ：帐户ID
 	 * @return:TaskRecord 已持久化到数据库中
 	 */
-	public TaskRecord fetchTaskRecord(long  accountId);
+	public TaskRecord fetchTaskRecord(long accountId);
 
 	/**
 	 * 返回用户识别记录列表
@@ -25,4 +25,15 @@ public interface TaskRecordService extends DAO<TaskRecord> {
 	 * @return
 	 */
 	List<TaskRecord> listTaskRecord(long accountId, int sign);
+
+	/**
+	 * 处理用户提交的识别结果
+	 * 
+	 * @param tid
+	 *            ：TaskRecord ID
+	 * @param resultStr
+	 *            :用户的识别结果
+	 * @return
+	 */
+	public int processTaskRecord(long tid, String resultStr);
 }

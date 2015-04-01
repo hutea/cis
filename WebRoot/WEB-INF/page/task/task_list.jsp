@@ -27,9 +27,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
-    	function show(tid,uid) {
-	   	   	 var url ="${pageContext.request.contextPath}/manage/task/task_show.action";
-	   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'task_'+tid});
+    	function show(taskId) {
+	   	   	 var url ="${pageContext.request.contextPath}/manage/task/task_show.action?taskId="+taskId;
+	   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'task_'+taskId});
    	 	}
         </script>
     </head>
@@ -63,9 +63,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                        <s:form action="task_list" namespace="/manage/task" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
+                         <s:hidden name="jobid" />
                          <div>查询区</div>
     					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
-							 <tr>
+							 <tr style="background-color: silver">
                                     <th>#</th>
                                     <th>行号</th>
                                     <th>行内号</th>
@@ -77,7 +78,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <th>超时时间</th>
                                     <th>操作</th>
                               </tr>
-                                	<tr>
+                                	<tr style="background-color: silver;">
                                 		 <td>1</td> 
                                 		 <td>2</td> 
                                 		 <td>1</td> 
@@ -87,10 +88,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 		 <td>2015-03-28 15:45:56</td> 
                                 		 <td>2015-03-28 16:05:56</td> 
                                 		 <td>6</td> 
-                                		 <td><a href='javascript:show(1,12)' >查看</a> 
+                                		 <td><a href='javascript:show(1)' >查看</a> 
                                 		 <a href='<s:url action="taskrecord_list" namespace="/manage/task" />'>详细</a>
                                 		 </td> 
                                 	</tr>
+                                	
+                              <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
+                           	  	<tr>
+                           		 <td>${s.index+1}</td> 
+                           		 <td>${entry.lineNo}</td> 
+                           		 <td>${entry.inLineNo}</td> 
+                           		 <td>${entry.matchedNum}</td> 
+                           		 <td>${entry.matchNum}</td> 
+                           		 <td>${entry.accuracy} ${entry.ration}</td> 
+                           		 <td><fmt:formatDate value="${entry.matchFirstTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                           		 <td><fmt:formatDate value="${entry.matchLastTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                           		 <td>${entry.recycleTime}</td> 
+                           		 <td>
+									<a href='javascript:show(${entry.id})' >查看</a> 
+                                	<a href='<s:url action="taskrecord_list" namespace="/manage/task" />?taskId=${entry.id}'>详细</a>
+                           		 </td> 
+                           	  	</tr>
+                           	  </c:forEach>
+                                	
 						 </table>
 						 <div>说明
 						 	<ul style="list-style-type: decimal;">
@@ -104,7 +124,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         
                         
                     </div><!-- contentpanel -->
-                    <div class="bottomwrapper" style="position:fixed;bottom:0;width:85%">
+                    <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>
                     </div>
                 </div><!-- mainpanel -->

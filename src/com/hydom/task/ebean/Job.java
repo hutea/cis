@@ -17,10 +17,10 @@ public class Job {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@Column
+	@Column(unique = true)
 	private String taskId;
 	@Column
-	private Long recycleTime;
+	private Long recycleTime; //超时时间
 	@Column
 	private Double accuracy;
 	@Column
@@ -42,7 +42,7 @@ public class Job {
 	@Column
 	private Integer taskCount; // 所拥有的task总数
 	@Column
-	private Integer taskFinishCount; // task完成数
+	private Integer taskFinishCount = 0; // task完成数
 	@Column
 	private boolean visible = true; // 逻辑删除标记
 

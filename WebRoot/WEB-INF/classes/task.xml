@@ -17,5 +17,8 @@
 		<action name="taskrecord_list" class="taskRecordAction" method="list">
 			<result>/WEB-INF/page/task/taskrecord_list.jsp</result>
 		</action>
+			<action name="taskrecord_show" class="taskRecordAction" method="show">
+			<result>/WEB-INF/page/task/taskrecord_show.jsp</result>
+		</action>
 	</package>
 </struts>

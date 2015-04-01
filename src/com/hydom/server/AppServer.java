@@ -65,7 +65,7 @@ public class AppServer {
 	private String newpwd;// 新密码
 	private String code;
 	private long uid;// 用户ID
-	private Long tid;// 任务ID[对应于TaskRecord ID]
+	private long tid;// 任务ID[对应于TaskRecord ID]
 	private String result_str;// 识别结果串
 	private int sign;// 识别的结果类型：1=正确 0=错误
 	private int num;// 兑换奖品的数量
@@ -86,12 +86,12 @@ public class AppServer {
 	public String signup() {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
-			if (code.equals(shortMessageService.find(username).getCode())) { // 验证码通过
+			if (code != null && code.equals(shortMessageService.find(username).getCode())) { // 验证码通过
 				Account account = new Account(username, password, username);
 				accountService.save(account);
 				dataMap.put("result", 1);
 			} else {
-				dataMap.put("result", 0);
+				dataMap.put("result", 2);// 验证码错误
 			}
 		} catch (Exception e) {
 			dataMap.put("result", 0);
@@ -114,7 +114,7 @@ public class AppServer {
 			dataMap.put("nickname", account.getNickname());
 			dataMap.put("uid", account.getId());
 		} else {
-			dataMap.put("result", 0);
+			dataMap.put("result", 4);// 用户名或密码错误
 			dataMap.put("username", "");
 			dataMap.put("nickname", "");
 			dataMap.put("uid", "");
@@ -140,6 +140,7 @@ public class AppServer {
 
 	/**
 	 * 获取分配的题目
+	 * 
 	 * @return
 	 */
 	public String fetchNote() {
@@ -151,20 +152,24 @@ public class AppServer {
 			// 处理MetricPoint对象
 			String[] data = taskRecord.getTask().getMetricPoint().replaceAll("},", "}#")
 					.split("#");
-			List<Map<String, Integer>> list = new ArrayList<Map<String, Integer>>();
+			List<Map<String, Integer>> lineList = new ArrayList<Map<String, Integer>>();
 			for (String str : data) {
 				String[] xy = str.split(",");
-				String[] x = xy[0].split(":");
-				String[] y = xy[1].split(":");
+				String[] x = xy[0].split("=");
+				String[] y = xy[1].split("=");
 				Map<String, Integer> map = new LinkedHashMap<String, Integer>();
-				map.put("x", Integer.parseInt(x[1]));
-				map.put("y", Integer.parseInt(y[1].substring(0, y[1].length() - 1)));
-				list.add(map);
+				map.put("x", Math.round(Float.parseFloat(x[1])));
+				map.put("y", Math.round(Float.parseFloat(y[1].substring(0,
+						y[1].length() - 1))));
+				lineList.add(map);
 			}
-			dataMap.put("image", list);
+			dataMap.put("result", 1);
+			dataMap.put("tid", taskRecord.getId());
+			dataMap.put("image", lineList);
 			dataMap.put("timeout", taskRecord.getTask().getRecycleTime());
 			dataMap.put("mathtime", sdf.format(taskRecord.getMatchTime()));
 		} else {
+			dataMap.put("result", 0);
 			dataMap.put("tid", "");
 			dataMap.put("image", "");
 			dataMap.put("timeout", "");
@@ -183,27 +188,8 @@ public class AppServer {
 	 */
 	public String postNote() {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-
-		try {
-			TaskRecord entity = taskRecordService.find(tid);
-			entity.setResult(result_str);
-			entity.setPostTime(new Date());
-			boolean overtime = entity.getPostTime().getTime()
-					- entity.getMatchTime().getTime() > entity.getTask().getRecycleTime();
-			System.out.println(overtime);
-			if (overtime) {// 超时
-				entity.setIdentState(0);// 设置状态为：超时
-				taskRecordService.update(entity);
-				dataMap.put("result", 0);
-			} else {
-				entity.setIdentState(1);
-				taskRecordService.update(entity);
-				dataMap.put("result", 1);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			dataMap.put("result", "0");
-		}
+		int result = taskRecordService.processTaskRecord(tid, result_str);
+		dataMap.put("result", result);
 		dataFillStream(dataMap);
 		return "success";
 	}
@@ -247,6 +233,11 @@ public class AppServer {
 			map.put("right_str", tr.getTask().getResult());
 			list.add(map);
 		}
+		if (list.size() > 0) {
+			dataMap.put("result", 1);
+		} else {
+			dataMap.put("result", 7);// 列表为空
+		}
 		dataMap.put("list", list);
 		dataFillStream(dataMap);
 		return "success";
@@ -274,6 +265,11 @@ public class AppServer {
 				map.put("image", tr.getImage());
 				list.add(map);
 			}
+		}
+		if (list.size() > 0) {
+			dataMap.put("result", 1);
+		} else {
+			dataMap.put("result", 7);// 列表为空
 		}
 		dataMap.put("list", list);
 		dataFillStream(dataMap);
@@ -304,8 +300,7 @@ public class AppServer {
 		record.setTrophy(trophy);
 		trophyRecordService.save(record);
 		dataMap.put("result", "1");
-		System.out.println("ID:" + record.getId());
-		dataMap.put("rid", record.getId());//
+		dataMap.put("rid", record.getId());
 		dataFillStream(dataMap);
 		return "success";
 	}
@@ -331,6 +326,11 @@ public class AppServer {
 			map.put("image", tr.getTrophy().getImage());
 			map.put("post_time", sdf.format(tr.getPostTime()));
 			list.add(map);
+		}
+		if (list.size() > 0) {
+			dataMap.put("result", 1);
+		} else {
+			dataMap.put("result", 7);// 列表为空
 		}
 		dataMap.put("list", list);
 		dataFillStream(dataMap);
@@ -399,6 +399,7 @@ public class AppServer {
 		} else {
 			dataMap.put("pay_result", 0);
 		}
+		accountService.update(account);
 		dataFillStream(dataMap);
 		return "success";
 	}
@@ -408,15 +409,23 @@ public class AppServer {
 	 * 
 	 * @return
 	 */
-	public String resetPasword() {
+	public String resetPassword() {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		String sysCode = shortMessageService.findCode(username); // username为手机号
-		if (sysCode != null && sysCode.equals(code)) {// 判断验证码是否正确：验证码超时问题
-			Account account = accountService.findByUsername(username);
-			account.setPassword(password);
-			accountService.update(account);
-			dataMap.put("result", 1);
-		} else {
+		try {
+			String sysCode = shortMessageService.findCode(username); // username为手机号
+			if (sysCode != null && sysCode.equals(code)) {// 判断验证码是否正确：验证码超时问题
+				Account account = accountService.findByUsername(username);
+				if (account != null) {
+					account.setPassword(password);
+					accountService.update(account);
+					dataMap.put("result", 1);
+				} else {
+					dataMap.put("result", 6);// 用户名不存在
+				}
+			} else {
+				dataMap.put("result", 2); // 验证码错误
+			}
+		} catch (Exception e) {
 			dataMap.put("result", 0);
 		}
 		dataFillStream(dataMap);
@@ -458,6 +467,11 @@ public class AppServer {
 			map.put("content", tr.getContent());
 			map.put("issuetime", sdf.format(tr.getIssueTime()));
 			list.add(map);
+		}
+		if (list.size() > 0) {
+			dataMap.put("result", 1);
+		} else {
+			dataMap.put("result", 7);// 列表为空
 		}
 		dataMap.put("list", list);
 		dataFillStream(dataMap);

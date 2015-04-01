@@ -94,7 +94,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         
                         
                     </div><!-- contentpanel -->
-                    <div class="bottomwrapper" style="position:fixed;bottom:0;width:85%">
+                    <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>
                     </div>
                 </div><!-- mainpanel -->

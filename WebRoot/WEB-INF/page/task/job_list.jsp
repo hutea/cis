@@ -54,16 +54,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="task_list" namespace="/manage/task" method="post" id="pageList"> 
+                       <s:form action="job_list" namespace="/manage/task" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
                          <div>查询区
+                         	<input type="text" name="query_taskId">
+                         	<input type="text" name="query_createTime">
+                         	<input type="text" name="query_finishTime">
                          	<ul style="list-style-type: decimal;">
+                         		
                          		<li>taskId</li>
                          		<li>生成时间</li>
                          		<li>完成时间</li>
                          	</ul>
-                         
                          </div>
     					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
 							 <tr>
@@ -76,7 +79,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <th>反馈结果</th>
                                     <th>操作</th>
                               </tr>
-                              <tr>
+                              <tr style="background-color: silver">
                            		 <td>1</td> 
                            		 <td>ef3d23243a3</td> 
                            		 <td>10</td> 
@@ -88,6 +91,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <a href='<s:url action="task_list" namespace="/manage/task" />'>详细</a>
                            		 </td> 
                            	  </tr>
+                           	  
+                           	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
+                           	  	<tr>
+                           		 <td>${s.index+1}</td> 
+                           		 <td>${entry.taskId}</td> 
+                           		 <td>${entry.taskCount}</td> 
+                           		 <td>${entry.taskFinishCount}</td> 
+                           		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                           		 <td><fmt:formatDate value="${entry.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                           		 <td>${entry.feedback?'反馈成功':'未反馈'}</td> 
+                           		 <td>
+                           		 <a href='<s:url action="task_list" namespace="/manage/task" />?jobid=${entry.id}'>详细</a>
+                           		 </td> 
+                           	  	</tr>
+                           	  </c:forEach>
 						 </table>
 						</s:form>
                        	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
@@ -95,7 +113,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         
                         
                     </div><!-- contentpanel -->
-                    <div class="bottomwrapper" style="position:fixed;bottom:0;width:85%">
+                    <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>
                     </div>
                 </div><!-- mainpanel -->

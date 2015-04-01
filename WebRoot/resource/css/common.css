@@ -5,13 +5,13 @@ table {
 }
 
 .tab {
-	margin:0 1px;
+	margin: 0 1px;
 	margin-bottom: 8px;
 	font-size: 13px;
 	border-collapse: collapse;
 }
 
-.tab th{
+.tab th {
 	border: solid 1px #E5E5E5;
 	padding: 10px;
 	text-align: left;
@@ -23,8 +23,11 @@ table {
 	text-align: left;
 }
 
-
-
+.bottomwrapper {
+	position: fixed;
+	bottom: 0;
+	width: 85%
+}
 
 .fenye {
 	font-size: 14px;
@@ -93,6 +96,7 @@ table {
 	position: relative;
 	top: -10px;
 }
+
 .fenye .btn {
 	border: 1px solid #9D9D9D;
 	background-color: #428BCA;
@@ -100,6 +104,4 @@ table {
 	font-size: 14px;
 	text-align: center;
 	padding: 2px 8px;
-
 }
-

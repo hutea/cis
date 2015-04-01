@@ -11,6 +11,11 @@ import java.util.GregorianCalendar;
  */
 public class HelperUtil {
 
+	public static void printLog() {
+		System.out.println(Thread.currentThread().getStackTrace()[1].getClassName());
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
+
 	/**
 	 * 获取当月第一天
 	 * 
@@ -43,6 +48,5 @@ public class HelperUtil {
 	public static void main(String[] args) {
 		System.out.println(firstDayThisMonth());
 		System.out.println(lastDayThisMonth());
-
 	}
 }

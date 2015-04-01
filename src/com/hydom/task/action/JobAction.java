@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.hydom.dao.PageView;
-import com.hydom.task.ebean.Task;
+import com.hydom.task.ebean.Job;
 import com.hydom.task.service.JobService;
 import com.hydom.task.service.TaskService;
 
@@ -26,14 +26,23 @@ public class JobAction {
 
 	private HttpServletRequest request;
 
-	private int maxresult = 1;
+	private int maxresult = 10;
 	private int page = 1;
 	private int m = 1;// 识别选中导航菜单
 	private String querytype;
 	private String queryContent;
 
 	public String list() {
-		// ...
+		request = ServletActionContext.getRequest();
+		PageView<Job> pageView = new PageView<Job>(maxresult, page);
+		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
+		orderby.put("id", "asc");
+		StringBuffer jpql = new StringBuffer("o.visible=?1 ");
+		List<Object> params = new ArrayList<Object>();
+		params.add(true);
+		pageView.setQueryResult(jobService.getScrollData(pageView.getFirstResult(),
+				maxresult, jpql.toString(), params.toArray(), orderby));
+		request.setAttribute("pageView", pageView);
 
 		return "success";
 	}

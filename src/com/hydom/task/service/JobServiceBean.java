@@ -34,18 +34,23 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 		}
 	}
 
+	@Override
 	public void postJob(long jobId) {
-		Job job = (Job) em
-				.createQuery(
-						"select o from Job o where o.visible=?1 and o.id=?2 and o.taskFinishCount=o.taskCount")
-				.setParameter(1, true).setParameter(2, jobId).getSingleResult();
-		if (job != null) {// 提交作业：工单反馈
-			if (postJob(job)) {
-				job.setFeedback(true);
-			} else {
-				job.setFeedback(false);
+		try {
+			Job job = (Job) em
+					.createQuery(
+							"select o from Job o where o.visible=?1 and o.id=?2 and o.taskFinishCount=o.taskCount")
+					.setParameter(1, true).setParameter(2, jobId).getSingleResult();
+			if (job != null) {// 提交作业：工单反馈
+				if (postJob(job)) {
+					job.setFeedback(true);
+				} else {
+					job.setFeedback(false);
+				}
+				this.update(job);
 			}
-			this.update(job);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -82,7 +87,7 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 			Map<String, String> map = new LinkedHashMap<String, String>();
 			map.put("lineNo", task.getLineNo() + "");
 			map.put("inLineNo", task.getInLineNo() + "");
-			map.put("inLineNo", task.getResult());
+			map.put("originalData", task.getResult());
 			if (task.getRation() >= task.getAccuracy()) {// 实际比例>指定的正确比例：不需纠正
 				map.put("status", "false");
 			} else {
@@ -93,13 +98,16 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 		dataMap.put("message", list);
 		Gson gson = new Gson();
 		String jsonStr = gson.toJson(dataMap);
-		String path = ""; // 地址
+		System.out.println("JobServiceBean[postJob]工单反馈，提交内容：" + jsonStr);
+		String path = "http://172.16.40.21:8080/tem-rest-support/rest/phoneTask/backTaskByQuestion"; // 地址
+		// http://172.16.40.21:8080/tem-rest-support/rest/phoneTask/backTaskByQuestion
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("jsonStr", jsonStr);
 		InputStream inputStream;
 		try {
 			inputStream = HttpSender.postFromHttpClient(path, params, "UTF-8");
 			String result = IOUtils.toString(inputStream, "UTF-8");
+			System.out.println("JobServiceBean[postJob]工单反馈，响应结果：" + result);
 			if (result != null && result.contains("true")) {
 				return true;
 			} else {

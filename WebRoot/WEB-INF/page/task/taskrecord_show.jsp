@@ -33,8 +33,6 @@
 
 
 	<body style="background-color: white;">
-		
-
 		<div style="border: 1px solid #e3d3ee;width: 400px;height: 200px;">
 			原始笔迹:
 			<svg viewBox="${si.minX} ${si.minY} 500 500" width="100%" height="100%"  version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -45,6 +43,10 @@
 		<div>
 			计算出的正确结果：
         </div>
+		<hr/>
+		<div>
+			用户识别结果：
+		</div>
 		
 	<script type="text/javascript">
 	$(document).ready(function(){

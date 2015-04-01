@@ -48,12 +48,12 @@ public class Task {
 	@Column
 	private Integer canNum;// 可分配，起始值=initNum，后面通过计算设定
 	@Column
-	private Integer resultNum;// 返回了识别结果的人数
+	private Integer resultNum=0;// 返回了识别结果的人数
 	@Column
 	private Double accuracy;// 指定的正确比例
 	@Column
 	private Integer recycleType;// 回收类型：1=超时回收
-	@Column
+	@Column(length = 2000)
 	private String result;// 计算出的正确结果
 	@Column
 	private Double ration;// 实际的正确比例

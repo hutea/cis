@@ -43,7 +43,7 @@ public class TaskRecord {
 	private Integer identState;// 用户识别状态：0=识别超时，1=在规定时间识别
 	@Column
 	private Double score;// 本次识别得分
-	@Column
+	@Column(length = 2000)
 	private String result;// 用户识别结果
 	@Column
 	private Integer sign;// 识别结果计算：1=用户识别正确；2=用户识别错误

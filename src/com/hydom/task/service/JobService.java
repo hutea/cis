@@ -10,4 +10,6 @@ public interface JobService extends DAO<Job> {
 	 * @return
 	 */
 	public Job findByTaskId(String taskId);
+
+	void postJob(long jobId);
 }

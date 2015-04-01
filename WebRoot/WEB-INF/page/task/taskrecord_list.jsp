@@ -27,9 +27,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
-	    	function show(tid,uid) {
-		   	   	 var url ="${pageContext.request.contextPath}/manage/task/task_show.action";
-		   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'task_'+tid});
+	    	function show(taskRecordId) {
+		   	   	 var url ="${pageContext.request.contextPath}/manage/task/taskrecord_show.action?taskRecordId="+taskRecordId;
+		   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'taskrecord_'+taskRecordId});
 	   	 	}
         </script>
     </head>
@@ -60,9 +60,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="task_list" namespace="/manage/task" method="post" id="pageList"> 
+                       <s:form action="taskrecord_list" namespace="/manage/task" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
+                         <s:hidden name="taskId" />
                          <div>查询区</div>
     					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
 							 <tr>
@@ -75,7 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <th>是否超时</th>
                                     <th>操作</th>
                               </tr>
-                                	<tr>
+                                	<tr style="background-color: silver;">
                                 		 <td>1</td> 
                                 		 <td>2</td> 
                                 		 <td>1</td> 
@@ -83,9 +84,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 		 <td>2015-03-28 15:45:56</td> 
                                 		 <td>2015-03-28 16:05:56</td> 
                                 		 <td>否</td> 
-                                		 <td><a href='javascript:show(1,12)'>查看笔迹</a> 
+                                		 <td><a href='javascript:show()'>查看笔迹</a> 
                                 		 </td> 
                                 	</tr>
+                               
+                                <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
+                           	  	<tr>
+                           		 <td>${s.index+1}</td> 
+                           		 <td>${entry.task.lineNo}</td> 
+                           		 <td>${entry.task.inLineNo}</td> 
+                           		 <td>${entry.account.id}</td> 
+                           		 <td><fmt:formatDate value="${entry.matchTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                           		 <td><fmt:formatDate value="${entry.postTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                           		 <td>${entry.identState==1?'未超时':'超时'}</td> 
+                        		 <td><a href='javascript:show(${entry.id})'>查看笔迹</a> 
+                           	  	</tr>
+                           	  </c:forEach>
 						 </table>
 						</s:form>
                        	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
@@ -93,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         
                         
                     </div><!-- contentpanel -->
-                    <div class="bottomwrapper" style="position:fixed;bottom:0;width:85%">
+                    <div class="bottomwrapper">
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>
                     </div>
                 </div><!-- mainpanel -->
