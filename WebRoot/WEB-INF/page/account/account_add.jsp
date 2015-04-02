@@ -26,28 +26,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/kindeditor.js"></script>
 		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/lang/zh_CN.js"></script>
 		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.js"></script>
-		<script>
-		var editor;
-		KindEditor.ready(function(K) {
-			editor = K.create('textarea[name="config.valueContent"]', {
-				resizeType : 1,
-				width : "500px", //编辑器的宽度为500px
-     	        height : "200px", //编辑器的高度为100px
-     	        minWidth:"500px",
-				allowPreviewEmoticons : false,
-				allowImageUpload : false,
-				items : [
-					'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
-					'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-					'insertunorderedlist', '|', 'emoticons', 'link']
-			});
-		});
-		</script>
-		<style type="text/css">
-			.ke-container ke-container-default{
-				width:500px;
-			}
-	    </style>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>

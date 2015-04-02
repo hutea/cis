@@ -14,16 +14,41 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         <meta name="author" content="">
         <title>Chain Responsive Bootstrap3 Admin</title>
+        <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/select2.css" rel="stylesheet" />
-
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
+		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
+        <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/kindeditor/themes/default/default.css" />
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.css" />
+		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/kindeditor.js"></script>
+		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/lang/zh_CN.js"></script>
+		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.js"></script>
+		<script>
+		var editor;
+		KindEditor.ready(function(K) {
+			editor = K.create('textarea[name="config.valueContent"]', {
+				resizeType : 1,
+				width : "350px", //编辑器的宽度为500px
+     	        height : "200px", //编辑器的高度为100px
+     	        minWidth:"500px",
+				allowPreviewEmoticons : false,
+				allowImageUpload : false,
+				items : [
+					'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+					'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+					'insertunorderedlist', '|', 'emoticons', 'link']
+			});
+		});
+		</script>
+        
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
-    </head>
 
     <body>
         <header>    
@@ -51,68 +76,72 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                        
-                        <div class="row row-stat">
-                               <!-- code block hydom -->
-                                	
-                                <form id="form2" class="form-horizontal form-bordered">
-                                    <div class="panel panel-default" style="width: 600px">
-                                        <div class="panel-heading">
-                                            <div style="display: none;" class="panel-btns">
-                                                <a data-original-title="Minimize Panel" href="" class="panel-minimize tooltips" data-toggle="tooltip" title=""><i class="fa fa-minus"></i></a>
-                                                <a data-original-title="Close Panel" href="" class="panel-close tooltips" data-toggle="tooltip" title=""><i class="fa fa-times"></i></a>
-                                            </div><!-- panel-btns -->
-                                            <h4 class="panel-title">Bordered Form</h4>
-                                            <p>Basic form with a class name of <code>.form-bordered</code>.</p>
-                                        </div>
-                                        <div class="panel-body nopadding">
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">奖品名称:</label>
-                                                <div class="col-sm-8">
-                                                    <input name="name" class="form-control" type="text">
-                                                </div>
-                                            </div><!-- form-group -->
-                                        
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">奖品数量:</label>
-                                                <div class="col-sm-8">
-                                                    <input name="" class="form-control" type="text">
-                                                </div>
-                                            </div><!-- form-group -->
-                                            
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">奖品状态:</label>
-                                                <div class="col-sm-8">
-                                                    <input name="" class="form-control" type="text">
-                                                </div>
-                                            </div><!-- form-group -->
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">兑换积分:</label>
-                                                <div class="col-sm-8">
-                                                    <input name="" class="form-control" type="text">
-                                                </div>
-                                            </div><!-- form-group -->
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">兑换状态:</label>
-                                                <div class="col-sm-8">
-	                                                <select name="trophy.type"   class="form-control" >
-									 				 	<option value="0" selected="selected" >请选择</option>
-									 				 	<option value="1" >可以兑换</option>
-									 				 	<option value="2" >停止兑换</option>
-									 				</select>
-                                                </div>
-                                            </div><!-- form-group -->
-                                        </div><!-- panel-body -->
-                                        <div class="panel-footer">
-                                            <button class="btn btn-primary mr5">Submit</button>
-                                            <button type="reset" class="btn btn-default">Reset</button>
-                                        </div><!-- panel-footer -->
-                                    </div><!-- panel -->
-                                </form>
-                              
-                            <!-- code block hydom -->
-                        </div><!-- row -->
-                        
+                    	<div class="content-s"  >
+                         <div>奖品添加</div>
+                         <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
+                         <s:form action="trophy_add" name="myform" namespace="/manage/credit" method="post"  id="pageList"> 
+	    					<div class="form-horizontal">
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">奖品名称</label>
+								    <div class="col-sm-9">
+								      <input type="text" class="form-control" name="trophy.name" placeholder="奖品名称">
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">兑换状态</label>
+								    <div class="col-sm-9">
+								      <select name="tropy.state" class="form-control"  >
+								      	<option value="1">可以兑换</option>
+								      	<option value="0">停止兑换</option>
+								      </select>
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">价值</label>
+								    <div class="col-sm-9">
+								      <input type="text" class="form-control"  name="trophy.money"  placeholder="价值">
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">所需积分</label>
+								    <div class="col-sm-9">
+								      <input type="text" class="form-control" name="trophy.score" placeholder="所需积分">
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">库存</label>
+								    <div class="col-sm-9">
+								      <input type="text" class="form-control" name="trophy.stock" placeholder="库存">
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">类别</label>
+								    <div class="col-sm-9">
+								      <input type="radio" name="trophy.type" placeholder="奖品类别">类别一
+								      <input type="radio" name="trophy.type" placeholder="奖品类别">类别二
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">上传图片</label>
+								    <div class="col-sm-9">
+								      <input type="file" class="form-control" name="trophy.xx" placeholder="昵称">
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <textarea class="col-sm-12" name="config.valueContent" cols="50" rows="8" >
+    					 				
+    					 			</textarea>
+								  </div>
+								  
+	    					 
+	    					 	<div style="line-height: 50px;text-align: center;">
+	    					 		<span><input type="reset" value="重置" class="btn btn-primary"/></span>
+	    					 		<span><input type="submit" value="提交" class="btn btn-primary"/></span>
+	    					 	</div>
+	    					</div>
+    					 </s:form>
+						</div>  <!-- content  -->
+
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>

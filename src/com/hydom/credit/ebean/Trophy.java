@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
@@ -22,15 +23,19 @@ public class Trophy {
 	@Column
 	private String name;// 名称
 	@Column
-	private int state;// 状态
-	@Column
+	private int state = 1;// 状态
+	@Lob
 	private String detail;// 奖品描述
+	@Lob
+	private String detailText;// 奖品描述
 	@Column
 	private int stock;// 库存数
 	@Column
 	private int score;// 需要的积分
 	@Column
 	private String image;// 奖品图片地址
+	@Column
+	private String money;// 价值
 	@Column
 	private String type;// 奖品类别
 	@Column
@@ -52,6 +57,14 @@ public class Trophy {
 		this.type = type;
 	}
 
+	public String getMoney() {
+		return money;
+	}
+
+	public void setMoney(String money) {
+		this.money = money;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -62,6 +75,14 @@ public class Trophy {
 
 	public int getState() {
 		return state;
+	}
+
+	public String getDetailText() {
+		return detailText;
+	}
+
+	public void setDetailText(String detailText) {
+		this.detailText = detailText;
 	}
 
 	public void setState(int state) {

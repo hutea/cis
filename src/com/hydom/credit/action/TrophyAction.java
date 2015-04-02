@@ -29,18 +29,10 @@ public class TrophyAction {
 	private int maxresult = 13;
 	private int page = 1;
 	private int id;
+	private int m = 3;// 识别选中导航菜单
 	private InputStream inputStream;
 	private String querytype;
 	private String queryContent;
-
-	public String addUI() {
-		return "success";
-	}
-
-	public String add() {
-		TrophyService.save(trophy);
-		return "success";
-	}
 
 	public String list() {
 		request = ServletActionContext.getRequest();
@@ -61,8 +53,18 @@ public class TrophyAction {
 			}
 
 		}
-		pageView.setQueryResult(TrophyService.getScrollData(pageView.getFirstResult(), maxresult, jpql.toString(), params.toArray(), orderby));
+		pageView.setQueryResult(TrophyService.getScrollData(pageView.getFirstResult(),
+				maxresult, jpql.toString(), params.toArray(), orderby));
 		request.setAttribute("pageView", pageView);
+		return "success";
+	}
+
+	public String addUI() {
+		return "success";
+	}
+
+	public String add() {
+		TrophyService.save(trophy);
 		return "success";
 	}
 
@@ -140,6 +142,14 @@ public class TrophyAction {
 
 	public void setQueryContent(String queryContent) {
 		this.queryContent = queryContent;
+	}
+
+	public int getM() {
+		return m;
+	}
+
+	public void setM(int m) {
+		this.m = m;
 	}
 
 }
