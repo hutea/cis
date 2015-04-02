@@ -15,7 +15,7 @@ public class SystemConfigAction {
 	private SystemConfigService systemConfigService;
 
 	private String scid;
-
+	private int m = 5;// 识别选中导航菜单
 	private SystemConfig config;
 
 	public String show() {
@@ -31,9 +31,7 @@ public class SystemConfigAction {
 	public String edit() {
 		SystemConfig entity = systemConfigService.find(scid);
 		entity.setValueContent(config.getValueContent());
-		if(config.getValueDouble()!=null){
-			entity.setValueDouble(config.getValueDouble() / 100);
-		}
+		entity.setValueDouble(config.getValueDouble());
 		entity.setValueInt(config.getValueInt());
 		entity.setValueLong(config.getValueLong());
 		entity.setValueShort(config.getValueShort());
@@ -56,6 +54,14 @@ public class SystemConfigAction {
 
 	public void setConfig(SystemConfig config) {
 		this.config = config;
+	}
+
+	public int getM() {
+		return m;
+	}
+
+	public void setM(int m) {
+		this.m = m;
 	}
 
 }

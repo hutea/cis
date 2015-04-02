@@ -10,16 +10,20 @@
 	<constant name="struts.i18n.encoding" value="UTF-8" />
 	<constant name="struts.ui.theme" value="simple" />
 
-	<!--  页面屏蔽导向action 	-->
-	<package name="forward" namespace="/" extends="struts-default">
-		<action name="signup" class="accountAction" method="signup">
-			<result>/signup.jsp</result>
-		</action>
-		<action name="signin" class="accountAction" method="signin">
+	<package name="signin_up" namespace="/" extends="struts-default">
+		<action name="signin" class="loginAndExitAction" method="signin">
 			<result type="redirectAction">
 				<param name="actionName">index</param>
+				<param name="namespace">manage</param>
 			</result>
+			<result name="fail">/signin.jsp</result>
 		</action>
+		<action name="signout" class="loginAndExitAction" method="signout">
+			<result>/signin.jsp</result>
+		</action>
+	</package>
+
+	<package name="manage" namespace="/manage" extends="struts-default">
 		<action name="index">
 			<result>/WEB-INF/page/common/index.jsp</result>
 		</action>

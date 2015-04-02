@@ -21,12 +21,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
         <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/kindeditor/themes/default/default.css" />
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.css" />
+		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/kindeditor.js"></script>
+		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/lang/zh_CN.js"></script>
+		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.js"></script>
+		<script>
+		var editor;
+		KindEditor.ready(function(K) {
+			editor = K.create('textarea[name="config.valueContent"]', {
+				resizeType : 1,
+				width : "500px", //编辑器的宽度为500px
+     	        height : "200px", //编辑器的高度为100px
+     	        minWidth:"500px",
+				allowPreviewEmoticons : false,
+				allowImageUpload : false,
+				items : [
+					'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+					'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+					'insertunorderedlist', '|', 'emoticons', 'link']
+			});
+		});
+		</script>
+		<style type="text/css">
+			.ke-container ke-container-default{
+				width:500px;
+			}
+	    </style>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
-    </head>
 
     <body>
         <header>    
@@ -46,72 +72,52 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>job list</li>
+                                    <li>account add</li>
                                 </ul>
-                                <h4>工单管理</h4>
+                                <h4>帐户添加</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="job_list" namespace="/manage/task" method="post" id="pageList"> 
-                         <s:hidden name="page" />
-                         <s:hidden name="m" />
-                         <div>查询区
-                         	<input type="text" name="query_taskId">
-                         	<input type="text" name="query_createTime">
-                         	<input type="text" name="query_finishTime">
-                         	<ul style="list-style-type: decimal;">
-                         		
-                         		<li>taskId</li>
-                         		<li>生成时间</li>
-                         		<li>完成时间</li>
-                         	</ul>
-                         </div>
-    					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
-							 <tr>
-                                    <th>#</th>
-                                    <th>taskId</th>
-                                    <th>区块数</th>
-                                    <th>区块完成数</th>
-                                    <th>生成时间</th>
-                                    <th>完成时间</th>
-                                    <th>反馈结果</th>
-                                    <th>操作</th>
-                              </tr>
-                              <tr style="background-color: silver">
-                           		 <td>1</td> 
-                           		 <td>ef3d23243a3</td> 
-                           		 <td>10</td> 
-                           		 <td>8</td> 
-                           		 <td>2015-03-28 15:45:56</td> 
-                           		 <td>2015-03-28 16:05:56</td> 
-                           		 <td>反馈成功</td> 
-                           		 <td>
-                           		 <a href='<s:url action="task_list" namespace="/manage/task" />'>详细</a>
-                           		 </td> 
-                           	  </tr>
-                           	  
-                           	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
-                           	  	<tr>
-                           		 <td>${s.index+1}</td> 
-                           		 <td>${entry.taskId}</td> 
-                           		 <td>${entry.taskCount}</td> 
-                           		 <td>${entry.taskFinishCount}</td> 
-                           		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td><fmt:formatDate value="${entry.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td>${entry.feedback?'反馈成功':'未反馈'}</td> 
-                           		 <td>
-                           		 <a href='<s:url action="task_list" namespace="/manage/task" />?jobid=${entry.id}'>详细</a>
-                           		 </td> 
-                           	  	</tr>
-                           	  </c:forEach>
-						 </table>
-						</s:form>
-                       	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
-                            <!-- code block hydom -->
-                        
-                        
+                    	<div class="content-s" >
+                         <div>帐户添加</div>
+                         <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
+                         <s:form action="account_add" name="myform" namespace="/manage/account" method="post"  id="pageList"> 
+	    					<div class="form-horizontal">
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">用户名</label>
+								    <div class="col-sm-9">
+								      <input type="text" class="form-control" name="account.username" placeholder="用户名">
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">密码</label>
+								    <div class="col-sm-9">
+								      <input type="text" class="form-control" name="account.password"  placeholder="密码">
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">手机号</label>
+								    <div class="col-sm-9">
+								      <input type="text" class="form-control"  name="account.phone"  placeholder="手机号">
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">昵称</label>
+								    <div class="col-sm-9">
+								      <input type="text" class="form-control" name="account.nickname" placeholder="昵称">
+								    </div>
+								  </div>
+	    					 
+	    					 	<div style="line-height: 50px;text-align: center;">
+	    					 		<span><input type="reset" value="重置" class="btn btn-primary"/></span>
+	    					 		<span><input type="submit" value="提交" class="btn btn-primary"/></span>
+	    					 	</div>
+	    					</div>
+    					 </s:form>
+						</div>  <!-- content  -->
+
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>

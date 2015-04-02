@@ -11,7 +11,7 @@
 	<head>
 		<base href="<%=basePath%>">
 
-		<title></title>
+	<title></title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/bootstrap.min.css" type="text/css">
     <script type="text/javascript" src="${pageContext.request.contextPath}/resource/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resource/bootstrap.js"></script>

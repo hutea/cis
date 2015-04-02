@@ -1,9 +1,14 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@page import="com.hydom.util.WebUtil"%>
+<%@ include file="/WEB-INF/page/common/taglib.jsp" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	request.setAttribute("uname",WebUtil.getCookieValueByName(request,"username"));
+	request.setAttribute("pwd",WebUtil.getCookieValueByName(request,"password"));
+	request.setAttribute("sign",WebUtil.getCookieValueByName(request,"rememberMe"));
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -35,24 +40,25 @@
                     <br />
                     <h4 class="text-center mb5">Already a Member?</h4>
                     <p class="text-center">Sign in to your account</p>
+                    <p class="text-center" style="color: red;">${error}</p>
                     
                     <div class="mb30"></div>
                     
                     <form action="signin.action" method="post">
                         <div class="input-group mb15">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input type="text" class="form-control" placeholder="Username">
+                            <input type="text" class="form-control" placeholder="Username" name="username" value="${uname }">
                         </div><!-- input-group -->
                         <div class="input-group mb15">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input type="password" class="form-control" placeholder="Password">
+                            <input type="password" class="form-control" placeholder="Password" name="password" value="${pwd}">
                         </div><!-- input-group -->
                         
                         <div class="clearfix">
                             <div class="pull-left">
                                 <div class="ckbox ckbox-primary mt10">
-                                    <input type="checkbox" id="rememberMe" value="1">
-                                    <label for="rememberMe">Remember Me</label>
+                                    <input type="checkbox" id="rememberMe" value="1" name="rememberMe" <c:if test="${sign==1}"> checked="checked"</c:if> >
+                                    <label for="rememberMe">Remember Me </label>
                                 </div>
                             </div>
                             <div class="pull-right">
@@ -66,7 +72,6 @@
                     <a href="" class="btn btn-primary btn-block">注册链接【备用】</a>
                 </div><!-- panel-footer -->
             </div><!-- panel -->
-            
         </section>
 
         <script src="${pageContext.request.contextPath}/resource/chain/js/jquery-1.11.1.min.js"></script>

@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!DOCTYPE html>
-<html lang="cn">
+<html lang="zh-CN">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -80,33 +80,46 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                    	<div class="contetn" style="width: 600px; margin: 10px auto;border: 1px solid #d3d3d3;padding: 50px;padding-bottom: 200px;font-size: 15px;">
-                         <div>系统设置
-                         	
-                         </div>
+                    	<div class="content-m" >
+                         <div>系统设置</div>
                          <div style="float: right;">设置</div>
                          <div style="border-bottom: 1px solid #d5d5d5">&nbsp</div>
                          <s:form action="config_edit" name="myform" namespace="/manage/extra" method="post" id="pageList"> 
                          <s:hidden name="m" />
                          <s:hidden name="scid" />
     					 <c:if test="${config.id=='match'}">
-    					 <div id="configblock" >
+    					 <div id="configblock" class="form-horizontal">
     					 	<div style="line-height: 50px;">
-    					 		<span>分配上限：</span>
-    					 		<span><input id="valueInt" name="config.valueInt" type="text"  value="${config.valueInt}"/></span>
+    					 		<span>工单设置</span>
     					 	</div>
-    					 	<div style="line-height: 50px;">
-    					 		<span>分配初值：</span>
-    					 		<span><input id="valueShort" name="config.valueShort" type="text"  value="${config.valueShort}"/></span>
-    					 	</div>
-    					 	<div style="line-height: 50px;">
-    					 		<span>正确比例：</span>
-    					 		<span><input id="valueDouble" name="config.valueDouble" type="text"  value="${config.valueDouble*100}"/>%</span>
-    					 	</div>
-    					 	<div style="line-height: 50px;">
-    					 		<span>超时时间：</span>
-    					 		<span><input id="valueLong" name="config.valueLong" type="text"  value="${config.valueLong}" /></span>
-    					 	</div>
+    					 	
+    					 	<div class="form-horizontal" style="width: 400px;">
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">分配上限</label>
+								    <div class="col-sm-9">
+								      <input id="valueInt"  name="config.valueInt" type="text"  value="${config.valueInt}" class="form-control">
+								    </div>
+						   		 </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">分配初值</label>
+								    <div class="col-sm-9">
+								      <input  id="valueShort" name="config.valueShort" type="text"  value="${config.valueShort}" class="form-control">
+								    </div>
+						   		 </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">正确比例</label>
+								    <div class="col-sm-9">
+								      <input id="valueDouble" name="config.valueDouble" type="text"  value="${config.valueDouble}"  class="form-control" title="${config.valueDouble*100}%" >
+								      
+								    </div>
+						   		 </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">超时时间 </label>
+								    <div class="col-sm-9">
+								      <input id="valueLong" name="config.valueLong" type="text"  value="${config.valueLong}"  class="form-control">
+								    </div>
+						   		 </div>
+						   	</div>
     					 </div><!-- configblock  -->
     					 </c:if>
     					 
@@ -139,7 +152,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 <c:if test="${config.id=='phone'}">
     					 <div id="configblock" >
     					 	<div style="line-height: 50px;">
-    					 		<span>联系电话</span>
+    					 		<span>联系我们</span>
     					 	</div>
     					 	<div style="line-height: 50px;">
     					 		<textarea name="config.valueContent" cols="50" rows="8" style="width:500px;height:200px;visibility:hidden;">
@@ -150,8 +163,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 </c:if>
     					 
     					 	<div style="line-height: 50px;text-align: center;">
-    					 		<span><input type="submit" value="提交" class="btn"/></span>
-    					 		<span><input type="reset" value="重置" class="btn"/></span>
+    					 		<span><input type="reset" value="重置" class="btn btn-primary"/></span>
+    					 		<span><input type="submit" value="提交" class="btn btn-primary"/></span>
     					 	</div>
     					 </s:form>
 						</div>  <!-- content  -->

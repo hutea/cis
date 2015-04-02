@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!DOCTYPE html>
-<html lang="cn">
+<html lang="zh-CN">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -66,7 +66,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         
                         
                     </div><!-- contentpanel -->
-                    <div class="bottomwrapper" style="position:fixed;bottom:0;width:85%">
+                    <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>
                     </div>
                 </div><!-- mainpanel -->

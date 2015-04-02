@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!DOCTYPE html>
-<html lang="cn">
+<html lang="zh-CN">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -63,37 +63,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                        <s:form action="task_list" namespace="/manage/task" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
- 						 <div>查询区
-                         	<ul style="list-style-type: decimal;">
-                         		<li>用户Id</li>
-                         		<li>注册时间</li>
-                         		<li>最近登录</li>
-                         	</ul>
-                         </div>
+ 						 <div>用户信息</div>
 						 
     					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
 							 <tr>
                                     <th>#</th>
                                     <th>帐户ID</th>
+                                    <th>手机号</th>
                                     <th>积分</th>
                                     <th>最近一月识别数</th>
                                     <th>识别总数</th>
                                     <th>正确率</th>
                                     <th>平均处理速度</th>
+                                    <th>注册时间</th>
                                     <th>最近登录</th>
                                     <th>操作</th>
                               </tr>
-                          	  <tr>
-                          		 	 <td>1</td> 
-                          			 <td>12345</td> 
-                          			 <td>1200</td> 
-                          			 <td>245</td> 
-                          			 <td>8562</td> 
-                          			 <td>80%</td> 
-                          			 <td>15s</td> 
-                          			 <td>2015-04-05 15:25:36</td> 
-                          			 <td><a href=''>详细</a></td> 
-                          	  </tr>
+                          	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
+                           	  	<tr id="tr_${entry.id}">
+                           		 <td>${s.index+1}</td> 
+                           		 <td>${entry.id}</td> 
+                           		 <td>${entry.phone}</td> 
+                           		 <td>${entry.score}</td> 
+                           		 <td>${entry.id+1}</td> 
+                           		 <td>${entry.id+101}</td> 
+                           		 <td>68%</td> 
+                           		 <td>3s</td> 
+                           		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                           		 <td><fmt:formatDate value="${entry.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                           		 <td>
+                           		 <a href='#'>详细</a>
+                           		 </td> 
+                           	  	</tr>
+                           	  </c:forEach>
 						 </table>
 						</s:form>
                        	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>

@@ -27,7 +27,7 @@ public class Account {
 	@Column(unique = true)
 	private String username;// 用户名（前期手机号即用户名）
 	@Column
-	private String phone;// 手机（利用后期扩展）
+	private String phone;// 手机（利于后期扩展）
 	@Column
 	private String password;// 密码
 	@Column
@@ -39,13 +39,17 @@ public class Account {
 	@Column
 	private String pay;// 支付宝帐号
 	@Column
+	private int type = 1;// 帐户类型：1=普通用户、2=后台管理员
+	@Column
 	private double score;// 用户的总积分
 	@Column
 	private Integer state;// 0=休息一下，1=识别中，2=注销
 	@Temporal(TemporalType.TIMESTAMP)
+	private Date createTime;// 创建时间
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastSigninTime;// 最后登录时间
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastSignoutTime;// 最后登录时间
+	private Date lastSignoutTime;// 最后注销时间
 	@Column
 	private Boolean visible = true;
 
@@ -57,10 +61,19 @@ public class Account {
 		this.username = username;
 		this.password = password;
 		this.phone = phone;
+		this.createTime = new Date();
 	}
 
 	public Long getId() {
 		return id;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	public Date getLastSigninTime() {
@@ -69,6 +82,14 @@ public class Account {
 
 	public void setLastSigninTime(Date lastSigninTime) {
 		this.lastSigninTime = lastSigninTime;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public Date getLastSignoutTime() {

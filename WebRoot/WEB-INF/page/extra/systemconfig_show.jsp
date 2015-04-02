@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!DOCTYPE html>
-<html lang="cn">
+<html lang="zh-CN">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -53,13 +53,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                    	<div class="contetn" style="width: 600px; margin: 10px auto;border: 1px solid #d3d3d3;padding: 50px;padding-bottom: 200px;font-size: 15px;">
-                         <div>系统设置
-                         	
-                         </div>
+                    	<div class="content-m" >
+                         <div>系统设置</div>
                          <div style="float: right;"><a href='<s:url action="config_editUI" namespace="/manage/extra" />?scid=${config.id}&m=5'>设置</a></div>
                          <div style="border-bottom: 1px solid #d5d5d5">&nbsp</div>
     					 <div id="" <c:if test="${scid!='match'}">style="display: none"</c:if>   >
+    					 	<div style="line-height: 50px;">
+    					 		<span>工单设置</span>
+    					 	</div >
     					 	<div style="line-height: 50px;">
     					 		<span>分配上限：</span>
     					 		<span>${config.valueInt }</span>
@@ -95,7 +96,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 </div>
     					 <div id="" <c:if test="${scid!='phone'}">style="display: none"</c:if>  >
     					 	<div style="line-height: 50px;">
-    					 		<span>联系电话 </span>
+    					 		<span>联系我们</span>
     					 	</div >
     					 	<div style="line-height: 50px;">
     					 		<span>${config.valueContent}</span>

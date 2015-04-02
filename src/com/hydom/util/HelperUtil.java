@@ -1,5 +1,7 @@
 package com.hydom.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -14,6 +16,29 @@ public class HelperUtil {
 	public static void printLog() {
 		System.out.println(Thread.currentThread().getStackTrace()[1].getClassName());
 		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+	}
+
+	/**
+	 * 对原始日期增加天数
+	 * 
+	 * @param srcDate
+	 *            ：原始日期
+	 * @param day
+	 *            ：要增加的天数
+	 * @return
+	 */
+	public static Date addDays(Date srcDate, int day) {
+		SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cale = Calendar.getInstance();
+		cale.setTime(srcDate);
+		cale.set(Calendar.DATE, cale.get(Calendar.DATE) + day);
+		Date date = null;
+		try {
+			date = dft.parse(dft.format(cale.getTime()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
 	}
 
 	/**

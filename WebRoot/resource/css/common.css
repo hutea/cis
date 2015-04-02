@@ -29,6 +29,28 @@ table {
 	width: 85%
 }
 
+.content-l {
+	width: 800px;
+	margin: 10px auto;
+	border: 1px solid #d3d3d3;
+	padding: 30px 50px ;
+	font-size: 15px;
+}
+.content-m {
+	width: 600px;
+	margin: 10px auto;
+	border: 1px solid #d3d3d3;
+	padding: 30px 50px ;
+	font-size: 15px;
+}
+.content-s {
+	width: 400px;
+	margin: 10px auto;
+	border: 1px solid #d3d3d3;
+	padding: 30px 50px ;
+	font-size: 15px;
+}
+
 .fenye {
 	font-size: 14px;
 	text-align: center;

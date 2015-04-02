@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>Chain Responsive Bootstrap3 Admin</title>
+        <title>帐户管理</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
@@ -21,11 +21,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
         <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
+        <script src="${pageContext.request.contextPath}/resource/my97/WdatePicker.js"></script>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+		function del(id){
+			if (confirm('您确定要删除此信息吗')) {
+			  $.get("${pageContext.request.contextPath}/manage/account/account_delete.action", 
+			  {accid:id},
+			  function(data) {
+		      	if(data==1){
+		      		$("#tr_"+id).css("display","none");
+		       	}
+			   });
+			}
+			}
+        </script>
     </head>
 
     <body>
@@ -46,72 +60,56 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>job list</li>
+                                    <li>account list</li>
                                 </ul>
-                                <h4>工单管理</h4>
+                                <h4>帐户管理</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="job_list" namespace="/manage/task" method="post" id="pageList"> 
+                       <s:form action="account_list" namespace="/manage/account" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
-                         <div>查询区
-                         	<input type="text" name="query_taskId">
-                         	<input type="text" name="query_createTime">
-                         	<input type="text" name="query_finishTime">
-                         	<ul style="list-style-type: decimal;">
-                         		
-                         		<li>taskId</li>
-                         		<li>生成时间</li>
-                         		<li>完成时间</li>
-                         	</ul>
+                         <div> 
+                         	<span class="text-primary hidden" >查询选项 </span>
+                         	<input type="text" style="width: 220px;display: inline-block;" name="query_username" value="${query_username}" class="form-control"  placeholder="用户名"  >
+                         	<input type="text" style="width: 220px;display: inline-block;" name="query_phone" value="${query_phone}" class="form-control"  placeholder="手机号"  >
+                         	<input type="text" style="width: 220px;display: inline-block;height: 38px;" name="query_createTime" value="${query_createTime}" class="Wdate"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="创建时间"  >
+                         		<input type="submit" style="margin: 0 50px;"  class="btn btn-primary"   value="查 询"  >
+                         		<a class="btn btn-success" href='<s:url action="account_addUI" namespace="/manage/account" />'>新增</a>
                          </div>
     					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
 							 <tr>
                                     <th>#</th>
-                                    <th>taskId</th>
-                                    <th>区块数</th>
-                                    <th>区块完成数</th>
-                                    <th>生成时间</th>
-                                    <th>完成时间</th>
-                                    <th>反馈结果</th>
+                                    <th>帐户ID</th>
+                                    <th>用户名</th>
+                                    <th>昵称</th>
+                                    <th>手机</th>
+                                    <th>创建时间</th>
+                                    <th>最后登录时间</th>
                                     <th>操作</th>
                               </tr>
-                              <tr style="background-color: silver">
-                           		 <td>1</td> 
-                           		 <td>ef3d23243a3</td> 
-                           		 <td>10</td> 
-                           		 <td>8</td> 
-                           		 <td>2015-03-28 15:45:56</td> 
-                           		 <td>2015-03-28 16:05:56</td> 
-                           		 <td>反馈成功</td> 
-                           		 <td>
-                           		 <a href='<s:url action="task_list" namespace="/manage/task" />'>详细</a>
-                           		 </td> 
-                           	  </tr>
                            	  
                            	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
-                           	  	<tr>
+                           	  	<tr id="tr_${entry.id}">
                            		 <td>${s.index+1}</td> 
-                           		 <td>${entry.taskId}</td> 
-                           		 <td>${entry.taskCount}</td> 
-                           		 <td>${entry.taskFinishCount}</td> 
+                           		 <td>${entry.id}</td> 
+                           		 <td>${entry.username}</td> 
+                           		 <td>${entry.nickname}</td> 
+                           		 <td>${entry.phone}</td> 
                            		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td><fmt:formatDate value="${entry.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td>${entry.feedback?'反馈成功':'未反馈'}</td> 
+                           		 <td><fmt:formatDate value="${entry.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td>
-                           		 <a href='<s:url action="task_list" namespace="/manage/task" />?jobid=${entry.id}'>详细</a>
+                           		 <a href='<s:url action="account_editUI" namespace="/manage/account" />?accid=${entry.id}'>修改</a>
+                           		 <a href="javascript:del('${entry.id}')">删除</a>
                            		 </td> 
                            	  	</tr>
                            	  </c:forEach>
 						 </table>
 						</s:form>
                        	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
-                            <!-- code block hydom -->
-                        
-                        
+
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>
