@@ -23,7 +23,9 @@
                         
                         <li <c:if test="${param.m==2||m==2}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-edit"></i> <span>用户管理</span></a>
                             <ul class="children"> 
-                                <li <td:active url="user_list">class="active"</td:active>  ><a href='<s:url action="user_list" namespace="/manage/account" />'>用户查看</a></li>
+                                <li>
+                                	<a href='<s:url action="user_list" namespace="/manage/account" />'>用户查看</a>
+                                </li>
                                 <li><a href="general-forms.html">积分详细 </a></li>
                                 <li><a href="general-forms.html">积分管理</a></li>
                             </ul>
@@ -31,8 +33,12 @@
                         
                         <li <c:if test="${param.m==3||m==3}">class="active parent"</c:if> class="parent" ><a href=""><i class="fa fa-bars"></i> <span>奖品管理</span></a>
                             <ul class="children">
-  								<li><a href='<s:url action="trophy_list" namespace="/manage/credit" />'>奖品列表</a></li> 
-  								<li><a href='<s:url action="trophy_addUI" namespace="/manage/credit" />'>奖品添加</a></li> 
+  								<li>
+  									<a href='<s:url action="trophy_list" namespace="/manage/credit" />'>奖品列表</a>
+  								</li> 
+  								<li>
+  									<a href='<s:url action="trophy_addUI" namespace="/manage/credit" />'>奖品添加</a>
+  								</li> 
                             </ul>
                         </li>
                         
@@ -47,10 +53,10 @@
                         
                         <li <c:if test="${param.m==5||m==5}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-file-text"></i> <span>系统设置</span></a>
                             <ul class="children">
-                                <li <td:active url="systemconfig_show" param="match">class="active"</td:active>  >
+                                <li>
                                 	<a href='<s:url action="config_show" namespace="/manage/extra" />?scid=match'>工单设置</a>
                                 </li>
-                                <li <td:active url="systemconfig_show" param="manual">class="active"</td:active> >
+                                <li>
                                 	<a href='<s:url action="config_show" namespace="/manage/extra" />?scid=manual'>积分说明</a>
                                 </li>
                                 <li>
