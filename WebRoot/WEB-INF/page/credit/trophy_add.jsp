@@ -21,12 +21,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
         <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/kindeditor/themes/default/default.css" />
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.css" />
+		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/kindeditor.js"></script>
+		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/lang/zh_CN.js"></script>
+		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.js"></script>
+		<script>
+		var editor;
+		KindEditor.ready(function(K) {
+			editor = K.create('textarea[name="trophy.detail"]', {
+				resizeType : 1,
+				width : "420px", //编辑器的宽度为500px
+     	        height : "180px", //编辑器的高度为100px
+     	        minWidth:"500px",
+				allowPreviewEmoticons : false,
+				allowImageUpload : false,
+				items : [
+					'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+					'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'link']
+			});
+		});
+		</script>
+        
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
-    </head>
 
     <body>
         <header>    
@@ -46,59 +67,77 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>job list</li>
+                                    <li>trophy add</li>
                                 </ul>
-                                <h4>工单管理</h4>
+                                <h4>奖品添加</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="job_list" namespace="/manage/task" method="post" id="pageList"> 
-                         <s:hidden name="page" />
-                         <s:hidden name="m" />
-                         <div>查询区
-                         	<input type="text" name="query_taskId">
-                         	<input type="text" name="query_createTime">
-                         	<input type="text" name="query_finishTime">
-                         	<ul style="list-style-type: decimal;">
-                         		
-                         		<li>taskId</li>
-                         		<li>生成时间</li>
-                         		<li>完成时间</li>
-                         	</ul>
-                         </div>
-    					 <table  class="table table-bordered table-striped">
-							 <tr>
-                                    <th>#</th>
-                                    <th>taskId</th>
-                                    <th>区块数</th>
-                                    <th>区块完成数</th>
-                                    <th>生成时间</th>
-                                    <th>完成时间</th>
-                                    <th>反馈结果</th>
-                                    <th>操作</th>
-                              </tr>
-                           	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
-                           	  	<tr>
-                           		 <td>${s.index+1}</td> 
-                           		 <td>${entry.taskId}</td> 
-                           		 <td>${entry.taskCount}</td> 
-                           		 <td>${entry.taskFinishCount}</td> 
-                           		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td><fmt:formatDate value="${entry.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td>${entry.feedback?'反馈成功':'未反馈'}</td> 
-                           		 <td>
-                           		 <a href='<s:url action="task_list" namespace="/manage/task" />?jobid=${entry.id}'>详细</a>
-                           		 </td> 
-                           	  	</tr>
-                           	  </c:forEach>
-						 </table>
-						</s:form>
-                       	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
-                            <!-- code block hydom -->
-                        
-                        
+                    	<div class="content-m"  >
+                         <div>奖品添加</div>
+                         <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
+                         <s:form action="trophy_add" name="myform" namespace="/manage/credit" method="post" enctype="multipart/form-data"  id="pageList"> 
+	    					<div class="form-horizontal">
+		    					 <div class="form-group">
+								    <label  class="col-sm-2 control-label">奖品名称</label>
+								    <div class="col-sm-4">
+								      <input type="text" class="form-control" name="trophy.name" placeholder="奖品名称">
+								    </div>
+								    <label  class="col-sm-2 control-label">兑换状态</label>
+								    <div class="col-sm-4">
+								      <select name="trophy.state" class="form-control"  >
+								      	<option value="1">可以兑换</option>
+								      	<option value="0">停止兑换</option>
+								      </select>
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-2 control-label">价值</label>
+								    <div class="col-sm-4">
+								      <input type="text" class="form-control"  name="trophy.money"  placeholder="价值">
+								    </div>
+								    <label  class="col-sm-2 control-label">所需积分</label>
+								    <div class="col-sm-4">
+								      <input type="text" class="form-control" name="trophy.score" placeholder="所需积分">
+								    </div>
+								 </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-2 control-label">库存</label>
+								    <div class="col-sm-4">
+								      <input type="text" class="form-control" name="trophy.stock" placeholder="库存">
+								    </div>
+								    <label  class="col-sm-2 control-label">类别</label>
+								    <div class="col-sm-4">
+								      <select name="typeid" class="form-control"  >
+								      	<c:forEach items="${types}" var="entry">  
+								      		<option value="${entry.id }">${entry.name}</option>
+								      	</c:forEach>
+								      </select>
+								    </div>
+								 </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-2 control-label">上传图片</label>
+								    <div class="col-sm-10">
+								      <input type="file" name="img" class="form-control"> 
+								    </div>
+								 </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-2 control-label">详细说明</label>
+								    <div class="col-sm-10">
+								    <textarea  name="trophy.detail" ></textarea>
+    					 			</div>
+								  </div>
+	    					 
+	    					 	<div style="line-height: 50px;text-align: center;">
+	    					 		<span><input type="reset" value="重置" class="btn btn-primary"/></span>
+	    					 		<span><input type="submit" value="提交" class="btn btn-primary"/></span>
+	    					 	</div>
+	    					</div>
+    					 </s:form>
+						</div>  <!-- content  -->
+
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>

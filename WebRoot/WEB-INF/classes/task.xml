@@ -4,7 +4,7 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
 
-	<package name="task" namespace="/manage/task" extends="struts-default">
+	<package name="task" namespace="/manage/task" extends="pub-package">
 		<action name="job_list" class="jobAction" method="list">
 			<result>/WEB-INF/page/task/job_list.jsp</result>
 		</action>

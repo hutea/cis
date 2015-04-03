@@ -63,9 +63,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                        <s:form action="task_list" namespace="/manage/task" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
- 						 <div>用户信息</div>
 						 
-    					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
+    					 <table class="table table-bordered table-striped" >
 							 <tr>
                                     <th>#</th>
                                     <th>帐户ID</th>

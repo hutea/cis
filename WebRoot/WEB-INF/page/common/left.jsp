@@ -39,6 +39,9 @@
   								<li>
   									<a href='<s:url action="trophy_addUI" namespace="/manage/credit" />'>奖品添加</a>
   								</li> 
+  								<li>
+  									<a href='<s:url action="trophyType_list" namespace="/manage/credit" />'>奖品分类管理</a>
+  								</li> 
                             </ul>
                         </li>
                         

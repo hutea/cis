@@ -1,12 +1,19 @@
 package com.hydom.account.ebean;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -52,6 +59,9 @@ public class Account {
 	private Date lastSignoutTime;// 最后注销时间
 	@Column
 	private Boolean visible = true;
+	@ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JoinTable(name = "t_account_group", joinColumns = @JoinColumn(name = "acc_id"), inverseJoinColumns = @JoinColumn(name = "g_id"))
+	private Set<PrivilegeGroup> groups = new HashSet<PrivilegeGroup>();// 权限组
 
 	public Account() {
 
@@ -90,6 +100,14 @@ public class Account {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public Set<PrivilegeGroup> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(Set<PrivilegeGroup> groups) {
+		this.groups = groups;
 	}
 
 	public Date getLastSignoutTime() {

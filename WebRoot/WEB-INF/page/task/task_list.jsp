@@ -64,9 +64,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          <s:hidden name="page" />
                          <s:hidden name="m" />
                          <s:hidden name="jobid" />
-                         <div>查询区</div>
-    					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
-							 <tr style="background-color: silver">
+    					 <table   class="table table-bordered table-striped">
+							 <tr>
                                     <th>#</th>
                                     <th>行号</th>
                                     <th>行内号</th>
@@ -78,21 +77,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <th>超时时间</th>
                                     <th>操作</th>
                               </tr>
-                                	<tr style="background-color: silver;">
-                                		 <td>1</td> 
-                                		 <td>2</td> 
-                                		 <td>1</td> 
-                                		 <td>3</td> 
-                                		 <td>6</td> 
-                                		 <td>65%/70%</td> 
-                                		 <td>2015-03-28 15:45:56</td> 
-                                		 <td>2015-03-28 16:05:56</td> 
-                                		 <td>6</td> 
-                                		 <td><a href='javascript:show(1)' >查看</a> 
-                                		 <a href='<s:url action="taskrecord_list" namespace="/manage/task" />'>详细</a>
-                                		 </td> 
-                                	</tr>
-                                	
                               <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
                            	  	<tr>
                            		 <td>${s.index+1}</td> 

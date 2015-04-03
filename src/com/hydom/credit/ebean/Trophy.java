@@ -1,11 +1,14 @@
 package com.hydom.credit.ebean;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -31,13 +34,18 @@ public class Trophy {
 	@Column
 	private int stock;// 库存数
 	@Column
+	private int exchangeNum = 0;// 被兑换的数量
+	@Column
 	private int score;// 需要的积分
 	@Column
 	private String image;// 奖品图片地址
 	@Column
-	private String money;// 价值
+	private String imageName;// 奖品图片名称
 	@Column
-	private String type;// 奖品类别
+	private String money;// 价值
+	@ManyToOne(cascade = { CascadeType.REFRESH, }, optional = false)
+	@JoinColumn(name = "type_id")
+	private TrophyType trophyType;// type;// 奖品类别
 	@Column
 	private Boolean visible = true;
 
@@ -49,12 +57,12 @@ public class Trophy {
 		this.id = id;
 	}
 
-	public String getType() {
-		return type;
+	public TrophyType getTrophyType() {
+		return trophyType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTrophyType(TrophyType trophyType) {
+		this.trophyType = trophyType;
 	}
 
 	public String getMoney() {
@@ -75,6 +83,14 @@ public class Trophy {
 
 	public int getState() {
 		return state;
+	}
+
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
 	}
 
 	public String getDetailText() {
@@ -127,6 +143,14 @@ public class Trophy {
 
 	public void setVisible(Boolean visible) {
 		this.visible = visible;
+	}
+
+	public int getExchangeNum() {
+		return exchangeNum;
+	}
+
+	public void setExchangeNum(int exchangeNum) {
+		this.exchangeNum = exchangeNum;
 	}
 
 }

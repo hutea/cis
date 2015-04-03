@@ -12,6 +12,8 @@ Dos命令提示符到 MySQL安装目录下的bin目录 如我的是 D:\Program Files\MySQL\MySQL S
 系统出现如下错误：warning: LF will be replaced by CRLF
 $ git config --gobal core.autocrlf false  
 
+修改表的自增ID起始值: alter table t_trophytype AUTO_INCREMENT=10000;
+
 bigint:922337 2036 854775807
 
 发送短信：http://localhost:8080/cis/app/send_code.action?phone=18328539781

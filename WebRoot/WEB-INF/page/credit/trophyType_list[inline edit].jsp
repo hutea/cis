@@ -26,6 +26,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+		function del(id){
+			if (confirm('您确定要删除此信息吗')) {
+			  $.get("${pageContext.request.contextPath}/manage/credit/trophyType_delete.action", 
+			  {id:id},
+			  function(data) {
+		      	if(data==1){
+		      		$("#tr_"+id).css("display","none");
+		       	}
+			   });
+			}
+		}
+		function showEdit(id){
+				//visibility: hidden visible
+			document.getElementById("con_"+id).style.display="none";
+			document.getElementById("edit_"+id).style.visibility="visible";
+		}
+		function postEdit(id){
+		  var name = document.getElementById("name_"+id).value;
+		  $.post("${pageContext.request.contextPath}/manage/credit/trophyType_edit.action", 
+		  {id:id,name:name},
+		  function(data) {
+	      	if(data==1){
+	      		if(window.navigator.userAgent.toLowerCase().indexOf("firefox")!=-1){
+	      			document.getElementById("con_"+id).textContent=name;
+	      		}else{
+	      			document.getElementById("con_"+id).innerText=name;
+	      		}	      		
+	      		document.getElementById("con_"+id).style.display="inline";
+				document.getElementById("edit_"+id).style.visibility="hidden";
+	       	}
+		  });
+		}
+        </script>
     </head>
 
     <body>
@@ -46,58 +80,61 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>job list</li>
+                                    <li>trophytype manage</li>
                                 </ul>
-                                <h4>工单管理</h4>
+                                <h4>奖品类别管理</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="job_list" namespace="/manage/task" method="post" id="pageList"> 
-                         <s:hidden name="page" />
-                         <s:hidden name="m" />
-                         <div>查询区
-                         	<input type="text" name="query_taskId">
-                         	<input type="text" name="query_createTime">
-                         	<input type="text" name="query_finishTime">
-                         	<ul style="list-style-type: decimal;">
-                         		
-                         		<li>taskId</li>
-                         		<li>生成时间</li>
-                         		<li>完成时间</li>
-                         	</ul>
-                         </div>
-    					 <table  class="table table-bordered table-striped">
-							 <tr>
-                                    <th>#</th>
-                                    <th>taskId</th>
-                                    <th>区块数</th>
-                                    <th>区块完成数</th>
-                                    <th>生成时间</th>
-                                    <th>完成时间</th>
-                                    <th>反馈结果</th>
-                                    <th>操作</th>
-                              </tr>
-                           	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
-                           	  	<tr>
-                           		 <td>${s.index+1}</td> 
-                           		 <td>${entry.taskId}</td> 
-                           		 <td>${entry.taskCount}</td> 
-                           		 <td>${entry.taskFinishCount}</td> 
-                           		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td><fmt:formatDate value="${entry.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td>${entry.feedback?'反馈成功':'未反馈'}</td> 
-                           		 <td>
-                           		 <a href='<s:url action="task_list" namespace="/manage/task" />?jobid=${entry.id}'>详细</a>
-                           		 </td> 
-                           	  	</tr>
-                           	  </c:forEach>
-						 </table>
-						</s:form>
-                       	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
-                            <!-- code block hydom -->
-                        
+                     <div class="container">
+				        <div class="row" style="margin-bottom: 10px;">
+				            <div class="col-md-12">
+				                <form class="form-inline" action="${pageContext.request.contextPath}/manage/credit/trophyType_add.action">
+				                     <input type="text" name="type.name" class="form-control" name="" placeholder="类别名称">
+                        			 <input type="submit" class="btn btn-primary" name="" value="提交">
+				                </form>
+				            </div>
+				        </div>
+
+				        <div class="row">
+				            <div class="col-md-7">
+				                <form action="${pageContext.request.contextPath}/manage/credit/trophyType_list.action" method="post" id="pageList">
+				                	<s:hidden name="page" />
+                        			<s:hidden name="m" />
+			                      <table class="table table-bordered table-striped">
+			                            <thead>
+			                                <tr>
+			                                    <th>#</th>
+			                                    <th>名称</th>
+			                                    <th>操作</th>
+			                                </tr>
+			                            </thead>
+			                            <tbody>
+			                                  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
+				                           	  	<tr id="tr_${entry.id}"">
+				                           		 <td>${s.index+1}</td> 
+				                           		 <td >
+				                           		 	<span id="con_${entry.id}" ondblclick="javascript:showEdit('${entry.id}')" title="双击修改" >${entry.name}</span>
+				                           		 	
+				                           		 </td> 
+				                           		 <td><a href="javascript:del('${entry.id}')">删除</a>				                           		 </td> 
+				                           	  	</tr>
+				                           	  </c:forEach>
+			                            </tbody>
+			                      </table>
+				                </form>
+                       			<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
+				            </div>
+				            <div class="col-md-5">
+				            	<span id="edit_${entry.id}" style="visibility: hidden">
+			                                            <input type="text" style="height: 30px;" id="name_${entry.id}" value="${entry.name}" >
+			                                            <input type="button" class="btn btn-success btn-xs" onclick="javascript:postEdit('${entry.id}')" value="确定">
+			                    </span>
+				            </div>
+				        </div>
+			    </div>
                         
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" >

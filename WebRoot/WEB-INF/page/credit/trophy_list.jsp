@@ -26,6 +26,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+			function del(id){
+				if (confirm('您确定要删除此信息吗')) {
+				  $.get("${pageContext.request.contextPath}/manage/credit/trophy_delete.action", 
+				  {id:id},
+				  function(data) {
+			      	if(data==1){
+			      		$("#tr_"+id).css("display","none");
+			       	}
+				   });
+				}
+			}
+		    function show(id) {
+			  	 var url ="${pageContext.request.contextPath}/manage/credit/trophy_show.action?id="+id;
+		   		 art.dialog.open(url,{width:800 ,height: 500 , title: '奖品图片',id:'trophy_'+id});
+		   	 }
+        </script>
     </head>
 
     <body>
@@ -46,53 +63,47 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>job list</li>
+                                    <li>trophy list</li>
                                 </ul>
-                                <h4>工单管理</h4>
+                                <h4>奖品查看</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="job_list" namespace="/manage/task" method="post" id="pageList"> 
+                       <s:form action="trophy_list" namespace="/manage/credit" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
-                         <div>查询区
-                         	<input type="text" name="query_taskId">
-                         	<input type="text" name="query_createTime">
-                         	<input type="text" name="query_finishTime">
-                         	<ul style="list-style-type: decimal;">
-                         		
-                         		<li>taskId</li>
-                         		<li>生成时间</li>
-                         		<li>完成时间</li>
-                         	</ul>
-                         </div>
-    					 <table  class="table table-bordered table-striped">
+                         <div>查询区</div>
+    					 <table class="table table-bordered table-striped">
 							 <tr>
                                     <th>#</th>
-                                    <th>taskId</th>
-                                    <th>区块数</th>
-                                    <th>区块完成数</th>
-                                    <th>生成时间</th>
-                                    <th>完成时间</th>
-                                    <th>反馈结果</th>
+                                    <th>奖品名称</th>
+                                    <th>价值</th>
+                                    <th>库存</th>
+                                    <th>已兑换数量</th>
+                                    <th>兑换积分</th>
+                                    <th>状态</th>
+                                    <th>类别</th>
                                     <th>操作</th>
                               </tr>
-                           	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
-                           	  	<tr>
-                           		 <td>${s.index+1}</td> 
-                           		 <td>${entry.taskId}</td> 
-                           		 <td>${entry.taskCount}</td> 
-                           		 <td>${entry.taskFinishCount}</td> 
-                           		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td><fmt:formatDate value="${entry.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td>${entry.feedback?'反馈成功':'未反馈'}</td> 
-                           		 <td>
-                           		 <a href='<s:url action="task_list" namespace="/manage/task" />?jobid=${entry.id}'>详细</a>
-                           		 </td> 
-                           	  	</tr>
-                           	  </c:forEach>
+                              <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
+                              <tr id="tr_${entry.id}">
+                                    <td>${s.index+1}</td>
+                                    <td>${entry.name}</td>
+                                    <td>${entry.money}</td>
+                                    <td>${entry.stock}</td>
+                                    <td>${entry.exchangeNum}</td>
+                                    <td>${entry.score}</td>
+                                    <td>${entry.state==1?"可以兑换":"停止兑换"}</td>
+                                    <td>${entry.trophyType.name}</td>
+                                    <td>
+                           				 <a href="javascript:show('${entry.id}')">查看</a>
+                                    	 <a href='<s:url action="trophy_editUI" namespace="/manage/credit" />?id=${entry.id}'>修改</a>
+                           				 <a href="javascript:del('${entry.id}')">删除</a>
+                                    </td>
+                              </tr>
+                              </c:forEach>
 						 </table>
 						</s:form>
                        	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>

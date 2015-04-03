@@ -27,10 +27,43 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
-	    	function show(taskRecordId) {
-		   	   	 var url ="${pageContext.request.contextPath}/manage/task/taskrecord_show.action?taskRecordId="+taskRecordId;
-		   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'taskrecord_'+taskRecordId});
-	   	 	}
+		function del(id){
+			if (confirm('您确定要删除此信息吗')) {
+			  $.get("${pageContext.request.contextPath}/manage/credit/trophyType_delete.action", 
+			  {id:id},
+			  function(data) {
+		      	if(data==1){
+		      		$("#tr_"+id).css("display","none");
+		       	}
+			   });
+			}
+		}
+		function showEdit(id,itext){
+			document.getElementById("tname").value = itext; 
+			document.getElementById("htid").value = id; 
+			if(window.navigator.userAgent.toLowerCase().indexOf("firefox")!=-1){
+				document.getElementById("tid").textContent = "ID:"+id; 
+      		}else{
+      			document.getElementById("tid").innerText= "ID:"+id;
+      		}
+			document.getElementById("editblock").style.display="block";
+		}
+		function postEdit(){
+		  var name = document.getElementById("tname").value;
+		  var id = document.getElementById("htid").value;
+		  $.post("${pageContext.request.contextPath}/manage/credit/trophyType_edit.action", 
+		  {id:id,name:name},
+		  function(data) {
+	      	if(data==1){
+	      		if(window.navigator.userAgent.toLowerCase().indexOf("firefox")!=-1){
+	      			document.getElementById("con_"+id).textContent=name;
+	      		}else{
+	      			document.getElementById("con_"+id).innerText=name;
+	      		}	      		
+				document.getElementById("editblock").style.display="none";
+	       	}
+		  });
+		}
         </script>
     </head>
 
@@ -52,50 +85,73 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>task record list</li>
+                                    <li>trophytype manage</li>
                                 </ul>
-                                <h4>区块分配详细</h4>
+                                <h4>奖品类别管理</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="taskrecord_list" namespace="/manage/task" method="post" id="pageList"> 
-                         <s:hidden name="page" />
-                         <s:hidden name="m" />
-                         <s:hidden name="taskId" />
-                         <div>查询区</div>
-    					 <table  class="table table-bordered table-striped">
-							 <tr>
-                                    <th>#</th>
-                                    <th>行号</th>
-                                    <th>行内号</th>
-                                    <th>用户ID</th>
-                                    <th>分配时间</th>
-                                    <th>完成时间</th>
-                                    <th>是否超时</th>
-                                    <th>操作</th>
-                              </tr>
-                                <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
-                           	  	<tr>
-                           		 <td>${s.index+1}</td> 
-                           		 <td>${entry.task.lineNo}</td> 
-                           		 <td>${entry.task.inLineNo}</td> 
-                           		 <td>${entry.account.id}</td> 
-                           		 <td><fmt:formatDate value="${entry.matchTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td><fmt:formatDate value="${entry.postTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td>${entry.identState==1?'未超时':'超时'}</td> 
-                        		 <td><a href='javascript:show(${entry.id})'>查看笔迹</a> 
-                           	  	</tr>
-                           	  </c:forEach>
-						 </table>
-						</s:form>
-                       	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
-                            <!-- code block hydom -->
-                        
+                     <div class="container">
+				        <div class="row" style="margin-bottom: 10px;">
+				            <div class="col-md-12">
+				                <form class="form-inline" action="${pageContext.request.contextPath}/manage/credit/trophyType_add.action" method="post">
+				                     <input type="text" name="type.name" class="form-control" name="" placeholder="类别名称">
+                        			 <input type="submit" class="btn btn-primary" name="" value="提交">
+				                </form>
+				            </div>
+				        </div>
+
+				        <div class="row">
+				            <div class="col-md-8">
+				                <form action="${pageContext.request.contextPath}/manage/credit/trophyType_list.action" method="post" id="pageList">
+				                	<s:hidden name="page" />
+                        			<s:hidden name="m" />
+			                      <table class="table table-bordered table-striped">
+			                            <thead>
+			                                <tr>
+			                                    <th>#</th>
+			                                    <th>ID</th>
+			                                    <th>名称</th>
+			                                    <th>操作</th>
+			                                </tr>
+			                            </thead>
+			                            <tbody>
+			                                  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
+				                           	  	<tr id="tr_${entry.id}"">
+				                           		 <td>${s.index+1}</td> 
+				                           		 <td>${entry.id}</td> 
+				                           		 <td >
+				                           		 	<span style="cursor: pointer;" id="con_${entry.id}" ondblclick="javascript:showEdit('${entry.id}','${entry.name}')" title="双击修改" >${entry.name}</span>
+				                           		 </td> 
+				                           		 <td><a href="javascript:del('${entry.id}')">删除</a></td> 
+				                           	  	</tr>
+				                           	  </c:forEach>
+			                            </tbody>
+			                      </table>
+				                </form>
+                       			<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
+				            </div>
+				            <div class="col-md-4" style="padding-top: 0">
+				            	<div id="editblock" class="content-s0" style="display: none;">
+				            	 <div>奖品类别修改</div>
+                        		 <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
+			                            <div>
+			                            	<span class="text-primary" id="tid"></span>
+			                            </div>
+				            			<div class="form-inline">
+			                            	<input type="text" class="form-control" id="tname"  >
+			                            	<input type="hidden" id="htid" />
+			                            	<input type="button" class="btn btn-primary btn-md" onclick="javascript:postEdit('${entry.id}')" value="确定">
+				            			</div>
+			                    </div>
+				            </div>
+				        </div>
+			    </div>
                         
                     </div><!-- contentpanel -->
-                    <div class="bottomwrapper">
+                    <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>
                     </div>
                 </div><!-- mainpanel -->

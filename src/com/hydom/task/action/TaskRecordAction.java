@@ -12,21 +12,17 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.hydom.dao.PageView;
-import com.hydom.task.ebean.Task;
 import com.hydom.task.ebean.TaskRecord;
 import com.hydom.task.service.TaskRecordService;
-import com.hydom.task.service.TaskService;
 
 @Controller
 @Scope(value = "prototype")
 public class TaskRecordAction {
 	@Resource
-	private TaskService taskService;
-	@Resource
 	private TaskRecordService taskRecordService;
 	private HttpServletRequest request;
 
-	private int maxresult = 1;
+	private int maxresult = 10;
 	private int page = 1;
 	private int m = 1;// 识别选中导航菜单
 	private long taskId;

@@ -71,7 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                        <s:form action="account_list" namespace="/manage/account" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
-                         <div> 
+                         <div style="margin-bottom: 10px;"> 
                          	<span class="text-primary hidden" >查询选项 </span>
                          	<input type="text" style="width: 220px;display: inline-block;" name="query_username" value="${query_username}" class="form-control"  placeholder="用户名"  >
                          	<input type="text" style="width: 220px;display: inline-block;" name="query_phone" value="${query_phone}" class="form-control"  placeholder="手机号"  >
@@ -79,8 +79,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          		<input type="submit" style="margin: 0 50px;"  class="btn btn-primary"   value="查 询"  >
                          		<a class="btn btn-success" href='<s:url action="account_addUI" namespace="/manage/account" />'>新增</a>
                          </div>
-    					 <table border="1" bordercolor="#E5E5E5" class="tab" width="100%" style="*width: 101%;margin-top: 10px;">
-							 <tr>
+    					 <table class="table table-bordered table-striped" >
+							 <tr >
                                     <th>#</th>
                                     <th>帐户ID</th>
                                     <th>用户名</th>

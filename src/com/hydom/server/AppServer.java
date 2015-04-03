@@ -261,7 +261,7 @@ public class AppServer {
 				map.put("detail", tr.getDetail());
 				map.put("stock", tr.getStock());
 				map.put("score", tr.getScore());
-				map.put("type", tr.getType());
+				map.put("type", tr.getTrophyType().getName());
 				map.put("image", tr.getImage());
 				list.add(map);
 			}
@@ -319,7 +319,7 @@ public class AppServer {
 			Map<String, Object> map = new LinkedHashMap<String, Object>();
 			map.put("tid", tr.getTrophy().getId());
 			map.put("name", tr.getTrophy().getName());
-			map.put("type", tr.getTrophy().getType());
+			map.put("type", tr.getTrophy().getTrophyType().getName());
 			map.put("detail", tr.getTrophy().getDetail());
 			map.put("score", tr.getScore());
 			map.put("image", tr.getTrophy().getImage());

@@ -23,7 +23,7 @@ public class TaskAction {
 	private TaskService taskService;
 	private HttpServletRequest request;
 
-	private int maxresult = 1;
+	private int maxresult = 10;
 	private int page = 1;
 	private int m = 1;// 识别选中导航菜单
 	private long jobid; //
