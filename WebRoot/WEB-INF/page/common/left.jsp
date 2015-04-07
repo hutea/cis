@@ -48,6 +48,7 @@
                         <li <c:if test="${param.m==4||m==4}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-file-text"></i> <span>系统管理</span></a>
                             <ul class="children">
                                 <li><a href='<s:url action="account_list" namespace="/manage/account" />'>系统帐号</a></li>
+                                <li><a href='<s:url action="message_list" namespace="/manage/extra" />'>消息管理</a></li>
                                 <li><a href="notfound.html">意见反馈</a></li>
                                 <li><a href="blank.html">权限定义</a></li>
                                 <li><a href="blank.html">App版本管理</a></li>

@@ -55,27 +55,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="contentpanel">
                     	<div class="content-m" >
                          <div>系统设置</div>
-                         <div style="float: right;"><a href='<s:url action="config_editUI" namespace="/manage/extra" />?scid=${config.id}&m=5'>设置</a></div>
+                         <div style="float: right;"><a href='<s:url action="config_editUI" namespace="/manage/extra" />?scid=${config.id}'>设置</a></div>
                          <div style="border-bottom: 1px solid #d5d5d5">&nbsp</div>
     					 <div id="" <c:if test="${scid!='match'}">style="display: none"</c:if>   >
     					 	<div style="line-height: 50px;">
     					 		<span>工单设置</span>
     					 	</div >
-    					 	<div style="line-height: 50px;">
-    					 		<span>分配上限：</span>
-    					 		<span>${config.valueInt }</span>
+    					 	<div class="row">
+    					 		<div class="input-group col-md-7">
+							      <div class="input-group-addon">分配上限</div>
+						     	  <input type="text" readonly value="${config.valueInt}"  class="form-control"  >
+							    </div>
     					 	</div >
-    					 	<div style="line-height: 50px;">
-    					 		<span>分配初值：</span>
-    					 		<span>${config.valueShort}</span>
-    					 	</div >
-    					 	<div style="line-height: 50px;">
-    					 		<span>正确比例：</span>
-    					 		<span>${config.valueDouble*100}%</span>
+    					 	<div class="row">
+    					 		<div class="input-group col-md-7">
+							    <div class="input-group-addon">分配初值</div>
+     					     	<input type="text" readonly value="${config.valueShort}"  class="form-control"  >
+     					     	</div>
     					 	</div>
-    					 	<div style="line-height: 50px;">
-    					 		<span>超时时间：</span>
-    					 		<span>${config.valueLong}</span>
+    					 	<div class="row">
+    					 		<div class="input-group col-md-7">
+							    <div class="input-group-addon">正确比例</div>
+     					     	<input type="text" readonly value="${percent}%"  class="form-control"  >
+     					     	</div>
+    					 	</div>
+    					 	<div class="row">
+    					 		<div class="input-group col-md-7">
+							    <div class="input-group-addon">超时时间</div>
+     					     	<input type="text" readonly value="${config.valueLong}"  class="form-control"  >
+     					     	</div>
     					 	</div>
     					 </div>
     					 <div id="" <c:if test="${scid!='manual'}">style="display: none"</c:if>  >

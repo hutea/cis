@@ -15,6 +15,5 @@ public class MessageServiceBean extends DAOSupport<Message> implements MessageSe
 	public List<Message> list() {
 		return em.createQuery("select o from Message where o.visible=?1").setParameter(1,
 				true).getResultList();
-
 	}
 }

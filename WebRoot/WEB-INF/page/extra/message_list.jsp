@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>Chain Responsive Bootstrap3 Admin</title>
+        <title>帐户管理</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
@@ -27,6 +27,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+		function del(id){
+			if (confirm('您确定要删除此信息吗')) {
+			  $.get("${pageContext.request.contextPath}/manage/account/account_delete.action", 
+			  {accid:id},
+			  function(data) {
+		      	if(data==1){
+		      		$("#tr_"+id).css("display","none");
+		       	}
+			   });
+			}
+			}
+        </script>
     </head>
 
     <body>
@@ -47,55 +60,99 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>job list</li>
+                                    <li>account list</li>
                                 </ul>
-                                <h4>工单管理</h4>
+                                <h4>帐户管理</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="job_list" namespace="/manage/task" method="post" id="pageList"> 
+                       <s:form action="message_add" namespace="/manage/extra" method="post" id="pageList"> 
+                         <div style="margin-bottom: 10px;border: 1px solid #ddd;padding-top: 10px;float:left;min-width: 700px;" class="form-horizontal"> 
+                         	<div class="form-group">
+                         		 <label class="col-md-1 control-label sr-only">消息主题</label>
+					             <div class="col-md-6">
+					                <input type="text" class="form-control" name="message.title" placeholder="消息主题">
+					             </div>
+					             <div class="col-md-4">
+					             		<div class="input-group">
+									      <div class="input-group-addon">消息保留时长</div>
+										  <select name="message.pushTimeToLive" class="form-control">
+											<option value="0">不保留:在线推送</option>
+											<option value="60">1分钟</option>
+											<option value="600">10分钟</option>
+											<option value="3600">1小时</option>
+											<option value="10800" >3小时</option>
+											<option value="43200">12小时</option>
+											<option value="86400">保留1天</option>
+											<option value="864000">保留10天</option>
+										  </select>
+									    </div>
+					             </div>
+                         	</div>
+                         	<div class="form-group">
+                         		 <label class="col-md-1 control-label sr-only">消息内容</label>
+					             <div class="col-md-10">
+					               <textarea row="4" class="form-control"  placeholder="消息内容" name="message.content"></textarea>
+					             </div>
+                         	</div>
+                         	<div class="form-group">
+                         		<div class="col-md-4 col-md-push-3">
+                         		 <button type="reset" class="btn btn-primary ">重置</button>
+                         		 <button type="submit" class="btn btn-primary">推送</button>
+                         		</div>
+                         	</div>
+                         </div>
+                       </s:form>
+                       <div style="min-width:500px;margin-bottom: 10px;border: 1px solid #ddd;padding-top: 10px;float:left;margin-left: 20px;padding:10px;" class="form-horizontal"> 
+                       		<h3>消息推送说明</h3>
+                       		<ul>
+                       			<li>消息保留时长
+	                       			<ul>
+	                       			<li>发送消息推送后，如果用户不在线，则会保存为离线消息，待该用户下次上线时继续推送。</li>
+	                       			<li>可以设定离线消息时长：不保留表示只推送消息给在线用户</li>
+	                       			</ul>
+                       			</li>
+                       			
+                       			<li>删除操作
+	                       			<ul>
+	                       			<li>在本页面删除某条消息，第三方仍会进行推送该消息。</li>
+	                       			<li>在本页面删除某条消息，手机端获取消息列表不会显示该消息。</li>
+	                       			</ul>
+                       			</li>
+                       			<li>建议：在进行推送消息前先<mark>确认消息内容</mark>再推送</li>
+                       		</ul>
+                       </div>
+                       <div class="clearfix"></div>
+                       <s:form action="message_list" namespace="/manage/extra" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
-                         <div style="margin-bottom: 10px;"> 
-                         	<span class="text-primary hidden" >查询选项 </span>
-                         	<input type="text" style="width: 220px;display: inline-block;" name="query_taskId" value="${query_taskId}" class="form-control"  placeholder="taskId"  >
-                         	<input type="text" style="width: 220px;display: inline-block;height: 38px;" name="query_createTime" value="${query_createTime}" class="Wdate"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="创建时间"  >
-                         	<input type="text" style="width: 220px;display: inline-block;height: 38px;" name="query_finishTime" value="${query_finishTime}" class="Wdate"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="创建时间"  >
-                       		<input type="submit" style="margin: 0 50px;"  class="btn btn-primary"   value="查 询"  >
-                         </div>
-    					 <table  class="table table-bordered table-striped">
-							 <tr>
+    					 <table class="table table-bordered table-striped" >
+							 <tr >
                                     <th>#</th>
-                                    <th>taskId</th>
-                                    <th>区块数</th>
-                                    <th>区块完成数</th>
-                                    <th>生成时间</th>
-                                    <th>完成时间</th>
-                                    <th>反馈结果</th>
+                                    <th>消息ID</th>
+                                    <th>发送时间</th>
+                                    <th>主题</th>
+                                    <th>内容</th>
                                     <th>操作</th>
                               </tr>
                            	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
-                           	  	<tr>
+                           	  	<tr id="tr_${entry.id}">
                            		 <td>${s.index+1}</td> 
-                           		 <td>${entry.taskId}</td> 
-                           		 <td>${entry.taskCount}</td> 
-                           		 <td>${entry.taskFinishCount}</td> 
-                           		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td><fmt:formatDate value="${entry.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td>${entry.feedback?'反馈成功':'未反馈'}</td> 
+                           		 <td>${entry.id}</td> 
+                           		 <td><fmt:formatDate value="${entry.issueTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                           		 <td>${entry.title}</td> 
+                           		 <td>${entry.content}</td> 
                            		 <td>
-                           		 <a href='<s:url action="task_list" namespace="/manage/task" />?jobid=${entry.id}'>详细</a>
+                           		 <a href="javascript:del('${entry.id}')">删除</a>
                            		 </td> 
                            	  	</tr>
                            	  </c:forEach>
 						 </table>
 						</s:form>
                        	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
-                            <!-- code block hydom -->
-                        
-                        
+
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>
@@ -123,6 +180,5 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
-
     </body>
 </html>

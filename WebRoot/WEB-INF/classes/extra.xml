@@ -15,5 +15,13 @@
 				<param name="actionName">config_show?scid=${scid}</param>
 			</result>
 		</action>
+		<action name="message_list" class="messageAction" method="list">
+			<result>/WEB-INF/page/extra/message_list.jsp</result>
+		</action>
+		<action name="message_add" class="messageAction" method="add">
+			<result type="redirectAction">
+				<param name="actionName">message_list</param>
+			</result>
+		</action>
 	</package>
 </struts>

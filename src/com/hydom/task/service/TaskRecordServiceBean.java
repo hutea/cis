@@ -94,6 +94,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 				job.setTaskFinishCount(job.getTaskFinishCount() + 1);// 对任务区块完成数+1
 				taskService.update(task);
 				jobService.update(job);
+				update_TaskRecordSign(task.getId(), (String) countResult[0]);
 				jobService.postJob(job.getId());// 反馈工单
 			}
 			if (task.getMatchedNum() >= task.getMatchNum()) {// 已分配人数达到分配上限
@@ -105,6 +106,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 				job.setTaskFinishCount(job.getTaskFinishCount() + 1);// 对任务区块完成数+1
 				taskService.update(task);
 				jobService.update(job);
+				update_TaskRecordSign(task.getId(), null);
 				jobService.postJob(job.getId());// 反馈工单
 			}
 			/* 未达到指定比例并且已分配人数未达到分配上限：计算可再次进行分配的人数 */
@@ -115,7 +117,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 			if ((moreNum + task.getMatchedNum()) > task.getMatchNum()) {// （再次分配人数+已分配人数）>分配上限
 				canNum = task.getMatchNum() - task.getMatchedNum();
 			}
-			System.out.println("canNum="+canNum+" postNum="+task.getPostNum()); 
+			System.out.println("canNum=" + canNum + " postNum=" + task.getPostNum());
 			task.setCanNum(canNum);// 设置再次分配的人数
 			task.setPostNum(task.getPostNum() + canNum);// 设置提交总数应达到的值
 			task.setResultNum(task.getResultNum() + 1);// 对返回了识别结果的人数+1
@@ -142,6 +144,19 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 						"select count(t.id) from TaskRecord t where t.task.id=?1 and t.identState=?2 and t.postTime is not null")
 				.setParameter(1, tid).setParameter(2, 1).getSingleResult();
 		return count.intValue();
+	}
+
+	private void update_TaskRecordSign(long taskid, String result) {
+		em.createQuery("update TaskRecord o SET o.sign=0 where o.task.id=?")
+				.setParameter(1, taskid).executeUpdate();
+		if (result != null && !"".equals(result)) {// 有正确的计算结果
+			System.out.println("设置每个用户结果标识:" + result);
+			em
+					.createQuery(
+							"update TaskRecord o SET o.sign=?1 where o.result=?2 and o.task.id=?3")
+					.setParameter(1, 1).setParameter(2, result).setParameter(3, taskid)
+					.executeUpdate();
+		}
 	}
 
 	/**

@@ -1,7 +1,11 @@
 package com.hydom.extra.action;
 
-import javax.annotation.Resource;
+import java.math.BigDecimal;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.ServletActionContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -20,18 +24,36 @@ public class SystemConfigAction {
 
 	public String show() {
 		config = systemConfigService.find(scid);
+		if("match".equals(scid)){//计算精准的百分比
+			HttpServletRequest request = ServletActionContext.getRequest();
+			BigDecimal b1 = new BigDecimal(Double.toString(config.getValueDouble()));
+			BigDecimal b2 = new BigDecimal("100");
+			request.setAttribute("percent", b1.multiply(b2).doubleValue());
+		}
 		return "success";
 	}
 
 	public String editUI() {
 		config = systemConfigService.find(scid);
+		if("match".equals(scid)){//计算精准的百分比
+			HttpServletRequest request = ServletActionContext.getRequest();
+			BigDecimal b1 = new BigDecimal(Double.toString(config.getValueDouble()));
+			BigDecimal b2 = new BigDecimal("100");
+			request.setAttribute("percent", b1.multiply(b2).doubleValue());
+		}
 		return "success";
 	}
 
 	public String edit() {
 		SystemConfig entity = systemConfigService.find(scid);
 		entity.setValueContent(config.getValueContent());
-		entity.setValueDouble(config.getValueDouble());
+		if (config.getValueDouble() > 1) {// 如果大于1除100：计算精准百分比
+			BigDecimal b1 = new BigDecimal(Double.toString(config.getValueDouble()));
+			BigDecimal b2 = new BigDecimal("100");
+			entity.setValueDouble(b1.divide(b2).doubleValue());
+		} else {
+			entity.setValueDouble(config.getValueDouble());
+		}
 		entity.setValueInt(config.getValueInt());
 		entity.setValueLong(config.getValueLong());
 		entity.setValueShort(config.getValueShort());

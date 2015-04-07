@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -58,6 +61,7 @@ public class AppServer {
 	private SystemConfigService systemConfigService;
 	@Resource
 	private SenseService senseService;
+	private Log log = LogFactory.getLog("appServerLog");
 
 	private String username;
 	private String password;
@@ -89,6 +93,7 @@ public class AppServer {
 			if (code != null && code.equals(shortMessageService.find(username).getCode())) { // 验证码通过
 				Account account = new Account(username, password, username);
 				accountService.save(account);
+				account.setType(1);// 设置为普通用户
 				dataMap.put("result", 1);
 			} else {
 				dataMap.put("result", 2);// 验证码错误
@@ -106,6 +111,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String signin() {
+		log.info("登录：" + username + "--" + password);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.findByUP(username, password);
 		if (account != null) { // 登录成功
@@ -188,6 +194,7 @@ public class AppServer {
 	 */
 	public String postNote() {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
+		log.info("提交识别结果：" + tid + "--" + result_str);
 		int result = taskRecordService.processTaskRecord(tid, result_str);
 		dataMap.put("result", result);
 		dataFillStream(dataMap);
@@ -621,22 +628,6 @@ public class AppServer {
 		this.password = password;
 	}
 
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public InputStream getInputStream() {
-		return inputStream;
-	}
-
-	public void setInputStream(InputStream inputStream) {
-		this.inputStream = inputStream;
-	}
-
 	public String getOripwd() {
 		return oripwd;
 	}
@@ -653,6 +644,14 @@ public class AppServer {
 		this.newpwd = newpwd;
 	}
 
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public long getUid() {
 		return uid;
 	}
@@ -661,11 +660,11 @@ public class AppServer {
 		this.uid = uid;
 	}
 
-	public Long getTid() {
+	public long getTid() {
 		return tid;
 	}
 
-	public void setTid(Long tid) {
+	public void setTid(long tid) {
 		this.tid = tid;
 	}
 
@@ -693,28 +692,20 @@ public class AppServer {
 		this.num = num;
 	}
 
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
+	}
+
 	public String getNickname() {
 		return nickname;
 	}
 
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
-	}
-
-	public String getBackname() {
-		return backname;
-	}
-
-	public void setBackname(String backname) {
-		this.backname = backname;
-	}
-
-	public String getBackaccount() {
-		return backaccount;
-	}
-
-	public void setBackaccount(String backaccount) {
-		this.backaccount = backaccount;
 	}
 
 	public String getPay() {

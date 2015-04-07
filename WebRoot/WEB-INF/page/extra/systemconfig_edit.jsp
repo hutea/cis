@@ -109,8 +109,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">正确比例</label>
 								    <div class="col-sm-9">
-								      <input id="valueDouble" name="config.valueDouble" type="text"  value="${config.valueDouble}"  class="form-control" title="${config.valueDouble*100}%" >
-								      
+									    <div class="input-group">
+									      <div class="input-group-addon">百分比</div>
+								     	 <input style="text-align: right;" id="valueDouble" name="config.valueDouble" type="text"  value="${percent}"  class="form-control" title="${config.valueDouble*100}%" >
+									      <div class="input-group-addon">%</div>
+									    </div>
 								    </div>
 						   		 </div>
 		    					 <div class="form-group">
