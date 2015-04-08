@@ -42,7 +42,6 @@ public class SvgImage {
 			if (ary.startsWith(",")) {
 				ary = ary.replaceFirst(",", "");
 			}
-			System.out.println("ary:" + ary);
 			String[] ss = ary.split("\\},");
 			String p1 = ss[0].replace("{x=", "").replace("y=", "").replace("}", "");
 			for (int i = 1; i < ss.length; i++) {// µã
@@ -51,8 +50,6 @@ public class SvgImage {
 							+ this.random(1, 255) + ")";
 				}
 				String p2 = ss[i].replace("{x=", "").replace("y=", "").replace("}", "");
-				System.out.println("p1:" + p1);
-				System.out.println("p2:" + p2);
 				String[] xy1 = p1.split(",");
 				String[] xy2 = p2.split(",");
 

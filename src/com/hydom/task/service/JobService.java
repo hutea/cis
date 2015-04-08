@@ -11,5 +11,15 @@ public interface JobService extends DAO<Job> {
 	 */
 	public Job findByTaskId(String taskId);
 
-	void postJob(long jobId);
+	/**
+	 * 提交工单给数据服务端
+	 * 
+	 * @param jobId
+	 */
+	public void postJob(long jobId);
+
+	/**
+	 * 定时提交失败的任务
+	 */
+	public void feedbackTimer();
 }

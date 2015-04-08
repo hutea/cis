@@ -40,4 +40,46 @@
 	</bean>
 
 
+	<!-- 重置分配数-->
+	<bean id="resetMatchTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject" ref="taskServiceBean" />
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod" value="resetMatchTask" />
+	</bean>
+	<!-- 设置执行时间 -->
+	<bean id="resetMatchTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="resetMatchTask" />
+		<!-- cron表达式 --><!-- 每隔3分钟执行一次-->
+		<property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+	
+	<!-- 定时提交失败的工单-->
+	<bean id="postFailJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 调用的类 -->
+		<property name="targetObject" ref="jobServiceBean" />
+		<!-- 调用类中的方法 -->
+		<property name="targetMethod" value="feedbackTimer" />
+	</bean>
+	<!-- 设置执行时间 -->
+	<bean id="postFailJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="postFailJob" />
+		<!-- cron表达式 --><!-- 每隔10分钟执行一次-->
+		<property name="cronExpression" value="0 0/10 * * * ?" />
+	</bean>
+
+	<!--设置调度 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
+	<bean id="startQuertz" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!-- 
+				<ref bean="resetMatchTaskTrigger" />
+				<ref bean="postFailJobTrigger" />
+				 -->
+			</list>
+		</property>
+	</bean>
 </beans>

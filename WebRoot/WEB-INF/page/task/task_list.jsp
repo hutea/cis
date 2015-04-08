@@ -89,7 +89,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td><fmt:formatDate value="${entry.matchLastTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td>${entry.recycleTime}</td> 
                            		 <td>
-									<a href='javascript:show(${entry.id})' >查看</a> 
+									<a href='javascript:show(${entry.id})' >查看笔迹</a> 
                                 	<a href='<s:url action="taskrecord_list" namespace="/manage/task" />?taskId=${entry.id}'>详细</a>
                            		 </td> 
                            	  	</tr>

@@ -31,7 +31,6 @@ import com.hydom.extra.service.MessageService;
 import com.hydom.extra.service.SenseService;
 import com.hydom.extra.service.ShortMessageService;
 import com.hydom.extra.service.SystemConfigService;
-import com.hydom.task.ebean.Task;
 import com.hydom.task.ebean.TaskRecord;
 import com.hydom.task.service.TaskRecordService;
 import com.hydom.util.StringGenerator;
@@ -88,6 +87,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String signup() {
+		log.info("App【用户注册】：" + "用户名=" + username + " 密码=" + password + " 验证码=" + code);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			if (code != null && code.equals(shortMessageService.find(username).getCode())) { // 验证码通过
@@ -111,7 +111,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String signin() {
-		log.info("登录：" + username + "--" + password);
+		log.info("App【用户登录】：" + "用户名=" + username + " 密码=" + password);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.findByUP(username, password);
 		if (account != null) { // 登录成功
@@ -130,6 +130,7 @@ public class AppServer {
 	}
 
 	public String signout() {
+		log.info("App【用户登出】：" + "用户名=" + username + " 密码=" + password + " 用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.findByUP(username, password);
 		if (account != null) { // 注销成功
@@ -150,6 +151,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String fetchNote() {
+		log.info("App【获取分配题目】：" + "uid=" + uid);
 		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		TaskRecord taskRecord = taskRecordService.fetchTaskRecord(uid);
@@ -193,10 +195,30 @@ public class AppServer {
 	 * @return
 	 */
 	public String postNote() {
+		log.info("App【提交识别结果】：" + "tid=" + tid + " 识别结果=" + result_str);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		log.info("提交识别结果：" + tid + "--" + result_str);
-		int result = taskRecordService.processTaskRecord(tid, result_str);
-		dataMap.put("result", result);
+		try {
+			log.info("1:" + new String(result_str.getBytes("utf-8"), "utf-8"));
+			log.info("2:" + new String(result_str.getBytes("gbk"), "utf-8"));
+			log.info("3:" + new String(result_str.getBytes("iso8859-1"), "utf-8"));
+			// 手机端使用了ISO8859-1编码
+			result_str = new String(result_str.getBytes("iso8859-1"), "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		TaskRecord record = taskRecordService.find(tid);
+		if (record.getIdentState() == 0) {// 超时程序检查设置了超时
+			record.setPostTime(new Date());
+			record.setResult(result_str);
+			taskRecordService.update(record);
+			dataMap.put("result", 8);
+		} else if (record.getPostTime() != null) {// 提交过
+			dataMap.put("result", 0);// 重复提交，暂时未定义
+		} else {
+
+			int result = taskRecordService.processTaskRecord(tid, result_str);
+			dataMap.put("result", result);
+		}
 		dataFillStream(dataMap);
 		return "success";
 	}
@@ -207,6 +229,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String breakNote() {
+		log.info("App【休息一下】：" + "用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			Account entity = accountService.find(uid);
@@ -226,16 +249,32 @@ public class AppServer {
 	 * @return
 	 */
 	public String synNote() {
+		log.info("App【同步识别结果】：" + "用户ID=" + uid + " sign=" + sign);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		List<TaskRecord> records = taskRecordService.listTaskRecord(uid, sign);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for (TaskRecord tr : records) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>();
+			/** 处理MetricPoint对象START **/
+			String[] data = tr.getTask().getMetricPoint().replaceAll("},", "}#").split(
+					"#");
+			List<Map<String, Integer>> lineList = new ArrayList<Map<String, Integer>>();
+			for (String str : data) {
+				String[] xy = str.split(",");
+				String[] x = xy[0].split("=");
+				String[] y = xy[1].split("=");
+				Map<String, Integer> xymap = new LinkedHashMap<String, Integer>();
+				xymap.put("x", Math.round(Float.parseFloat(x[1])));
+				xymap.put("y", Math.round(Float.parseFloat(y[1].substring(0, y[1]
+						.length() - 1))));
+				lineList.add(xymap);
+			}
+			/** 处理MetricPoint对象END **/
 			map.put("sign", tr.getSign());
-			map.put("score", tr.getScore());
+			map.put("score", tr.getScore() == null ? 0 : tr.getScore());
 			map.put("post_time", sdf.format(tr.getPostTime()));
-			map.put("image", tr.getSign());
+			map.put("image", lineList);
 			map.put("result_str", tr.getResult());
 			map.put("right_str", tr.getTask().getResult());
 			list.add(map);
@@ -256,6 +295,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String listTrophy() {
+		log.info("App【获取所有奖品列表】：" + "用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.find(uid);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -272,11 +312,13 @@ public class AppServer {
 				map.put("image", tr.getImage());
 				list.add(map);
 			}
-		}
-		if (list.size() > 0) {
-			dataMap.put("result", 1);
+			if (list.size() > 0) {
+				dataMap.put("result", 1);
+			} else {
+				dataMap.put("result", 7);// 列表为空
+			}
 		} else {
-			dataMap.put("result", 7);// 列表为空
+			dataMap.put("result", 9); // 用户ID不存在
 		}
 		dataMap.put("list", list);
 		dataFillStream(dataMap);
@@ -289,6 +331,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String exchangeTrophy() {
+		log.info("App【提交奖品兑换信息】：" + "用户ID=" + uid + "奖品ID=" + tid + "奖品数量=" + num);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account accout = accountService.find(uid);
 		Trophy trophy = trophyService.find(tid);
@@ -318,6 +361,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String listHistory() {
+		log.info("App【获取历史兑换列表】：" + "用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -350,6 +394,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String clearHistory() {
+		log.info("App【清空历史兑换列表】：" + "用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			trophyRecordService.clear(uid);
@@ -367,6 +412,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String countExchange() {
+		log.info("App【统计兑换信息】：" + "用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("total", trophyRecordService.countAll(uid));
 		dataMap.put("month", trophyRecordService.countMonth(uid));
@@ -380,6 +426,8 @@ public class AppServer {
 	 * @return
 	 */
 	public String updateProfile() {
+		log.info("App【更新个人资料】：" + "用户ID=" + uid + " 用户昵称=" + nickname + " 银行名称="
+				+ backname + " 银行帐号=" + backaccount + " 支付宝帐号=" + pay);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.find(uid);
 		if (nickname != null && !"".equals(nickname)) {
@@ -417,6 +465,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String resetPassword() {
+		log.info("App【找回密码】：" + "用户名=" + username + " 新密码=" + password + " 验证码=" + code);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			String sysCode = shortMessageService.findCode(username); // username为手机号
@@ -445,14 +494,20 @@ public class AppServer {
 	 * @return
 	 */
 	public String updatePassword() {
+		log.info("App【更改密码】：" + "用户ID=" + uid + "用户名=" + username + " 原密码=" + oripwd
+				+ " 新密码=" + newpwd);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.find(uid);
-		if (oripwd != null && oripwd.equals(account.getPassword())) {// 原密码正确
-			account.setPassword(newpwd);
-			accountService.update(account);
-			dataMap.put("result", 1);
+		if (account != null) {
+			if (oripwd != null && oripwd.equals(account.getPassword())) {// 原密码正确
+				account.setPassword(newpwd);
+				accountService.update(account);
+				dataMap.put("result", 1);
+			} else {
+				dataMap.put("result", 0);
+			}
 		} else {
-			dataMap.put("result", 0);
+			dataMap.put("result", 9); // 用户ID不存在
 		}
 		dataFillStream(dataMap);
 		return "success";
@@ -464,6 +519,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String listMessage() {
+		log.info("App【获取消息列表】：" + "用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -491,6 +547,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String fetchAbout() {
+		log.info("App【获取关于等信息】：" + "用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			dataMap.put("manual", systemConfigService.find("manual").getValueText());
@@ -517,12 +574,13 @@ public class AppServer {
 	 * @return
 	 */
 	public String postSense() {
+		log.info("App【提交建议】：" + "用户ID=" + uid + " 联系方式=" + contact + " 内容=" + content);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			Sense sense = new Sense();
-			sense.setAcount(accountService.find(uid));
+			sense.setAccount(accountService.find(uid));
 			sense.setContact(contact);
-			sense.setContact(content);
+			sense.setContent(content);
 			sense.setPostTime(new Date());
 			senseService.save(sense);
 			dataMap.put("result", 1);
@@ -539,6 +597,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String update() {
+		log.info("App【软件更新】：" + "用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("result", 0);
 		dataFillStream(dataMap);
@@ -551,6 +610,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String sendCode() {
+		log.info("App【发送验证码】：" + "手机号=" + phone);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -569,13 +629,6 @@ public class AppServer {
 			dataMap.put("sendtime", "");
 		}
 		dataFillStream(dataMap);
-		return "success";
-	}
-
-	//
-	public String showImage() {
-		TaskRecord taskRecord = taskRecordService.find(tid);
-		Task task = taskRecord.getTask();
 		return "success";
 	}
 
@@ -605,6 +658,7 @@ public class AppServer {
 	private void dataFillStream(Map<String, Object> dataMap) {
 		Gson gson = new Gson();
 		String jsonStr = gson.toJson(dataMap);
+		log.info("App【响应结果】：" + jsonStr);
 		try {
 			inputStream = new ByteArrayInputStream(jsonStr.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {

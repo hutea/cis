@@ -54,7 +54,7 @@ public class TrophyAction {
 		request = ServletActionContext.getRequest();
 		PageView<Trophy> pageView = new PageView<Trophy>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
-		orderby.put("id", "asc");
+		orderby.put("id", "desc");
 		StringBuffer jpql = new StringBuffer("o.visible=?1 ");
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);

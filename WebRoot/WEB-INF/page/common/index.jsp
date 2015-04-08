@@ -60,10 +60,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                    	<div style="">首页。。</div>
-                       	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
-                            <!-- code block hydom -->
-                        
+                    	<div style="">
+                    		您好，欢迎！
+                    	</div>
                         
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" >

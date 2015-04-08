@@ -35,8 +35,8 @@ public class Sense {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date postTime;// 提交时间
 	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-	@JoinColumn(name = "accout_id")
-	private Account acount;// 用户
+	@JoinColumn(name = "account_id")
+	private Account account;// 用户
 	@Column
 	private Boolean visible = true; // 逻辑删除标记
 
@@ -72,12 +72,12 @@ public class Sense {
 		this.postTime = postTime;
 	}
 
-	public Account getAcount() {
-		return acount;
+	public Account getAccount() {
+		return account;
 	}
 
-	public void setAcount(Account acount) {
-		this.acount = acount;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	public Boolean getVisible() {

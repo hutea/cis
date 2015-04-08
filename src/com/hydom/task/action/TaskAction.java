@@ -47,14 +47,9 @@ public class TaskAction {
 	}
 
 	public String show() {
-		System.out.println("--->");
 		task = taskService.find(taskId);
 		String metricPoint = task.getMetricPoint();
-		System.out.println("mp:" + metricPoint);
 		si = new SvgImage(metricPoint);
-		System.out.println(si.getMinX());
-		System.out.println(si.getMinY());
-		System.out.println(si.getSvgdata());
 		return "success";
 	}
 

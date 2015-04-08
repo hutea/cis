@@ -22,4 +22,11 @@ public interface TaskService extends DAO<Task> {
 	 * @return
 	 */
 	public List<Task> listByTaskId(String taskId);
+
+	/**
+	 * 定时检查超时工单 <br>
+	 * 1.对超时任务(TaskRecord)作如下设置： identState=0表示识别超时 <br>
+	 * 2.重置Task分配信息：matchedNum-1，canNum+1
+	 */
+	public void resetMatchTask();
 }

@@ -1,5 +1,8 @@
 package com.hydom.extra.action;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import com.hydom.dao.PageView;
 import com.hydom.extra.ebean.Message;
 import com.hydom.extra.service.MessageService;
+import com.hydom.server.PushServer;
 
 @Controller
 @Scope(value = "prototype")
@@ -24,15 +28,15 @@ public class MessageAction {
 	private int page = 1;
 	private int maxresult = 10;
 	private int m = 4;// 识别选中导航菜单
-	private int  timeLive ;
-
+	private long msgId;
 	private HttpServletRequest request;
+	private InputStream inputStream;
 
 	public String list() {
 		request = ServletActionContext.getRequest();
 		PageView<Message> pageView = new PageView<Message>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
-		orderby.put("id", "asc");
+		orderby.put("id", "desc");
 		StringBuffer jpql = new StringBuffer("o.visible=?1 ");
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);
@@ -44,17 +48,23 @@ public class MessageAction {
 
 	public String add() {
 		messageService.save(message);
-		// PushServer.sendPush(message.getTitle(), message.getContent());
+		PushServer.sendPush(message.getTitle(), message.getContent(), message
+				.getPushTimeToLive());
 		return "success";
 	}
 
-
-	public static void main(String[] args) {
-		//[Ljava.lang.String;@10fbe75'
-		String [] str ={"1","2"};
-		System.out.println(str); 
+	public String delete() {
+		try {
+			Message entitiy = messageService.find(msgId);
+			entitiy.setVisible(false);
+			messageService.update(entitiy);
+			inputStream = new ByteArrayInputStream("1".getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// e.printStackTrace();
+		}
+		return "success";
 	}
-	
+
 	public Message getMessage() {
 		return message;
 	}
@@ -79,12 +89,20 @@ public class MessageAction {
 		this.page = page;
 	}
 
-	public int getTimeLive() {
-		return timeLive;
+	public long getMsgId() {
+		return msgId;
 	}
 
-	public void setTimeLive(int timeLive) {
-		this.timeLive = timeLive;
+	public void setMsgId(long msgId) {
+		this.msgId = msgId;
+	}
+
+	public InputStream getInputStream() {
+		return inputStream;
+	}
+
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
 	}
 
 }

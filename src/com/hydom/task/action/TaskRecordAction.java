@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.hydom.dao.PageView;
+import com.hydom.server.SvgImage;
 import com.hydom.task.ebean.TaskRecord;
 import com.hydom.task.service.TaskRecordService;
 
@@ -28,6 +29,7 @@ public class TaskRecordAction {
 	private long taskId;
 	private long taskRecordId;
 	private TaskRecord taskRecord;
+	private SvgImage si;
 
 	public String list() {
 		request = ServletActionContext.getRequest();
@@ -47,6 +49,8 @@ public class TaskRecordAction {
 
 	public String show() {
 		taskRecord = taskRecordService.find(taskRecordId);
+		String metricPoint = taskRecord.getTask().getMetricPoint();
+		si = new SvgImage(metricPoint);
 		return "success";
 	}
 
@@ -88,6 +92,14 @@ public class TaskRecordAction {
 
 	public void setTaskRecord(TaskRecord taskRecord) {
 		this.taskRecord = taskRecord;
+	}
+
+	public SvgImage getSi() {
+		return si;
+	}
+
+	public void setSi(SvgImage si) {
+		this.si = si;
 	}
 
 }

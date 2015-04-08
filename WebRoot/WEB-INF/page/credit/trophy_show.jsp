@@ -12,38 +12,11 @@
 		<meta charset="utf-8">
 		<meta name="viewport"
 			content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-		<meta name="description" content="">
-
-		<meta name="author" content="">
-		<title>Chain Responsive Bootstrap3 Admin</title>
-		<link
-			href="${pageContext.request.contextPath}/resource/css/common.css"
-			rel="stylesheet" />
-		<link
-			href="${pageContext.request.contextPath}/resource/chain/css/style.default.css"
-			rel="stylesheet">
-		<link
-			href="${pageContext.request.contextPath}/resource/chain/css/morris.css"
-			rel="stylesheet">
-		<link
-			href="${pageContext.request.contextPath}/resource/chain/css/select2.css"
-			rel="stylesheet" />
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
-		<script
-			src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
-		<link rel="stylesheet"
-			href="${pageContext.request.contextPath}/resource/kindeditor/themes/default/default.css" />
-		<link rel="stylesheet"
-			href="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.css" />
-		<script charset="utf-8"
-			src="${pageContext.request.contextPath}/resource/kindeditor/kindeditor.js"></script>
-		<script charset="utf-8"
-			src="${pageContext.request.contextPath}/resource/kindeditor/lang/zh_CN.js"></script>
-		<script charset="utf-8"
-			src="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.js"></script>
+		<title>奖品查看</title>
+        <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
+        <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/resource/chain/css/select2.css" rel="stylesheet" />
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
@@ -87,7 +60,7 @@
             </div>
         </div>
         <div class="form-group">
-	   		 <img class="col-sm-12"  style="max-height: 500px;" src="${pageContext.request.contextPath}/${trophy.image}"/>
+	   		 <img class="col-sm-12 img-responsive img-thumbnail"   src="${pageContext.request.contextPath}/${trophy.image}"/>
         </div>
         <div class="form-group">
   			  <p>${trophy.detail}</p>

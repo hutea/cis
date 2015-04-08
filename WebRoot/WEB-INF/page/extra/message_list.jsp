@@ -18,20 +18,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/select2.css" rel="stylesheet" />
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
+        <link  href="${pageContext.request.contextPath}/resource/poshytip/tip-skyblue/tip-skyblue.css" rel="stylesheet" >
+		<script src="${pageContext.request.contextPath}/resource/chain/js/jquery-1.11.1.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resource/poshytip/src/jquery.poshytip.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
         <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
         <script src="${pageContext.request.contextPath}/resource/my97/WdatePicker.js"></script>
+		<script src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
+        $(function() {
+			$(".titleStyle").poshytip( {
+				className : 'tip-skyblue',
+				alignTo : 'target',
+				alignX : 'right',
+				alignY : 'bottom',
+				offsetX : -80,
+				offsetY : 0,
+				showTimeout : 5
+			});
+		});
 		function del(id){
 			if (confirm('您确定要删除此信息吗')) {
-			  $.get("${pageContext.request.contextPath}/manage/account/account_delete.action", 
-			  {accid:id},
+			  $.get("${pageContext.request.contextPath}/manage/extra/message_delete.action", 
+			  {msgId:id},
 			  function(data) {
 		      	if(data==1){
 		      		$("#tr_"+id).css("display","none");
@@ -39,7 +53,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			   });
 			}
 			}
+		
         </script>
+        <style type="text/css">
+        	.mleft {
+        		margin-bottom: 10px;
+        		border: 1px solid #ddd;
+        		padding: 10px;
+        		float:left;
+        		width: 700px;
+        		height: 205px;
+        	}
+        	.mright{
+        		margin-bottom: 10px;
+        		border: 1px solid #ddd;
+        		padding: 10px;
+        		float:left;
+        		width: 700px;
+        		height: 205px;
+        		margin-left: 20px;
+        	}
+        </style>
     </head>
 
     <body>
@@ -60,16 +94,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>account list</li>
+                                    <li>message list</li>
                                 </ul>
-                                <h4>帐户管理</h4>
+                                <h4>消息推送</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="message_add" namespace="/manage/extra" method="post" id="pageList"> 
-                         <div style="margin-bottom: 10px;border: 1px solid #ddd;padding-top: 10px;float:left;min-width: 700px;" class="form-horizontal"> 
+                       <s:form action="message_add" namespace="/manage/extra" method="post" > 
+                         <div   class="form-horizontal mleft"> 
                          	<div class="form-group">
                          		 <label class="col-md-1 control-label sr-only">消息主题</label>
 					             <div class="col-md-6">
@@ -81,7 +115,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										  <select name="message.pushTimeToLive" class="form-control">
 											<option value="0">不保留:在线推送</option>
 											<option value="60">1分钟</option>
-											<option value="600">10分钟</option>
+											<option value="600" selected="selected">10分钟</option>
 											<option value="3600">1小时</option>
 											<option value="10800" >3小时</option>
 											<option value="43200">12小时</option>
@@ -105,12 +139,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          	</div>
                          </div>
                        </s:form>
-                       <div style="min-width:500px;margin-bottom: 10px;border: 1px solid #ddd;padding-top: 10px;float:left;margin-left: 20px;padding:10px;" class="form-horizontal"> 
-                       		<h3>消息推送说明</h3>
+                       <div class="mright form-horizontal"> 
+                       		<h4>消息推送说明</h4>
                        		<ul>
                        			<li>消息保留时长
 	                       			<ul>
-	                       			<li>发送消息推送后，如果用户不在线，则会保存为离线消息，待该用户下次上线时继续推送。</li>
+	                       			<li>发送消息推送后，如果用户不在线，则会保存为离线消息，待该用户上线时会继续推送。</li>
 	                       			<li>可以设定离线消息时长：不保留表示只推送消息给在线用户</li>
 	                       			</ul>
                        			</li>
@@ -133,6 +167,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <th>#</th>
                                     <th>消息ID</th>
                                     <th>发送时间</th>
+                                    <th>消息保留时长</th>
                                     <th>主题</th>
                                     <th>内容</th>
                                     <th>操作</th>
@@ -142,8 +177,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td>${s.index+1}</td> 
                            		 <td>${entry.id}</td> 
                            		 <td><fmt:formatDate value="${entry.issueTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                           		 <td>${entry.pushTimeToLive}</td> 
                            		 <td>${entry.title}</td> 
-                           		 <td>${entry.content}</td> 
+                           		 <td class="titleStyle" title="<div>${entry.content}</div>" >
+	                           		 <span style="width:200px;display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
+	                           		 	${entry.content }
+	                           		 </span>
+                           		 </td> 
                            		 <td>
                            		 <a href="javascript:del('${entry.id}')">删除</a>
                            		 </td> 
@@ -160,8 +200,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div><!-- mainpanel -->
             </div><!-- mainwrapper -->
         </section>
-
-        <script src="${pageContext.request.contextPath}/resource/chain/js/jquery-1.11.1.min.js"></script>
+        
+        
+   		<script src="${pageContext.request.contextPath}/resource/chain/js/jquery-1.11.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/jquery-migrate-1.2.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/modernizr.min.js"></script>
@@ -180,5 +221,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
+
     </body>
 </html>

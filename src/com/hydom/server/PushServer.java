@@ -7,6 +7,7 @@ import cn.jpush.api.JPushClient;
 import cn.jpush.api.common.resp.APIConnectionException;
 import cn.jpush.api.common.resp.APIRequestException;
 import cn.jpush.api.push.PushResult;
+import cn.jpush.api.push.model.Options;
 import cn.jpush.api.push.model.Platform;
 import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
@@ -28,15 +29,15 @@ public class PushServer {
 	public static final String TAG = "tag_api";
 
 	public static void main(String[] args) {
-		sendPush("test title", "test content");
+		sendPush("test title", "test content",1000l);
 	}
 
-	public static void sendPush(String title, String content) {
+	public static void sendPush(String title, String content,long timeToLive) {
 		// HttpProxy proxy = new HttpProxy("localhost", 3128);
 		// Can use this https proxy: https://github.com/Exa-Networks/exaproxy
 		JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
 		// For push, all you need do is to build PushPayload object.
-		PushPayload payload = buildPayload(title, content);
+		PushPayload payload = buildPayload(title, content, timeToLive);
 		try {
 			PushResult result = jpushClient.sendPush(payload);
 			LOG.info("Got result - " + result);
@@ -53,7 +54,7 @@ public class PushServer {
 		}
 	}
 
-	public static PushPayload buildPayload(String title, String content) {
+	public static PushPayload buildPayload(String title, String content, long timeToLive) {
 		// return PushPayload.alertAll(ALERT);
 		return PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(
 				Audience.all()).setNotification(
@@ -61,6 +62,7 @@ public class PushServer {
 						AndroidNotification.newBuilder().setTitle(title).build())
 						.addPlatformNotification(
 								IosNotification.newBuilder().incrBadge(1).build())
-						.build()).build();
+						.build()).setOptions(
+				Options.newBuilder().setTimeToLive(timeToLive).build()).build();
 	}
 }

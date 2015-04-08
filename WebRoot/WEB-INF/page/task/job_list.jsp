@@ -62,7 +62,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          	<span class="text-primary hidden" >查询选项 </span>
                          	<input type="text" style="width: 220px;display: inline-block;" name="query_taskId" value="${query_taskId}" class="form-control"  placeholder="taskId"  >
                          	<input type="text" style="width: 220px;display: inline-block;height: 38px;" name="query_createTime" value="${query_createTime}" class="Wdate"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="创建时间"  >
-                         	<input type="text" style="width: 220px;display: inline-block;height: 38px;" name="query_finishTime" value="${query_finishTime}" class="Wdate"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="创建时间"  >
+                         	<input type="text" style="width: 220px;display: inline-block;height: 38px;" name="query_finishTime" value="${query_finishTime}" class="Wdate"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="完成时间"  >
                        		<input type="submit" style="margin: 0 50px;"  class="btn btn-primary"   value="查 询"  >
                          </div>
     					 <table  class="table table-bordered table-striped">

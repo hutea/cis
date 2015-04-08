@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -22,6 +24,7 @@ import com.hydom.util.HttpSender;
 public class JobServiceBean extends DAOSupport<Job> implements JobService {
 	@Resource
 	private TaskService taskService;
+	private Log log = LogFactory.getLog("dataServerLog");
 
 	@Override
 	public Job findByTaskId(String taskId) {
@@ -54,11 +57,10 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 		}
 	}
 
-	/**
-	 * 定时提交失败的任务
-	 */
 	@SuppressWarnings( { "unchecked" })
-	public void feedback() {
+	@Override
+	public void feedbackTimer() {
+		log.info("DataServer【失败工单定义提交开始】");
 		List<Job> jobs = em
 				.createQuery(
 						"select o from Job o where o.visible=?1 and feedback=?2 and o.taskFinishCount=o.taskCount")
@@ -69,7 +71,7 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 				this.update(job);
 			}
 		}
-
+		log.info("DataServer【失败工单定义提交结束】，共计：" + jobs.size());
 	}
 
 	/**
@@ -98,7 +100,7 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 		dataMap.put("message", list);
 		Gson gson = new Gson();
 		String jsonStr = gson.toJson(dataMap);
-		System.out.println("JobServiceBean[postJob]工单反馈，提交内容：" + jsonStr);
+		log.info("DataServer【工单反馈】：" + "提交jsonStr=" + jsonStr);
 		String path = "http://172.16.40.21:8080/tem-rest-support/rest/phoneTask/backTaskByQuestion"; // 地址
 		// http://172.16.40.21:8080/tem-rest-support/rest/phoneTask/backTaskByQuestion
 		Map<String, String> params = new HashMap<String, String>();
@@ -107,7 +109,7 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 		try {
 			inputStream = HttpSender.postFromHttpClient(path, params, "UTF-8");
 			String result = IOUtils.toString(inputStream, "UTF-8");
-			System.out.println("JobServiceBean[postJob]工单反馈，响应结果：" + result);
+			log.info("DataServer【工单反馈】：" + "响应=" + result);
 			if (result != null && result.contains("true")) {
 				return true;
 			} else {

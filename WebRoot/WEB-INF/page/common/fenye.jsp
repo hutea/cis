@@ -18,7 +18,7 @@
 			</span>
 		</c:if>
 		
-		<c:if test="${pageView.pageIndex.startindex>3}" >...</c:if>
+		<c:if test="${pageView.pageIndex.startindex>3}" ><span><a>...</a></span></c:if>
 		
 		<c:if test="${pageView.totalPage>1}" >
 		<c:forEach begin="${pageView.pageIndex.startindex}" end="${pageView.pageIndex.endindex}" var="per">
@@ -28,7 +28,7 @@
 		</c:forEach>
 		</c:if>
 	
-		<c:if test="${pageView.pageIndex.endindex<pageView.totalPage-2}" >...</c:if>
+		<c:if test="${pageView.pageIndex.endindex<pageView.totalPage-2}" ><span><a>...</a></span></c:if>
 		
 		<c:if  test="${pageView.totalPage>=4}">
 		<span <c:if test="${page==pageView.totalPage-1}">class="crupage"</c:if>>
@@ -48,8 +48,9 @@
 		<c:if test="${pageView.currentPage<pageView.totalPage}">
 		<a href='javascript:topage(${pageView.currentPage+1})'>下一页</a>
 		</c:if>
-		</span style="border-left:10px">
+		</span style="border-left:10px;">
 		<span class="gopage">
-		到 <input type="text" value="${pageView.currentPage}" id="inputPage"  maxlength="5" style="width:40px;height: 25px;vertical-align:baseline;"> 页		<input type="button" onclick="javascript:go(${pageView.totalPage})" class="btn" value="确定" style="vertical-align:baseline;"> 
+		到 <input type="text" value="${pageView.currentPage}" id="inputPage"  maxlength="5" style="width:40px;height: 25px;vertical-align:baseline;"> 页
+		<input type="button" onclick="javascript:go(${pageView.totalPage})" class="btn" value="确定" style="vertical-align:baseline;"> 
 		</span>
 </c:if>

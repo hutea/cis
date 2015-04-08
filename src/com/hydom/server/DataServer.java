@@ -50,7 +50,7 @@ public class DataServer {
 	@SuppressWarnings("unchecked")
 	public String assignTaskQuestion() {
 		System.out.println("DataServer[assignTaskQuestion]接受到的jsonStr字串---<" + jsonStr);
-		log.info("接受到的jsonStr字串---<" + jsonStr);
+		log.info("DataServer【分配工单assignTaskQuestion】：" + "jsonStr=" + jsonStr);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			Gson gson = new Gson();
@@ -68,8 +68,8 @@ public class DataServer {
 			} catch (Exception e) {
 				job.setMatchNum(config.getValueInt());// 出现异常用系统设置的分配上限值
 			}
-			if (job.getMatchNum() < job.getInitNum()) {// 如果上限小于了分配初值 ：用分配初值填充分配上限
-				job.setMatchNum(job.getInitNum());
+			if (job.getMatchNum() < job.getInitNum()) {// 如果上限小于了分配初值 ：用分配初值=分配上限
+				job.setInitNum(job.getMatchNum());
 			}
 			job.setCreateTime(currentTime);
 			jobService.save(job);
@@ -77,20 +77,20 @@ public class DataServer {
 			for (Map<String, Object> map : taskData.getMessage()) {
 				Task task = new Task();
 				/** 拼装metricPoint字串 START **/
-				//log.info("~~~:"+map.get("metricPoint").getClass()+"--"+map.get("metricPoint")); 
-				List<Object> array = (List<Object>) map.get("metricPoint"); 
+				// log.info("~~~:"+map.get("metricPoint").getClass()+"--"+map.get("metricPoint"));
+				List<Object> array = (List<Object>) map.get("metricPoint");
 				StringBuffer metricPoint = new StringBuffer();
 				for (Object obj : array) {
-					log.info("obj:"+obj.getClass()+"--"+obj);
+					log.info("obj:" + obj.getClass() + "--" + obj);
 					metricPoint.append(obj + ",");
 				}
 				metricPoint.deleteCharAt(metricPoint.length() - 1);
-				
+
 				/** 拼装metricPoint字串 END **/
 				task.setLineNo(Integer.parseInt((String) map.get("lineNo")));// 设置行号
 				task.setInLineNo(Integer.parseInt((String) map.get("inLineNo")));// 设置行内号
 				task.setMetricPoint(metricPoint.toString());// 设置切分数据
-				log.info("metricPoint:"+metricPoint.toString()) ;
+				log.info("metricPoint:" + metricPoint.toString());
 				task.setRecycleTime(Long.parseLong(taskData.getRecycleTime()));// 设置超时时间
 				task.setAccuracy(Double.parseDouble(taskData.getAccuracy()));// 设置正确率
 				task.setInitNum(job.getInitNum());// 设置分配初值
@@ -127,11 +127,22 @@ public class DataServer {
 		dataFillStream(dataMap);
 		return "success";
 	}
+	/**
+	 * 工单反馈：定时调用反馈失败的工单
+	 * 
+	 * @return
+	 */
+	public String backTaskTimer() {
+		
+		return "success";
+	}
 
 	/**
 	 * 回收工单
 	 */
 	public String recycleTaskByQuestion() {
+		log.info("DataServer【回收工单recycleTaskByQuestion】：" + "taskID=" + taskId + " 加收类型="
+				+ recycleType);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			List<Task> tasks = taskService.listByTaskId(taskId);
@@ -152,15 +163,9 @@ public class DataServer {
 					map.put("status", 0);
 				}
 				content.add(map);
-				task.setRecycleType(Integer.parseInt(recycleType));// 设置工单状态
-				// ：1=超时回收
+				task.setRecycleType(Integer.parseInt(recycleType));// 设置回收类型：1=超时回收
 				taskService.update(task);
 			}
-			/*
-			 * Map<String, String> taskIdMap = new HashMap<String, String>(); taskIdMap.put("taskId", taskId); Map<String,
-			 * List<Map<String, Object>> > contentMap = new HashMap<String, List<Map<String, Object>> >();
-			 * contentMap.put("content", content);
-			 */
 			Map<String, Object> message = new HashMap<String, Object>();
 			message.put("taskId", taskId);
 			message.put("content", content);
@@ -186,8 +191,7 @@ public class DataServer {
 	private void dataFillStream(Map<String, Object> dataMap) {
 		Gson gson = new Gson();
 		String jsonStr = gson.toJson(dataMap);
-		System.out.println("返回内容：" + jsonStr);
-		log.info("DataServer响应字串--->" + jsonStr);
+		log.info("DataServer【响应结果】：" + jsonStr);
 		try {
 			inputStream = new ByteArrayInputStream(jsonStr.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {

@@ -13,6 +13,7 @@ import com.hydom.dao.DAOSupport;
 import com.hydom.task.ebean.Job;
 import com.hydom.task.ebean.Task;
 import com.hydom.task.ebean.TaskRecord;
+import com.hydom.util.HelperUtil;
 
 @Service
 public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
@@ -37,6 +38,8 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 			taskRecord.setAccount(account);
 			taskRecord.setTask(task);
 			taskRecord.setMatchTime(currentTime);
+			taskRecord.setEffectiveTime(HelperUtil.addms(currentTime, task
+					.getRecycleTime()));// 设置有效时间
 			this.save(taskRecord);
 			account.setState(1);// 设置用户状态为1，表示在识别中
 			accountService.update(account);
@@ -56,7 +59,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 			taskService.update(task);
 			return taskRecord;
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			return null;
 		}
 	}
@@ -76,6 +79,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 			result = 8;
 			this.update(entity);
 			task.setCanNum(task.getCanNum() + 1);// 设置再次分配的人数
+			task.setMatchedNum(task.getMatchedNum() - 1);// 对已分配人数-1
 			taskService.update(task);
 			return result;
 		}
@@ -127,7 +131,6 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 			task.setResultNum(task.getResultNum() + 1);// 对返回了识别结果的人数+1
 			taskService.update(task);
 		}
-		/*		 */
 		return result;
 	}
 
@@ -159,6 +162,24 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TaskRecord> listTaskRecord(long accountId, int sign) {
+		return em.createQuery(
+				"select t from TaskRecord t where t.account.id=?1 and t.sign=?2")
+				.setParameter(1, accountId).setParameter(2, sign).getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TaskRecord> listOverTimeRecord() {
+		Date now = new Date();
+		return em
+				.createQuery(
+						"select t from TaskRecord t where t.effectiveTime<=?1 and t.identState!=0")
+				.setParameter(1, now).getResultList();
+	}
+
 	/**
 	 * 计算出相同结果最多的结果内容及人数
 	 * 
@@ -173,13 +194,5 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 				.setParameter(1, tid).setParameter(2, 1).setMaxResults(1)
 				.getSingleResult();
 		return (Object[]) obj;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<TaskRecord> listTaskRecord(long accountId, int sign) {
-		return em.createQuery(
-				"select t from TaskRecord t where t.account.id=?1 and t.sign=?2")
-				.setParameter(1, accountId).setParameter(2, sign).getResultList();
 	}
 }

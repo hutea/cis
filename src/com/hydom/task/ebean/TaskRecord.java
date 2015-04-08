@@ -38,6 +38,8 @@ public class TaskRecord {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date matchTime;// 分配时间
 	@Temporal(TemporalType.TIMESTAMP)
+	private Date effectiveTime;// 有效提交时间
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date postTime;// 完成时间
 	@Column
 	private Integer identState;// 用户识别状态：0=识别超时，1=在规定时间识别
@@ -128,6 +130,14 @@ public class TaskRecord {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	public Date getEffectiveTime() {
+		return effectiveTime;
+	}
+
+	public void setEffectiveTime(Date effectiveTime) {
+		this.effectiveTime = effectiveTime;
 	}
 
 }

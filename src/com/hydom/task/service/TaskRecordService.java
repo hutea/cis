@@ -36,4 +36,11 @@ public interface TaskRecordService extends DAO<TaskRecord> {
 	 * @return
 	 */
 	public int processTaskRecord(long tid, String resultStr);
+
+	/**
+	 * 列出所有超时任务
+	 * 
+	 * @return
+	 */
+	public List<TaskRecord> listOverTimeRecord();
 }

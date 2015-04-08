@@ -70,8 +70,24 @@ public class HelperUtil {
 		return cal.getTime();
 	}
 
+	/**
+	 * 对一个原始日期增加毫秒数后返回一个新的日期
+	 * 
+	 * @param srcDate
+	 *            ：原始日期
+	 * @param ms
+	 *            ：毫秒
+	 * @return
+	 */
+	public static Date addms(Date srcDate, long ms) {
+		Calendar cale = Calendar.getInstance();
+		cale.setTimeInMillis(srcDate.getTime() + ms);
+		return cale.getTime();
+	}
+
 	public static void main(String[] args) {
-		System.out.println(firstDayThisMonth());
-		System.out.println(lastDayThisMonth());
+		Date now  = new Date();
+		System.out.println(now);
+		System.out.println(addms(now, 60000000000l));
 	}
 }
