@@ -29,7 +29,7 @@ public class SystemPrivilege {
 	private String name; // 权限名称
 
 	@Column(name = "levelORC")
-	private int level = 1;// 权限类别:预留
+	private int level = 1;// 权限级别:
 
 	@ManyToMany(mappedBy = "privileges", cascade = CascadeType.REFRESH)
 	private Set<PrivilegeGroup> groups = new HashSet<PrivilegeGroup>();

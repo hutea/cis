@@ -60,18 +60,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         		margin-bottom: 10px;
         		border: 1px solid #ddd;
         		padding: 10px;
-        		float:left;
-        		width: 700px;
-        		height: 205px;
+        		min-height: 225px;
         	}
         	.mright{
         		margin-bottom: 10px;
         		border: 1px solid #ddd;
         		padding: 10px;
-        		float:left;
-        		width: 700px;
-        		height: 205px;
-        		margin-left: 20px;
+        		min-height: 225px;
         	}
         </style>
     </head>
@@ -102,63 +97,69 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="message_add" namespace="/manage/extra" method="post" > 
-                         <div   class="form-horizontal mleft"> 
-                         	<div class="form-group">
-                         		 <label class="col-md-1 control-label sr-only">消息主题</label>
-					             <div class="col-md-6">
-					                <input type="text" class="form-control" name="message.title" placeholder="消息主题">
-					             </div>
-					             <div class="col-md-4">
-					             		<div class="input-group">
-									      <div class="input-group-addon">消息保留时长</div>
-										  <select name="message.pushTimeToLive" class="form-control">
-											<option value="0">不保留:在线推送</option>
-											<option value="60">1分钟</option>
-											<option value="600" selected="selected">10分钟</option>
-											<option value="3600">1小时</option>
-											<option value="10800" >3小时</option>
-											<option value="43200">12小时</option>
-											<option value="86400">保留1天</option>
-											<option value="864000">保留10天</option>
-										  </select>
-									    </div>
-					             </div>
-                         	</div>
-                         	<div class="form-group">
-                         		 <label class="col-md-1 control-label sr-only">消息内容</label>
-					             <div class="col-md-10">
-					               <textarea row="4" class="form-control"  placeholder="消息内容" name="message.content"></textarea>
-					             </div>
-                         	</div>
-                         	<div class="form-group">
-                         		<div class="col-md-4 col-md-push-3">
-                         		 <button type="reset" class="btn btn-primary ">重置</button>
-                         		 <button type="submit" class="btn btn-primary">推送</button>
-                         		</div>
-                         	</div>
-                         </div>
-                       </s:form>
-                       <div class="mright form-horizontal"> 
-                       		<h4>消息推送说明</h4>
-                       		<ul>
-                       			<li>消息保留时长
-	                       			<ul>
-	                       			<li>发送消息推送后，如果用户不在线，则会保存为离线消息，待该用户上线时会继续推送。</li>
-	                       			<li>可以设定离线消息时长：不保留表示只推送消息给在线用户</li>
-	                       			</ul>
-                       			</li>
-                       			
-                       			<li>删除操作
-	                       			<ul>
-	                       			<li>在本页面删除某条消息，第三方仍会进行推送该消息。</li>
-	                       			<li>在本页面删除某条消息，手机端获取消息列表不会显示该消息。</li>
-	                       			</ul>
-                       			</li>
-                       			<li>建议：在进行推送消息前先<mark>确认消息内容</mark>再推送</li>
-                       		</ul>
-                       </div>
-                       <div class="clearfix"></div>
+                      <div class="row">
+                      		<div class="col-md-6">
+                      			<s:form action="message_add" namespace="/manage/extra" method="post" > 
+		                         <div   class="form-horizontal mleft"> 
+		                         	<div class="form-group">
+		                         		 <label class="col-md-1 control-label sr-only">消息主题</label>
+							             <div class="col-md-6">
+							                <input type="text" class="form-control" name="message.title" placeholder="消息主题">
+							             </div>
+							             <div class="col-md-4">
+							             		<div class="input-group">
+											      <div class="input-group-addon">消息保留时长</div>
+												  <select name="message.pushTimeToLive" class="form-control">
+													<option value="0">不保留:在线推送</option>
+													<option value="60">1分钟</option>
+													<option value="600" selected="selected">10分钟</option>
+													<option value="3600">1小时</option>
+													<option value="10800" >3小时</option>
+													<option value="43200">12小时</option>
+													<option value="86400">保留1天</option>
+													<option value="864000">保留10天</option>
+												  </select>
+											    </div>
+							             </div>
+		                         	</div>
+		                         	<div class="form-group">
+		                         		 <label class="col-md-1 control-label sr-only">消息内容</label>
+							             <div class="col-md-10">
+							               <textarea row="4" class="form-control"  placeholder="消息内容" name="message.content"></textarea>
+							             </div>
+		                         	</div>
+		                         	<div class="form-group">
+		                         		<div class="col-md-4 col-md-push-3">
+		                         		 <button type="reset" class="btn btn-primary ">重置</button>
+		                         		 <button type="submit" class="btn btn-primary">推送</button>
+		                         		</div>
+		                         	</div>
+		                         </div>
+		                       </s:form>
+                      		</div>
+                      		<div class="col-md-6">
+                      			<div class="mright form-horizontal"> 
+		                       		<h4>消息推送说明</h4>
+		                       		<ul>
+		                       			<li>消息保留时长
+			                       			<ul>
+			                       			<li>发送消息推送后，如果用户不在线，则会保存为离线消息，待该用户上线时会继续推送。</li>
+			                       			<li>可以设定离线消息时长：不保留表示只推送消息给在线用户</li>
+			                       			</ul>
+		                       			</li>
+		                       			
+		                       			<li>删除操作
+			                       			<ul>
+			                       			<li>在本页面删除某条消息，第三方仍会进行推送该消息。</li>
+			                       			<li>在本页面删除某条消息，手机端获取消息列表不会显示该消息。</li>
+			                       			</ul>
+		                       			</li>
+		                       			<li>建议：在进行推送消息前先<mark>确认消息内容</mark>再推送</li>
+		                       		</ul>
+		                       </div>
+                      		</div>
+                      </div>	
+                       
                        <s:form action="message_list" namespace="/manage/extra" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />

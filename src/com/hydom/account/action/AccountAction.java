@@ -2,7 +2,6 @@ package com.hydom.account.action;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,8 +41,6 @@ public class AccountAction {
 	private String query_createTime;
 
 	private long accid;
-
-
 
 	public String list() {
 		request = ServletActionContext.getRequest();

@@ -31,4 +31,12 @@ public class SystemPrivilegeServiceBean extends DAOSupport<SystemPrivilege> impl
 			return null;
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SystemPrivilege> listBylevel(int level) {
+		return em.createQuery("select o from SystemPrivilege o where o.level=?1")
+				.setParameter(1, level).getResultList();
+
+	}
 }

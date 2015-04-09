@@ -15,11 +15,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.hydom.dao.PageView;
-import com.hydom.extra.ebean.Message;
 import com.hydom.extra.ebean.Sense;
-import com.hydom.extra.service.MessageService;
 import com.hydom.extra.service.SenseService;
-import com.hydom.server.PushServer;
 
 @Controller
 @Scope(value = "prototype")

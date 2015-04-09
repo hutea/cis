@@ -615,8 +615,8 @@ public class AppServer {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String smscode = StringGenerator.SerialNumber(4);
-			String smsconent = "本次验证码为：" + smscode;
-			boolean sendresult = shortMessageService.sendCode(phone, smscode, smsconent);
+			String smscontent = "本次验证码为：" + smscode;
+			boolean sendresult = shortMessageService.sendCode(phone, smscode, smscontent);
 			if (sendresult) {
 				dataMap.put("code", smscode);
 				dataMap.put("sendtime", sdf.format(new Date()));

@@ -5,7 +5,6 @@ import java.util.List;
 import com.hydom.account.ebean.SystemPrivilege;
 import com.hydom.dao.DAO;
 
-
 public interface SystemPrivilegeService extends DAO<SystemPrivilege> {
 
 	/**
@@ -20,5 +19,13 @@ public interface SystemPrivilegeService extends DAO<SystemPrivilege> {
 	 * @return
 	 */
 	public SystemPrivilege findByURL(String url);
+
+	/**
+	 * 列出权限
+	 * 
+	 * @param level
+	 * @return
+	 */
+	public List<SystemPrivilege> listBylevel(int level);
 
 }

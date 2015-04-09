@@ -2,3 +2,30 @@ INSERT INTO `t_systemconfig` VALUES ('about', '<strong> \r\n<p>\r\n	<span style=
 INSERT INTO `t_systemconfig` VALUES ('manual', '兑换积分要求：21212121212', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `t_systemconfig` VALUES ('match', NULL, 0.65, 12, 10000000, 3, '');
 INSERT INTO `t_systemconfig` VALUES ('phone', '地址：成都市青羊区一环路西一段148号颐景商务楼403-409\r\n\r\n          电话：86-28-87011623\r\n\r\n          传真：86-28-87047300\r\n\r\n     邮箱：service@tsinghuabigdata.com', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO `t_systemprivilege` VALUES ('10001', 1, '工单分配', 'manage/task/job_list.action');
+INSERT INTO `t_systemprivilege` VALUES ('20001', 2, '用户查看', 'manage/account/user_list.action1');
+INSERT INTO `t_systemprivilege` VALUES ('30001', 3, '奖品列表', 'manage/credit/trophy_list.action');
+INSERT INTO `t_systemprivilege` VALUES ('30002', 3, '奖品添加', 'manage/credit/trophy_addUI.action');
+INSERT INTO `t_systemprivilege` VALUES ('30003', 3, '奖品分类管理', 'manage/credit/trophyType_list.action');
+INSERT INTO `t_systemprivilege` VALUES ('40001', 4, '系统帐号', 'manage/account/account_list.action');
+INSERT INTO `t_systemprivilege` VALUES ('40002', 4, '消息管理', 'manage/extra/message_list.action');
+INSERT INTO `t_systemprivilege` VALUES ('40003', 4, '意见反馈', 'manage/account/notfound.html');
+INSERT INTO `t_systemprivilege` VALUES ('40004', 4, '角色定义', 'manage/account/blank.html');
+INSERT INTO `t_systemprivilege` VALUES ('50001', 5, '工单设置', 'manage/extra/config_show.action#scid=match');
+INSERT INTO `t_systemprivilege` VALUES ('50002', 5, '积分说明', 'manage/extra/config_show.action#scid=manual');
+INSERT INTO `t_systemprivilege` VALUES ('50003', 5, '关于我们', 'manage/extra/config_show.action#scid=about');
+INSERT INTO `t_systemprivilege` VALUES ('50004', 5, '联系我们', 'manage/extra/config_show.action#scid=phone');
+
+
+alter table t_account AUTO_INCREMENT=10001;
+alter table t_job AUTO_INCREMENT=10001;
+alter table t_message AUTO_INCREMENT=10001;
+alter table t_privilegegroup AUTO_INCREMENT=10001;
+alter table t_sense AUTO_INCREMENT=10001;
+alter table t_task AUTO_INCREMENT=10001;
+alter table t_taskrecord AUTO_INCREMENT=10001;
+alter table t_trophy AUTO_INCREMENT=10001;
+alter table t_trophytype AUTO_INCREMENT=10001;
+
+

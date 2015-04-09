@@ -1,4 +1,4 @@
-package com.hydom.credit.action;
+package com.hydom.extra.action;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -19,103 +19,78 @@ import org.apache.struts2.ServletActionContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.hydom.credit.ebean.Trophy;
-import com.hydom.credit.service.TrophyService;
-import com.hydom.credit.service.TrophyTypeService;
 import com.hydom.dao.PageView;
-import com.hydom.util.WebUtil;
+import com.hydom.extra.ebean.AppVersion;
+import com.hydom.extra.service.AppVersionService;
 
 @Controller
 @Scope(value = "prototype")
-public class TrophyAction {
+public class AppVersionAction {
 	@Resource
-	private TrophyService trophyService;
-	@Resource
-	private TrophyTypeService trophyTypeService;
-	private HttpServletRequest request;
+	private AppVersionService appVersionService;
 
-	private Trophy trophy;
+	private AppVersion appVersion;
 	private int maxresult = 10;
 	private int page = 1;
-	private long typeid;// 奖品类别ID
-	private long id;
-	private int m = 3;// 识别选中导航菜单
+	private int m = 4;// 识别选中导航菜单
 	private InputStream inputStream;
 
-	private File img;
-	private String imgFileName;
-	private String imgContentType;
+	private File app;
+	private String appFileName;
+	private String appContentType;
 	private Log log = LogFactory.getLog("manageOPLog");
+	private HttpServletRequest request;
+	private long appid;
 
 	public String list() {
 		request = ServletActionContext.getRequest();
-		PageView<Trophy> pageView = new PageView<Trophy>(maxresult, page);
+		PageView<AppVersion> pageView = new PageView<AppVersion>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
 		orderby.put("id", "desc");
 		StringBuffer jpql = new StringBuffer("o.visible=?1 ");
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);
-		pageView.setQueryResult(trophyService.getScrollData(pageView.getFirstResult(),
-				maxresult, jpql.toString(), params.toArray(), orderby));
+		pageView.setQueryResult(appVersionService.getScrollData(
+				pageView.getFirstResult(), maxresult, jpql.toString(), params.toArray(),
+				orderby));
 		request.setAttribute("pageView", pageView);
 		return "success";
 	}
 
-	public String addUI() {
-		request = ServletActionContext.getRequest();
-		request.setAttribute("types", trophyTypeService.list());
-		return "success";
-	}
-
 	public String add() {
-		trophy.setImage(this.saveAccessory(img, imgFileName));
-		trophy.setImageName(imgFileName);
-		trophy.setTrophyType(trophyTypeService.find(typeid));
-		trophy.setDetailText(WebUtil.HtmltoText(trophy.getDetail()));
-		trophyService.save(trophy);
+		appVersion.setFileName(appFileName);
+		appVersion.setFilePath(saveAccessory(app, appFileName));
+		appVersionService.save(appVersion);
 		return "success";
 	}
 
 	public String editUI() {
-		request = ServletActionContext.getRequest();
-		trophy = trophyService.find(id);
-		request.setAttribute("types", trophyTypeService.list());
+		appVersion = appVersionService.find(appid);
 		return "success";
 	}
 
 	public String edit() {
-		Trophy entity = trophyService.find(id);
-		entity.setName(trophy.getName());
-		entity.setState(trophy.getState());
-		entity.setStock(trophy.getStock());
-		entity.setScore(trophy.getScore());
-		entity.setMoney(trophy.getMoney());
-		entity.setTrophyType(trophyTypeService.find(typeid));
-		if (img != null && img.length() > 0) {// 修改图片
-			// 删除原图
-			String oripath = entity.getImage();
+		AppVersion entity = appVersionService.find(appid);
+		if (app != null && app.length() > 0) {// 修改上传的文件
+			// 删除原文件
+			String oripath = entity.getFilePath();
 			File oriFile = new File(ServletActionContext.getServletContext().getRealPath(
 					oripath));
 			if (!oriFile.delete()) {
-				log.info("删除图片失败，请手动删除，删除路径：" + oriFile.getAbsolutePath());
+				log.info("删除文件失败，请手动删除，删除路径：" + oriFile.getAbsolutePath());
 			}
-			// 更新图片地址及图片名
-			entity.setImage(this.saveAccessory(img, imgFileName));
-			entity.setImageName(imgFileName);
+			// 更新文件地址及文件名
+			entity.setFilePath(this.saveAccessory(app, appFileName));
+			entity.setFileName(appFileName);
 		}
-		trophyService.update(entity);
-		return "success";
-	}
-
-	public String show() {
-		trophy = trophyService.find(id);
+		appVersionService.update(entity);
 		return "success";
 	}
 
 	public String delete() {
-		Trophy entity = trophyService.find(id);
+		AppVersion entity = appVersionService.find(appid);
 		entity.setVisible(false);
-		trophyService.update(entity);
+		appVersionService.update(entity);
 		try {
 			inputStream = new ByteArrayInputStream("1".getBytes("utf-8"));
 		} catch (UnsupportedEncodingException e) {
@@ -129,12 +104,12 @@ public class TrophyAction {
 		if (accessory != null && accessoryFileName != null
 				&& !"".equals(accessoryFileName)) {
 			String saveDir = ServletActionContext.getServletContext().getRealPath(
-					"/resource/system/tropy");
+					"/resource/system/app");
 			String suffix = accessoryFileName.substring(
 					accessoryFileName.lastIndexOf("."), accessoryFileName.length())
 					.toLowerCase();
 			String fileName = new Date().getTime() + suffix;
-			savePath = "resource/system/tropy/" + fileName;
+			savePath = "resource/system/app/" + fileName;
 			File file = new File(saveDir);
 			if (file.exists()) {
 				file.mkdirs();
@@ -148,36 +123,36 @@ public class TrophyAction {
 		return savePath;
 	}
 
-	public Trophy getTrophy() {
-		return trophy;
+	public AppVersion getAppVersion() {
+		return appVersion;
 	}
 
-	public void setTrophy(Trophy trophy) {
-		this.trophy = trophy;
+	public void setAppVersion(AppVersion appVersion) {
+		this.appVersion = appVersion;
 	}
 
-	public long getTypeid() {
-		return typeid;
+	public File getApp() {
+		return app;
 	}
 
-	public void setTypeid(long typeid) {
-		this.typeid = typeid;
+	public void setApp(File app) {
+		this.app = app;
 	}
 
-	public File getImg() {
-		return img;
+	public String getAppFileName() {
+		return appFileName;
 	}
 
-	public void setImg(File img) {
-		this.img = img;
+	public void setAppFileName(String appFileName) {
+		this.appFileName = appFileName;
 	}
 
-	public String getImgFileName() {
-		return imgFileName;
+	public String getAppContentType() {
+		return appContentType;
 	}
 
-	public void setImgFileName(String imgFileName) {
-		this.imgFileName = imgFileName;
+	public void setAppContentType(String appContentType) {
+		this.appContentType = appContentType;
 	}
 
 	public int getPage() {
@@ -186,14 +161,6 @@ public class TrophyAction {
 
 	public void setPage(int page) {
 		this.page = page;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public InputStream getInputStream() {
@@ -213,11 +180,19 @@ public class TrophyAction {
 	}
 
 	public String getImgContentType() {
-		return imgContentType;
+		return appContentType;
 	}
 
 	public void setImgContentType(String imgContentType) {
-		this.imgContentType = imgContentType;
+		this.appContentType = imgContentType;
+	}
+
+	public long getAppid() {
+		return appid;
+	}
+
+	public void setAppid(long appid) {
+		this.appid = appid;
 	}
 
 }

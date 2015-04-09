@@ -14,21 +14,13 @@
                 </div><!-- header-left -->
                 
                 <div class="header-right">
-                    
                     <div class="pull-right" >
-                        
-                        <form class="form form-search" action="search-results.html" >
-                            <input type="search" class="form-control" placeholder="Search" />
-                        </form>
-                        
-                        
                         <div class="btn-group btn-group-option" style="margin-left: 100px">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                               <i class="fa fa-caret-down"></i>
                             </button>
                             <ul class="dropdown-menu pull-right" role="menu">
                               <li><a href="#"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
-                              <li><a href="#"><i class="glyphicon glyphicon-star"></i> Activity Log</a></li>
                               <li><a href="#"><i class="glyphicon glyphicon-cog"></i> Account Settings</a></li>
                               <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> Help</a></li>
                               <li class="divider"></li>

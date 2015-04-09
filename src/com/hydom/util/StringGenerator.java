@@ -19,7 +19,7 @@ public class StringGenerator {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		Date date = new Date();
 		String dateStr = sdf.format(date);
-		String id = dateStr + getRandomString(7);
+		String id = dateStr + getRandomString(3);
 		return id;
 	}
 
@@ -48,7 +48,7 @@ public class StringGenerator {
 	 * @return
 	 */
 	private static String getRandomString(int length) {
-		String base = "abcdefghijklmnopqrstuvwxyz0123456789";
+		String base = "ABCDEFGHIJKLMNOPQURSTUVWXYZ";
 		Random random = new Random();
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < length; i++) {

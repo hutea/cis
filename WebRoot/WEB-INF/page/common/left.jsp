@@ -50,8 +50,8 @@
                                 <li><a href='<s:url action="account_list" namespace="/manage/account" />'>系统帐号</a></li>
                                 <li><a href='<s:url action="message_list" namespace="/manage/extra" />'>消息管理</a></li>
                                 <li><a href='<s:url action="sense_list" namespace="/manage/extra" />'>意见反馈</a></li>
-                                <li><a href="blank.html">权限定义</a></li>
-                                <li><a href="blank.html">App版本管理</a></li>
+                                <li><a href='<s:url action="group_list" namespace="/manage/account" />'>角色定义</a></li>
+                                <li><a href='<s:url action="appversion_list" namespace="/manage/extra" />'>App版本管理</a></li>
                             </ul>
                         </li>
                         

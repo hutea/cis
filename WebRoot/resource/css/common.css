@@ -23,10 +23,18 @@ table {
 	text-align: left;
 }
 
+.contentpanel{
+	min-height: 720px;
+}
 .bottomwrapper {
+	/*
 	position: fixed;
 	bottom: 0;
 	width: 85%
+	*/
+	margin:0 20px;
+	padding-top:10px;
+	border-top:1px solid #d3d3d3; 
 }
 
 .content-l {

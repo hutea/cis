@@ -50,4 +50,6 @@ public class ParticularInterceptor extends AbstractInterceptor {
 //		}
 		return invocation.invoke();
 	}
+	
+	
 }
