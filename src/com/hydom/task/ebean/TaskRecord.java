@@ -33,7 +33,7 @@ public class TaskRecord {
 	@JoinColumn(name = "task_id")
 	private Task task;
 	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-	@JoinColumn(name = "accout_id")
+	@JoinColumn(name = "account_id")
 	private Account account;// 分配给的用户
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date matchTime;// 分配时间
@@ -48,7 +48,7 @@ public class TaskRecord {
 	@Column(length = 2000)
 	private String result;// 用户识别结果
 	@Column
-	private Integer sign;// 识别结果计算：1=用户识别正确；2=用户识别错误
+	private Integer sign;// 识别结果计算：1=用户识别正确；0=用户识别错误
 	@Column
 	private boolean visible = true; // 逻辑删除标记
 

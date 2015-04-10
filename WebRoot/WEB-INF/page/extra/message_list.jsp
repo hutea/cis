@@ -18,9 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/select2.css" rel="stylesheet" />
-        <link  href="${pageContext.request.contextPath}/resource/poshytip/tip-skyblue/tip-skyblue.css" rel="stylesheet" >
 		<script src="${pageContext.request.contextPath}/resource/chain/js/jquery-1.11.1.min.js"></script>
-        <script src="${pageContext.request.contextPath}/resource/poshytip/src/jquery.poshytip.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
         <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
         <script src="${pageContext.request.contextPath}/resource/my97/WdatePicker.js"></script>
@@ -180,7 +178,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td><fmt:formatDate value="${entry.issueTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td>${entry.pushTimeToLive}</td> 
                            		 <td>${entry.title}</td> 
-                           		 <td class="titleStyle" title="<div>${entry.content}</div>" >
+                           		 <td   data-toggle="tooltip" title="${entry.content }" >
 	                           		 <span style="width:200px;display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
 	                           		 	${entry.content }
 	                           		 </span>

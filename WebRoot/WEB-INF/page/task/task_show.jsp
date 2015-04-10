@@ -27,11 +27,8 @@
 		<div>
 			计算出的正确结果：
         </div>
-        	${task.result}
 			\[\begin{matrix}
-			\dot{x} &#038; = &#038; \sigma(y-x) \\
-			\dot{y} &#038; = &#038; \rho x - y - xz \\
-			\dot{z} &#038; = &#038; -\beta z + xy
+        	${task.result}
 			\end{matrix} \]
 	</body>
 </html>

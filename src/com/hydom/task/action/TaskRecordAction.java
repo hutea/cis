@@ -27,6 +27,7 @@ public class TaskRecordAction {
 	private int page = 1;
 	private int m = 1;// 识别选中导航菜单
 	private long taskId;
+	private long jobid;
 	private long taskRecordId;
 	private TaskRecord taskRecord;
 	private SvgImage si;
@@ -100,6 +101,14 @@ public class TaskRecordAction {
 
 	public void setSi(SvgImage si) {
 		this.si = si;
+	}
+
+	public long getJobid() {
+		return jobid;
+	}
+
+	public void setJobid(long jobid) {
+		this.jobid = jobid;
 	}
 
 }

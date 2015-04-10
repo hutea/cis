@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import sun.applet.resources.MsgAppletViewer;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,25 +19,19 @@ public class Test {
 	// style="stroke:rgb(99,99,99);stroke-width:2" />
 
 	public static void main(String[] args) {
-		String data = getdata().replaceAll("},", "}#");
-		String[] str = data.split("#");
-		List<Map<String, Integer>> list = new ArrayList<Map<String, Integer>>();
-		for (String s : str) {
-			System.out.println(s);
-			String[] xy = s.split(",");
-
-			String[] x = xy[0].split(":");
-			String[] y = xy[1].split(":");
-			Map<String, Integer> map = new LinkedHashMap<String, Integer>();
-			map.put("x", Integer.parseInt(x[1]));
-			map.put("y", Integer.parseInt(y[1].substring(0, y[1].length()-1)));
-			list.add(map);
-		}
-		Map<String, Object> dataMap = new HashMap<String, Object>();
-		dataMap.put("list", list);
+		String jsonstr = "{\"uid\":4,\"msgids\":[\"1\",\"2\",\"3\"]}";
 		Gson gson = new Gson();
-		String json = gson.toJson(dataMap);
-		System.out.println(json);
+		Map<String, Object> map = gson.fromJson(jsonstr, Map.class);
+		
+		for (String key : map.keySet()) {
+			System.out.println(key);
+			if("msgids".equals(key)){
+			  ArrayList list= 	(ArrayList) map.get(key);
+			  for(Object l :list ){
+				  System.out.println(l+"-"+l.getClass()); 
+			  }
+			}
+		}
 	}
 
 	public static String getdata() {

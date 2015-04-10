@@ -9,8 +9,8 @@
 	<constant name="struts.action.extension" value="action" />
 	<constant name="struts.i18n.encoding" value="UTF-8" />
 	<constant name="struts.ui.theme" value="simple" />
-	<!-- 指定允许上传的文件最大字节数：-->
-	<constant name="struts.multipart.maxSize" value="1048576" />
+	<!-- 指定允许上传的文件最大字节数：这里设置为50MB-->
+	<constant name="struts.multipart.maxSize" value="52428800" />
 
 
 	<package name="signin_up" namespace="/" extends="struts-default">

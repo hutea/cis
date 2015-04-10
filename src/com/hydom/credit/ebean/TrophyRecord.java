@@ -39,8 +39,8 @@ public class TrophyRecord {
 	private double score;// 本次兑换消费的积分
 
 	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-	@JoinColumn(name = "accout_id")
-	private Account acount;// 兑换用户
+	@JoinColumn(name = "account_id")
+	private Account account;// 兑换用户
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date postTime;// 提交兑换时间
@@ -97,12 +97,12 @@ public class TrophyRecord {
 		this.score = score;
 	}
 
-	public Account getAcount() {
-		return acount;
+	public Account getAccount() {
+		return account;
 	}
 
-	public void setAcount(Account acount) {
-		this.acount = acount;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	public Boolean getSign() {

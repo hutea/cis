@@ -26,8 +26,9 @@
                                 <li>
                                 	<a href='<s:url action="user_list" namespace="/manage/account" />'>用户查看</a>
                                 </li>
-                                <li><a href="general-forms.html">积分详细 </a></li>
-                                <li><a href="general-forms.html">积分管理</a></li>
+                                <li>
+                                	<a href='<s:url action="scoreRecord_list" namespace="/manage/credit" />'>积分中心</a>
+                                </li>
                             </ul>
                         </li>
                         

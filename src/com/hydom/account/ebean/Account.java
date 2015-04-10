@@ -48,7 +48,7 @@ public class Account {
 	@Column
 	private int type = 1;// 帐户类型：1=普通用户、2=后台管理员
 	@Column
-	private double score;// 用户的总积分
+	private double score = 0;// 用户的总积分
 	@Column
 	private Integer state;// 0=休息一下，1=识别中，2=注销
 	@Temporal(TemporalType.TIMESTAMP)

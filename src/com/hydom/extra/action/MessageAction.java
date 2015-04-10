@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -47,6 +48,7 @@ public class MessageAction {
 	}
 
 	public String add() {
+		message.setIssueTime(new Date());
 		messageService.save(message);
 		PushServer.sendPush(message.getTitle(), message.getContent(), message
 				.getPushTimeToLive());

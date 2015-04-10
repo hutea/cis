@@ -75,7 +75,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    					 <table class="table table-bordered table-striped" >
 									 <tr >
 		                                    <th>#</th>
-		                                    <th>ID</th>
 		                                    <th>版本号</th>
 		                                    <th>上传时间</th>
 		                                    <th>状态</th>
@@ -84,12 +83,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                           	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
 		                           	  	<tr id="tr_${entry.id}">
 		                           		 <td>${s.index+1}</td> 
-		                           		 <td>${entry.id}</td> 
 		                           		 <td>${entry.version}</td> 
 		                           		 <td><fmt:formatDate value="${entry.uploadTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
 		                           		 <td>${entry.state==1?"开启":"关闭" }</td> 
 		                           		 <td>
-		                           		 <a href='<s:url action="group_editUI" namespace="/manage/account" />?gid=${entry.id}'>修改</a>
+		                           		 <a href='<s:url action="appversion_editUI" namespace="/manage/extra" />?appid=${entry.id}'>修改</a>
 		                           		 <a href="javascript:del('${entry.id}')">删除</a>
 		                           		 <c:if test="${entry.filePath!=null}">
 		                           		 <a href='<s:url action="app_download" namespace="/manage/extra" />?appid=${entry.id}'>下载</a>
@@ -102,7 +100,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                       	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
                     		</div>
                     		
-                    		<div class="col-sm-6 col-md-3" style="border: 1px solid #d3d3d3;">
+                    		<div class="col-sm-6 col-md-3" style="border: 1px solid #d3d3d3;padding-top: 8px">
                     			<form  action ="${pageContext.request.contextPath}/manage/extra/appversion_add.action" enctype="multipart/form-data" method="post" >
                     				<div class="form-group">
                     					<label class="col-md-3 control-label">版本号</label>

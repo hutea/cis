@@ -27,10 +27,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
-    	function show(tid,uid) {
-	   	   	 var url ="${pageContext.request.contextPath}/manage/task/task_show.action";
-	   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'task_'+tid});
-   	 	}
+			function del(id){
+				if (confirm('您确定要删除此信息吗')) {
+				  $.get("${pageContext.request.contextPath}/manage/credit/trophy_delete.action", 
+				  {id:id},
+				  function(data) {
+			      	if(data==1){
+			      		$("#tr_"+id).css("display","none");
+			       	}
+				   });
+				}
+			}
+		    function show(id) {
+			  	 var url ="${pageContext.request.contextPath}/manage/credit/trophy_show.action?id="+id;
+		   		 art.dialog.open(url,{width:800 ,height: 500 , title: '奖品图片',id:'trophy_'+id});
+		   	 }
         </script>
     </head>
 
@@ -52,51 +63,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href="${pageContext.request.contextPath}/manage/index.action"><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li class="active">用户查看</li>
+                                    <li class="active">score center</li>
                                 </ul>
-                                <h4>用户查看</h4>
+                                <h4>积分中心</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="task_list" namespace="/manage/task" method="post" id="pageList"> 
+                       <s:form action="scoreRecord_list" namespace="/manage/credit" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
-						 
-    					 <table class="table table-bordered table-striped" >
+    					 <table class="table table-bordered table-striped">
 							 <tr>
                                     <th>#</th>
-                                    <th>帐户ID</th>
-                                    <th>手机号</th>
+                                    <th>帐号</th>
                                     <th>积分</th>
-                                    <th>最近一月识别数</th>
-                                    <th>识别总数</th>
-                                    <th>正确率</th>
-                                    <th>平均处理速度</th>
-                                    <th>注册时间</th>
-                                    <th>最近登录</th>
-                                    <th>操作</th>
+                                    <th>时间</th>
+                                    <th>详细</th>
                               </tr>
-                          	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
-                           	  	<tr id="tr_${entry.id}">
-                           		 <td>${s.index+1}</td> 
-                           		 <td>${entry.id}</td> 
-                           		 <td>${entry.phone}</td> 
-                           		 <td>${entry.score}</td> 
-                           		 <td>${entry.id+1}</td> 
-                           		 <td>${entry.id+101}</td> 
-                           		 <td>68%</td> 
-                           		 <td>3s</td> 
-                           		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td><fmt:formatDate value="${entry.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td>
-                           		  <a href='#'>详细</a>
-                           		  <a href='<s:url action="scoreRecord_listheap" namespace="/manage/credit" />?accid=${entry.id}'>积分详细</a>
-                           		  <a href='<s:url action="scoreRecord_listuse" namespace="/manage/credit" />?accid=${entry.id}'>消费详细</a>
-                           		 </td> 
-                           	  	</tr>
-                           	  </c:forEach>
+                              <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
+                              <tr id="tr_${entry.id}">
+                                    <td>${s.index+1}</td>
+                                    <td>${entry.account.username}</td>
+                                    <td>${entry.sign?"+":"-"}${entry.score}</td>
+                                    <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                                    <td>${entry.taskRecord!=null?"完成任务":"兑换"}</td>
+                              </tr>
+                              </c:forEach>
 						 </table>
 						</s:form>
                        	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
@@ -130,6 +124,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
-	
+
     </body>
 </html>

@@ -13,25 +13,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>Chain Responsive Bootstrap3 Admin</title>
+        <title>app版本管理-修改</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/select2.css" rel="stylesheet" />
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
+		<script src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
         <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
+        <script src="${pageContext.request.contextPath}/resource/my97/WdatePicker.js"></script>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
-        <script type="text/javascript">
-    	function show(tid,uid) {
-	   	   	 var url ="${pageContext.request.contextPath}/manage/task/task_show.action";
-	   		 art.dialog.open(url,{width:400 ,height: 500 , title: '区块笔迹',id:'task_'+tid});
-   	 	}
-        </script>
     </head>
 
     <body>
@@ -42,7 +37,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <section>
             <div class="mainwrapper">
         	<%@ include file="/WEB-INF/page/common/left.jsp" %>
-                
                 <div class="mainpanel">
                     <div class="pageheader">
                         <div class="media">
@@ -51,58 +45,51 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             </div>
                             <div class="media-body">
                                 <ul class="breadcrumb">
-                                    <li><a href="${pageContext.request.contextPath}/manage/index.action"><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li class="active">用户查看</li>
+                                    <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
+                                    <li>app version</li>
                                 </ul>
-                                <h4>用户查看</h4>
+                                <h4>app版本管理</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="task_list" namespace="/manage/task" method="post" id="pageList"> 
-                         <s:hidden name="page" />
-                         <s:hidden name="m" />
-						 
-    					 <table class="table table-bordered table-striped" >
-							 <tr>
-                                    <th>#</th>
-                                    <th>帐户ID</th>
-                                    <th>手机号</th>
-                                    <th>积分</th>
-                                    <th>最近一月识别数</th>
-                                    <th>识别总数</th>
-                                    <th>正确率</th>
-                                    <th>平均处理速度</th>
-                                    <th>注册时间</th>
-                                    <th>最近登录</th>
-                                    <th>操作</th>
-                              </tr>
-                          	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
-                           	  	<tr id="tr_${entry.id}">
-                           		 <td>${s.index+1}</td> 
-                           		 <td>${entry.id}</td> 
-                           		 <td>${entry.phone}</td> 
-                           		 <td>${entry.score}</td> 
-                           		 <td>${entry.id+1}</td> 
-                           		 <td>${entry.id+101}</td> 
-                           		 <td>68%</td> 
-                           		 <td>3s</td> 
-                           		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td><fmt:formatDate value="${entry.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td>
-                           		  <a href='#'>详细</a>
-                           		  <a href='<s:url action="scoreRecord_listheap" namespace="/manage/credit" />?accid=${entry.id}'>积分详细</a>
-                           		  <a href='<s:url action="scoreRecord_listuse" namespace="/manage/credit" />?accid=${entry.id}'>消费详细</a>
-                           		 </td> 
-                           	  	</tr>
-                           	  </c:forEach>
-						 </table>
-						</s:form>
-                       	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
-                            <!-- code block hydom -->
-                        
-                        
+                    	<div class="row">
+                    		<div class="col-sm-6 col-md-3" style="border: 1px solid #d3d3d3;">
+                    			<form  action ="${pageContext.request.contextPath}/manage/extra/appversion_edit.action" enctype="multipart/form-data" method="post" >
+                    				<input type="hidden" value="${appid}" name="appid">
+                    				<div class="form-group">
+                    					<label class="col-md-3 control-label">版本号</label>
+                    					<div class="col-md-8">
+                    						<input type="text" class="form-control" name="appVersion.version" value="${appVersion.version}"/>
+                    					</div>
+                    				</div>
+                    				<div class="form-group">
+                    					<label class="col-md-3 control-label">版本状态</label>
+                    					<div class="col-md-8">
+                    						<select name="appVersion.state" class="form-control"  >
+										      	<option value="1" ${appVersion.state==1?"selected='selected'":"" } >开启</option>
+										      	<option value="0" ${appVersion.state==0?"selected='selected'":"" } >关闭</option>
+										    </select>
+                    					</div>
+                    				</div>
+                    				<div class="form-group">
+                    					<label class="col-md-3 control-label">上传文件</label>
+                    					<div class="col-md-8">
+								     		 <input type="file" name="app" class="form-control"> 
+                    					</div>
+                    				</div>
+                    				
+									<div class="form-group">
+										<div class="col-md-6 col-md-push-5">
+											<button type="reset" class="btn btn-primary">重置</button>
+											<button type="submit" class="btn btn-primary">确认</button>
+										</div>
+									</div>
+						   		 </form>
+                    		</div>
+                    	</div>
+
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>
@@ -130,6 +117,5 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
-	
     </body>
 </html>

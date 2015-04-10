@@ -58,9 +58,13 @@ public class AppVersionAction {
 	}
 
 	public String add() {
-		appVersion.setFileName(appFileName);
-		appVersion.setFilePath(saveAccessory(app, appFileName));
-		appVersionService.save(appVersion);
+		try {
+			appVersion.setFileName(appFileName);
+			appVersion.setFilePath(saveAccessory(app, appFileName));
+			appVersionService.save(appVersion);
+		} catch (Exception e) {
+			//e.printStackTrace();
+		}
 		return "success";
 	}
 
@@ -70,20 +74,28 @@ public class AppVersionAction {
 	}
 
 	public String edit() {
+		try{
 		AppVersion entity = appVersionService.find(appid);
+		entity.setVersion(appVersion.getVersion());
+		entity.setState(appVersion.getState());
 		if (app != null && app.length() > 0) {// 修改上传的文件
 			// 删除原文件
 			String oripath = entity.getFilePath();
-			File oriFile = new File(ServletActionContext.getServletContext().getRealPath(
-					oripath));
-			if (!oriFile.delete()) {
-				log.info("删除文件失败，请手动删除，删除路径：" + oriFile.getAbsolutePath());
+			if (oripath != null && "".equals(oripath)) {
+				File oriFile = new File(ServletActionContext.getServletContext()
+						.getRealPath(oripath));
+				if (!oriFile.delete()) {
+					log.info("删除文件失败，请手动删除，删除路径：" + oriFile.getAbsolutePath());
+				}
 			}
 			// 更新文件地址及文件名
 			entity.setFilePath(this.saveAccessory(app, appFileName));
 			entity.setFileName(appFileName);
 		}
-		appVersionService.update(entity);
+			appVersionService.update(entity);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return "success";
 	}
 
@@ -104,12 +116,12 @@ public class AppVersionAction {
 		if (accessory != null && accessoryFileName != null
 				&& !"".equals(accessoryFileName)) {
 			String saveDir = ServletActionContext.getServletContext().getRealPath(
-					"/resource/system/app");
+					"/app/resource/system/soft");
 			String suffix = accessoryFileName.substring(
 					accessoryFileName.lastIndexOf("."), accessoryFileName.length())
 					.toLowerCase();
 			String fileName = new Date().getTime() + suffix;
-			savePath = "resource/system/app/" + fileName;
+			savePath = "app/resource/system/soft/" + fileName;
 			File file = new File(saveDir);
 			if (file.exists()) {
 				file.mkdirs();

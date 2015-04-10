@@ -5,6 +5,7 @@
 <struts>
 
 	<package name="credit" namespace="/manage/credit" extends="pub-package">
+		<!-- 奖品分类相关 -->
 		<action name="trophyType_list" class="trophyTypeAction" method="list">
 			<result>/WEB-INF/page/credit/trophyType_list.jsp</result>
 		</action>
@@ -26,7 +27,7 @@
 				<param name="inputName">inputStream</param>
 			</result>
 		</action>
-
+		<!-- 奖品相关 -->
 		<action name="trophy_list" class="trophyAction" method="list">
 			<result>/WEB-INF/page/credit/trophy_list.jsp</result>
 		</action>
@@ -52,7 +53,7 @@
 				<param name="actionName">trophy_list</param>
 			</result>
 			<interceptor-ref name="allStack">
-				<param name="fileUpload.maximumSize">1024*9024</param>
+				<param name="fileUpload.maximumSize">5*1024*1024</param>
 				<param name="fileUpload.allowedTypes">
 					image/bmp,image/jpeg,image/gif,image/png
 				</param>
@@ -66,6 +67,19 @@
 				<param name="contentType">text/html</param>
 				<param name="inputName">inputStream</param>
 			</result>
+		</action>
+		<!-- 积分相关 -->
+		<action name="scoreRecord_list" class="scoreRecordAction"
+			method="list">
+			<result>/WEB-INF/page/credit/scoreRecord_list.jsp</result>
+		</action>
+		<action name="scoreRecord_listuse" class="scoreRecordAction"
+			method="listUse">
+			<result>/WEB-INF/page/credit/scoreRecord_list_use.jsp</result>
+		</action>
+		<action name="scoreRecord_listheap" class="scoreRecordAction"
+			method="listHeap">
+			<result>/WEB-INF/page/credit/scoreRecord_list_heap.jsp</result>
 		</action>
 	</package>
 </struts>

@@ -1,11 +1,7 @@
 package com.hydom.server;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * 用于json对象转换

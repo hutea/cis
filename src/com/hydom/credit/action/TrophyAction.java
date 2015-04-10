@@ -129,12 +129,12 @@ public class TrophyAction {
 		if (accessory != null && accessoryFileName != null
 				&& !"".equals(accessoryFileName)) {
 			String saveDir = ServletActionContext.getServletContext().getRealPath(
-					"/resource/system/tropy");
+					"/app/resource/system/tropy");
 			String suffix = accessoryFileName.substring(
 					accessoryFileName.lastIndexOf("."), accessoryFileName.length())
 					.toLowerCase();
 			String fileName = new Date().getTime() + suffix;
-			savePath = "resource/system/tropy/" + fileName;
+			savePath = "app/resource/system/tropy/" + fileName;
 			File file = new File(saveDir);
 			if (file.exists()) {
 				file.mkdirs();

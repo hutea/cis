@@ -10,11 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.hydom.account.ebean.Account;
+import com.hydom.task.ebean.TaskRecord;
 
 /**
  * 积分记录
@@ -34,15 +36,46 @@ public class ScoreRecord {
 	private Boolean sign;// true表示+分，false表示-分
 	@Column
 	private String detail;// 积分说明
+
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date time; // 积分时间
+	private Date createTime; // 积分时间
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date processTime; // 处理时间
 
 	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-	@JoinColumn(name = "accout_id")
-	private Account account;// 分配给的用户
+	@JoinColumn(name = "account_id")
+	private Account account;// 用户
+
+	@OneToOne(cascade = { CascadeType.REFRESH }, optional = true)
+	@JoinColumn(name = "taskRecord_id")
+	private TaskRecord taskRecord;
+
+	@OneToOne(cascade = { CascadeType.REFRESH }, optional = true)
+	@JoinColumn(name = "trophyRecord_id")
+	private TrophyRecord trophyRecord;
+
+	@Column
+	private boolean visible = true;
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
 
 	public Long getId() {
 		return id;
+	}
+
+	public Date getProcessTime() {
+		return processTime;
+	}
+
+	public void setProcessTime(Date processTime) {
+		this.processTime = processTime;
 	}
 
 	public void setId(Long id) {
@@ -73,12 +106,12 @@ public class ScoreRecord {
 		this.detail = detail;
 	}
 
-	public Date getTime() {
-		return time;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setTime(Date time) {
-		this.time = time;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	public Account getAccount() {
@@ -87,6 +120,22 @@ public class ScoreRecord {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	public TaskRecord getTaskRecord() {
+		return taskRecord;
+	}
+
+	public void setTaskRecord(TaskRecord taskRecord) {
+		this.taskRecord = taskRecord;
+	}
+
+	public TrophyRecord getTrophyRecord() {
+		return trophyRecord;
+	}
+
+	public void setTrophyRecord(TrophyRecord trophyRecord) {
+		this.trophyRecord = trophyRecord;
 	}
 
 }

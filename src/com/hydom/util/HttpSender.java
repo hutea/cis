@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,9 +73,21 @@ public class HttpSender {
 		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams, encode);
 		HttpPost httppost = new HttpPost(path);
 		httppost.setEntity(entity);
-		HttpClient httpclient = new DefaultHttpClient();// 看作是浏览器
+		HttpClient httpclient = new DefaultHttpClient();  // 看作是浏览器
 		HttpResponse response = httpclient.execute(httppost);// 发送post请求
 		return response.getEntity().getContent();
 	}
-
+	
+	
+	public static void main(String[] args) {
+		String path ="http://localhost:8090/cis/app/post_note.action";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("tid", "213");
+		map.put("result_str", "中文。。");
+		try {
+			postFromHttpClient(path, map, "utf-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+	}
 }

@@ -25,8 +25,11 @@ import com.hydom.credit.ebean.Trophy;
 import com.hydom.credit.ebean.TrophyRecord;
 import com.hydom.credit.service.TrophyRecordService;
 import com.hydom.credit.service.TrophyService;
+import com.hydom.dao.PageView;
 import com.hydom.extra.ebean.Message;
+import com.hydom.extra.ebean.MessageDeleteRecord;
 import com.hydom.extra.ebean.Sense;
+import com.hydom.extra.service.MessageDeleteRecordService;
 import com.hydom.extra.service.MessageService;
 import com.hydom.extra.service.SenseService;
 import com.hydom.extra.service.ShortMessageService;
@@ -60,6 +63,8 @@ public class AppServer {
 	private SystemConfigService systemConfigService;
 	@Resource
 	private SenseService senseService;
+	@Resource
+	private MessageDeleteRecordService messageDeleteRecordService;
 	private Log log = LogFactory.getLog("appServerLog");
 
 	private String username;
@@ -80,6 +85,9 @@ public class AppServer {
 	private String contact;// 提交建议：联系方式
 	private String content;// 提交建议：内容
 	private String phone; // 发送短信时的电话
+	private String jsonStr;//
+	private int page = 1;
+	private int maxresult = 10;
 
 	/**
 	 * 注册
@@ -203,21 +211,22 @@ public class AppServer {
 			log.info("3:" + new String(result_str.getBytes("iso8859-1"), "utf-8"));
 			// 手机端使用了ISO8859-1编码
 			result_str = new String(result_str.getBytes("iso8859-1"), "utf-8");
+			TaskRecord record = taskRecordService.find(tid);
+			if (record.getIdentState() != null && record.getIdentState() == 0) {// 超时程序检查设置了超时
+				record.setPostTime(new Date());
+				record.setResult(result_str);
+				taskRecordService.update(record);
+				dataMap.put("result", 8);
+			} else if (record.getPostTime() != null) {// 提交过
+				dataMap.put("result", 0);// 重复提交，暂时未定义
+			} else {
+				int result = taskRecordService.processTaskRecord(tid, result_str);
+				dataMap.put("result", result);
+			}
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		TaskRecord record = taskRecordService.find(tid);
-		if (record.getIdentState() == 0) {// 超时程序检查设置了超时
-			record.setPostTime(new Date());
-			record.setResult(result_str);
-			taskRecordService.update(record);
-			dataMap.put("result", 8);
-		} else if (record.getPostTime() != null) {// 提交过
-			dataMap.put("result", 0);// 重复提交，暂时未定义
-		} else {
-
-			int result = taskRecordService.processTaskRecord(tid, result_str);
-			dataMap.put("result", result);
+			dataMap.put("result", 0);
+		} catch (Exception e) {
+			dataMap.put("result", 0);
 		}
 		dataFillStream(dataMap);
 		return "success";
@@ -252,7 +261,21 @@ public class AppServer {
 		log.info("App【同步识别结果】：" + "用户ID=" + uid + " sign=" + sign);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		List<TaskRecord> records = taskRecordService.listTaskRecord(uid, sign);
+
+		PageView<TaskRecord> pageView = new PageView<TaskRecord>(maxresult, page);
+		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
+		orderby.put("id", "desc");
+		StringBuffer jpql = new StringBuffer(
+				"o.visible=?1 and o.account.id=?2 and o.sign=?3");
+		List<Object> params = new ArrayList<Object>();
+		params.add(true);
+		params.add(uid);
+		params.add(sign);
+		pageView.setQueryResult(taskRecordService.getScrollData(
+				pageView.getFirstResult(), maxresult, jpql.toString(), params.toArray(),
+				orderby));
+		List<TaskRecord> records = pageView.getRecords();
+
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for (TaskRecord tr : records) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>();
@@ -281,8 +304,10 @@ public class AppServer {
 		}
 		if (list.size() > 0) {
 			dataMap.put("result", 1);
+			dataMap.put("pages", pageView.getTotalPage());
 		} else {
 			dataMap.put("result", 7);// 列表为空
+			dataMap.put("pages", 0);
 		}
 		dataMap.put("list", list);
 		dataFillStream(dataMap);
@@ -300,8 +325,16 @@ public class AppServer {
 		Account account = accountService.find(uid);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		if (account != null) {
-			List<Trophy> trophys = trophyService.list();
-			for (Trophy tr : trophys) {
+			PageView<Trophy> pageView = new PageView<Trophy>(maxresult, page);
+			LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
+			orderby.put("id", "desc");
+			StringBuffer jpql = new StringBuffer("o.visible=?1");
+			List<Object> params = new ArrayList<Object>();
+			params.add(true);
+			pageView.setQueryResult(trophyService.getScrollData(
+					pageView.getFirstResult(), maxresult, jpql.toString(), params
+							.toArray(), orderby));
+			for (Trophy tr : pageView.getRecords()) {
 				Map<String, Object> map = new LinkedHashMap<String, Object>();
 				map.put("tid", tr.getId());
 				map.put("name", tr.getName());
@@ -314,8 +347,10 @@ public class AppServer {
 			}
 			if (list.size() > 0) {
 				dataMap.put("result", 1);
+				dataMap.put("pages", pageView.getTotalPage());
 			} else {
 				dataMap.put("result", 7);// 列表为空
+				dataMap.put("pages", 0);// 列表为空
 			}
 		} else {
 			dataMap.put("result", 9); // 用户ID不存在
@@ -333,10 +368,10 @@ public class AppServer {
 	public String exchangeTrophy() {
 		log.info("App【提交奖品兑换信息】：" + "用户ID=" + uid + "奖品ID=" + tid + "奖品数量=" + num);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		Account accout = accountService.find(uid);
+		Account account = accountService.find(uid);
 		Trophy trophy = trophyService.find(tid);
 		double theScore = num * trophy.getScore(); // 本次兑换需要的积分
-		if (theScore > accout.getScore()) {// 如果用户积分不足够兑换，直接返回
+		if (theScore > account.getScore()) {// 如果用户积分不足够兑换，直接返回
 			dataMap.put("result", "0");
 			dataMap.put("rid", "");
 			dataFillStream(dataMap);
@@ -344,7 +379,7 @@ public class AppServer {
 		}
 		TrophyRecord record = new TrophyRecord();
 		record.setPostTime(new Date());// 设置提交兑换的时间为当前时间
-		record.setAcount(accout);
+		record.setAccount(account);
 		record.setNumber(num);
 		record.setScore(theScore);
 		record.setTrophy(trophy);
@@ -365,7 +400,20 @@ public class AppServer {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		List<TrophyRecord> records = trophyRecordService.list(uid);
+
+		PageView<TrophyRecord> pageView = new PageView<TrophyRecord>(maxresult, page);
+		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
+		orderby.put("id", "desc");
+		StringBuffer jpql = new StringBuffer("o.visible=?1 and o.account.id=?2");
+		List<Object> params = new ArrayList<Object>();
+		params.add(true);
+		params.add(uid);
+		pageView
+				.setQueryResult(trophyRecordService.getScrollData(pageView
+						.getFirstResult(), maxresult, jpql.toString(), params.toArray(),
+						orderby));
+
+		List<TrophyRecord> records = pageView.getRecords();
 		for (TrophyRecord tr : records) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>();
 			map.put("tid", tr.getTrophy().getId());
@@ -380,8 +428,10 @@ public class AppServer {
 		}
 		if (list.size() > 0) {
 			dataMap.put("result", 1);
+			dataMap.put("pages", pageView.getTotalPage());
 		} else {
-			dataMap.put("result", 7);// 列表为空
+			dataMap.put("result", 1);
+			dataMap.put("pages", 0);// 列表为空
 		}
 		dataMap.put("list", list);
 		dataFillStream(dataMap);
@@ -523,20 +573,72 @@ public class AppServer {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		List<Message> messages = messageService.list();
-		for (Message tr : messages) {
+
+		PageView<Message> pageView = new PageView<Message>(maxresult, page);
+		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
+		orderby.put("id", "desc");
+
+		/***** 用户删除消息记录ID集合 STRART ******/
+		StringBuffer mids = new StringBuffer();
+		List<Long> midList = messageDeleteRecordService.listMidsByAccid(uid);
+		for (long mid : midList) {
+			mids.append(mid + ",");
+		}
+		if (mids.length() > 0) {
+			mids.deleteCharAt(mids.length() - 1);
+		}
+		/***** 用户删除的消息记录ID集合 END *****/
+		StringBuffer jpql = new StringBuffer("o.visible=?1");
+		if (midList.size() > 0) {
+			jpql.append(" and o.id not in(" + mids.toString() + ")");
+		}
+		List<Object> params = new ArrayList<Object>();
+		params.add(true);
+		pageView.setQueryResult(messageService.getScrollData(pageView.getFirstResult(),
+				maxresult, jpql.toString(), params.toArray(), orderby));
+
+		List<Message> messages = pageView.getRecords();
+		for (Message message : messages) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>();
-			map.put("title", tr.getTitle());
-			map.put("content", tr.getContent());
-			map.put("issuetime", sdf.format(tr.getIssueTime()));
+			map.put("mid", message.getId());
+			map.put("title", message.getTitle());
+			map.put("content", message.getContent());
+			map.put("issuetime", sdf.format(message.getIssueTime()));
 			list.add(map);
 		}
 		if (list.size() > 0) {
 			dataMap.put("result", 1);
+			dataMap.put("pages", pageView.getTotalPage());
 		} else {
 			dataMap.put("result", 7);// 列表为空
+			dataMap.put("pages", 0);
 		}
 		dataMap.put("list", list);
+		dataFillStream(dataMap);
+		return "success";
+	}
+
+	public String deleteMessage() {
+		log.info("App【删除消息】：" + "jsonStr=" + jsonStr);
+		long accid = 0;
+		ArrayList<Long> messageIds = null;
+
+		ArrayList<String> delSucMids = new ArrayList<String>();
+		for (Long mid : messageIds) {
+			Message message = messageService.find(mid);
+			if (message != null) {
+				MessageDeleteRecord mdr = new MessageDeleteRecord();
+				mdr.setAccid(accid);
+				mdr.setMsgid(mid);
+				mdr.setDeleteTime(new Date());
+				messageDeleteRecordService.save(mdr);
+				delSucMids.add(mid + "");
+			}
+		}
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		dataMap.put("result", delSucMids.size() == messageIds.size() ? 1 : 0);
+		dataMap.put("records", delSucMids.size());
+		dataMap.put("mids", delSucMids);
 		dataFillStream(dataMap);
 		return "success";
 	}
@@ -618,13 +720,16 @@ public class AppServer {
 			String smscontent = "本次验证码为：" + smscode;
 			boolean sendresult = shortMessageService.sendCode(phone, smscode, smscontent);
 			if (sendresult) {
+				dataMap.put("result", 1);
 				dataMap.put("code", smscode);
 				dataMap.put("sendtime", sdf.format(new Date()));
 			} else {
+				dataMap.put("result", 0);
 				dataMap.put("code", "");
 				dataMap.put("sendtime", "");
 			}
 		} catch (Exception e) {
+			dataMap.put("result", 0);
 			dataMap.put("code", "");
 			dataMap.put("sendtime", "");
 		}
@@ -792,6 +897,14 @@ public class AppServer {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public String getJsonStr() {
+		return jsonStr;
+	}
+
+	public void setJsonStr(String jsonStr) {
+		this.jsonStr = jsonStr;
 	}
 
 }

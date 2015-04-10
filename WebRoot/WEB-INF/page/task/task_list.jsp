@@ -51,10 +51,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             </div>
                             <div class="media-body">
                                 <ul class="breadcrumb">
-                                    <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>task list</li>
+                                     <li><a href="${pageContext.request.contextPath}/manage/index.action"><i class="glyphicon glyphicon-home"></i></a></li>
+                                     <li><a href="${pageContext.request.contextPath}/manage/task/job_list.action">工单分配</a></li>
+                                     <li class="active">工单区块</li>
                                 </ul>
-                                <h4>区块管理</h4>
+                                <h4>工单区块表</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
@@ -90,7 +91,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td>${entry.recycleTime}</td> 
                            		 <td>
 									<a href='javascript:show(${entry.id})' >查看笔迹</a> 
-                                	<a href='<s:url action="taskrecord_list" namespace="/manage/task" />?taskId=${entry.id}'>详细</a>
+                                	<a href='<s:url action="taskrecord_list" namespace="/manage/task" />?taskId=${entry.id}&jobid=${jobid}'>详细</a>
                            		 </td> 
                            	  	</tr>
                            	  </c:forEach>

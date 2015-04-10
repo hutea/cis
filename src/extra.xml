@@ -50,7 +50,7 @@
 				<param name="actionName">appversion_list</param>
 			</result>
 			<interceptor-ref name="allStack">
-				<param name="fileUpload.maximumSize">1024*9024</param>
+				<param name="fileUpload.maximumSize">50*1024*1024</param>
 			</interceptor-ref>
 		</action>
 		<action name="appversion_editUI" class="appVersionAction"
@@ -62,7 +62,7 @@
 				<param name="actionName">appversion_list</param>
 			</result>
 			<interceptor-ref name="allStack">
-				<param name="fileUpload.maximumSize">1024*9024</param>
+				<param name="fileUpload.maximumSize">50*1024*1024</param>
 			</interceptor-ref>
 		</action>
 			<action name="appversion_delete" class="appVersionAction" method="delete">

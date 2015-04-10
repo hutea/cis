@@ -46,10 +46,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             </div>
                             <div class="media-body">
                                 <ul class="breadcrumb">
-                                    <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>job list</li>
+                                    <li><a href="${pageContext.request.contextPath}/manage/index.action"><i class="glyphicon glyphicon-home"></i></a></li>
+                                    <li class="active">工单分配</li>
                                 </ul>
-                                <h4>工单管理</h4>
+                                <h4>工单分配表</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->

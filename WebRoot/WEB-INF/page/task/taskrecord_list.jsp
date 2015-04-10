@@ -51,10 +51,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             </div>
                             <div class="media-body">
                                 <ul class="breadcrumb">
-                                    <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>task record list</li>
+                                     <li><a href="${pageContext.request.contextPath}/manage/index.action"><i class="glyphicon glyphicon-home"></i></a></li>
+                                     <li><a href="${pageContext.request.contextPath}/manage/task/job_list.action">工单分配</a></li>
+                                     <li><a href="${pageContext.request.contextPath}/manage/task/task_list.action?jobid=${jobid}">工单区块</a></li>
+                                     <li class="active">区块分配详细</li>
                                 </ul>
-                                <h4>区块分配详细</h4>
+                                <h4>区块分配详细表</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
@@ -64,6 +66,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          <s:hidden name="page" />
                          <s:hidden name="m" />
                          <s:hidden name="taskId" />
+                         <s:hidden name="jobid" />
                          <div>查询区</div>
     					 <table  class="table table-bordered table-striped">
 							 <tr>

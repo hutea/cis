@@ -30,21 +30,15 @@
 		<div>
 			计算出的正确结果：
         </div>
-			${taskRecord.task.result}
         	\[\begin{matrix}
-			\dot{x} &#038; = &#038; \sigma(y-x) \\
-			\dot{y} &#038; = &#038; \rho x - y - xz \\
-			\dot{z} &#038; = &#038; -\beta z + xy
+			${taskRecord.task.result}
 			\end{matrix} \]
 		<hr/>
 		<div>
 			用户识别结果：
 		</div>
-			${taskRecord.result}
 			\[\begin{matrix}
-			\dot{x} &#038; = &#038; \sigma(y-x) \\
-			\dot{y} &#038; = &#038; \rho x - y - xz \\
-			\dot{z} &#038; = &#038; -\beta z + xy
+			${taskRecord.result}
 			\end{matrix} \]
 	</body>
 </html>
