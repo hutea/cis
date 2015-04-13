@@ -10,6 +10,8 @@ function go(totalPage) {
 	var inputPageValue = document.getElementById("inputPage").value;
 	if (inputPageValue > totalPage) {
 		alert("超过最大页数: " + totalPage);
+	} else if (inputPageValue < 1) {
+		alert("页码数必须大于等于1");
 	} else {
 		var form = document.getElementById("pageList");
 		form.page.value = inputPageValue;

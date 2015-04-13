@@ -15,4 +15,6 @@ public interface MessageDeleteRecordService extends DAO<MessageDeleteRecord> {
 	 * @return
 	 */
 	public List<Long> listMidsByAccid(long accid);
+
+	public MessageDeleteRecord find(long accid, long msgid);
 }

@@ -21,6 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
         <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
+        <script src="${pageContext.request.contextPath}/resource/my97/WdatePicker.js"></script>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
@@ -60,10 +61,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                       <s:form action="task_list" namespace="/manage/task" method="post" id="pageList"> 
+                       <s:form action="user_list" namespace="/manage/account" method="post" id="pageList"> 
                          <s:hidden name="page" />
                          <s:hidden name="m" />
-						 
+						  <div style="margin-bottom: 10px;"> 
+                         	<span class="text-primary hidden" >查询选项 </span>
+                         	<input type="text" style="width: 220px;display: inline-block;" name="query_phone" value="${query_phone}" class="form-control"  placeholder="手机号"  >
+                         	<input type="text" style="width: 220px;display: inline-block;height: 38px;" name="query_createTime" value="${query_createTime}" class="Wdate"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="创建时间"  >
+                         	<input type="text" style="width: 220px;display: inline-block;height: 38px;" name="query_lastTime" value="${query_lastTime}" class="Wdate"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="最近登录"  >
+                            <input type="submit" style="margin: 0 50px;"  class="btn btn-primary"   value="查 询"  >
+                         </div>
     					 <table class="table table-bordered table-striped" >
 							 <tr>
                                     <th>#</th>
@@ -84,10 +91,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td>${entry.id}</td> 
                            		 <td>${entry.phone}</td> 
                            		 <td>${entry.score}</td> 
-                           		 <td>${entry.id+1}</td> 
-                           		 <td>${entry.id+101}</td> 
-                           		 <td>68%</td> 
-                           		 <td>3s</td> 
+                           		 <td>${entry.count_month}</td> 
+                           		 <td>${entry.count_all}</td> 
+                           		 <td>${entry.count_rightPercent*100}%</td> 
+                           		 <td>${entry.count_processTime}</td> 
                            		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td><fmt:formatDate value="${entry.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td>

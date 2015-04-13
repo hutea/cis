@@ -19,19 +19,10 @@ public class Test {
 	// style="stroke:rgb(99,99,99);stroke-width:2" />
 
 	public static void main(String[] args) {
-		String jsonstr = "{\"uid\":4,\"msgids\":[\"1\",\"2\",\"3\"]}";
-		Gson gson = new Gson();
-		Map<String, Object> map = gson.fromJson(jsonstr, Map.class);
-		
-		for (String key : map.keySet()) {
-			System.out.println(key);
-			if("msgids".equals(key)){
-			  ArrayList list= 	(ArrayList) map.get(key);
-			  for(Object l :list ){
-				  System.out.println(l+"-"+l.getClass()); 
-			  }
-			}
-		}
+		long s = 1;
+		long e = 3;
+		double r =(double) s / e;
+		System.out.println(r);
 	}
 
 	public static String getdata() {

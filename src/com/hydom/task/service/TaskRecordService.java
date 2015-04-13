@@ -43,4 +43,39 @@ public interface TaskRecordService extends DAO<TaskRecord> {
 	 * @return
 	 */
 	public List<TaskRecord> listOverTimeRecord();
+
+	/**
+	 * 统计用户平均处理速度
+	 * 
+	 * @param accid
+	 * @return
+	 */
+	public double countProcessTime(long accid);
+
+	/**
+	 * 统计用户识别正确率
+	 * 
+	 * @param accid
+	 * @return
+	 */
+	public double countRightPercent(long accid);
+
+	/**
+	 * 统计用户识别总数<br>
+	 * 不包含超时识别记录，即在规定时间内返回了识别结果的所有记录
+	 * 
+	 * @param accid
+	 * @return
+	 */
+	public long count(long accid);
+
+	/**
+	 * 统计用户最近一月识别数<br>
+	 * 时间界限(如当天为2015-3-13，则最近一月指：2015-2-13~2015-3-13)<br>
+	 * 超时识别不纳入计算
+	 * 
+	 * @param accid
+	 * @return
+	 */
+	public long countThisMonth(long accid);
 }

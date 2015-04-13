@@ -36,6 +36,7 @@ import com.hydom.extra.service.ShortMessageService;
 import com.hydom.extra.service.SystemConfigService;
 import com.hydom.task.ebean.TaskRecord;
 import com.hydom.task.service.TaskRecordService;
+import com.hydom.util.HelperUtil;
 import com.hydom.util.StringGenerator;
 
 /**
@@ -71,7 +72,8 @@ public class AppServer {
 	private String password;
 	private String oripwd;// 原密码
 	private String newpwd;// 新密码
-	private String code;
+	private String code;// 验证码
+	private int codeType;// 验证码类型：1=注册验证码 2=找回密码验证码
 	private long uid;// 用户ID
 	private long tid;// 任务ID[对应于TaskRecord ID]
 	private String result_str;// 识别结果串
@@ -99,10 +101,17 @@ public class AppServer {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			if (code != null && code.equals(shortMessageService.find(username).getCode())) { // 验证码通过
-				Account account = new Account(username, password, username);
-				accountService.save(account);
-				account.setType(1);// 设置为普通用户
-				dataMap.put("result", 1);
+
+				if (!HelperUtil.isPhoneNumber(username)) {// 手机号格式不正确
+					dataMap.put("result", 10);
+				} else if (password.length() > 12 || password.length() < 6) {// 密码长度不符合规范
+					dataMap.put("result", 11);
+				} else {
+					Account account = new Account(username, password, username);
+					accountService.save(account);
+					account.setType(1);// 设置为普通用户
+					dataMap.put("result", 1);
+				}
 			} else {
 				dataMap.put("result", 2);// 验证码错误
 			}
@@ -123,9 +132,12 @@ public class AppServer {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.findByUP(username, password);
 		if (account != null) { // 登录成功
+			account.setLastSigninTime(new Date());
+			accountService.update(account);
 			dataMap.put("result", 1);
 			dataMap.put("username", account.getUsername());
-			dataMap.put("nickname", account.getNickname());
+			dataMap.put("nickname", account.getNickname() == null ? "" : account
+					.getNickname());
 			dataMap.put("uid", account.getId());
 		} else {
 			dataMap.put("result", 4);// 用户名或密码错误
@@ -206,11 +218,6 @@ public class AppServer {
 		log.info("App【提交识别结果】：" + "tid=" + tid + " 识别结果=" + result_str);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
-			log.info("1:" + new String(result_str.getBytes("utf-8"), "utf-8"));
-			log.info("2:" + new String(result_str.getBytes("gbk"), "utf-8"));
-			log.info("3:" + new String(result_str.getBytes("iso8859-1"), "utf-8"));
-			// 手机端使用了ISO8859-1编码
-			result_str = new String(result_str.getBytes("iso8859-1"), "utf-8");
 			TaskRecord record = taskRecordService.find(tid);
 			if (record.getIdentState() != null && record.getIdentState() == 0) {// 超时程序检查设置了超时
 				record.setPostTime(new Date());
@@ -218,13 +225,11 @@ public class AppServer {
 				taskRecordService.update(record);
 				dataMap.put("result", 8);
 			} else if (record.getPostTime() != null) {// 提交过
-				dataMap.put("result", 0);// 重复提交，暂时未定义
+				dataMap.put("result", 13);// 重复提交
 			} else {
 				int result = taskRecordService.processTaskRecord(tid, result_str);
 				dataMap.put("result", result);
 			}
-		} catch (UnsupportedEncodingException e) {
-			dataMap.put("result", 0);
 		} catch (Exception e) {
 			dataMap.put("result", 0);
 		}
@@ -350,7 +355,7 @@ public class AppServer {
 				dataMap.put("pages", pageView.getTotalPage());
 			} else {
 				dataMap.put("result", 7);// 列表为空
-				dataMap.put("pages", 0);// 列表为空
+				dataMap.put("pages", 0);
 			}
 		} else {
 			dataMap.put("result", 9); // 用户ID不存在
@@ -618,21 +623,38 @@ public class AppServer {
 		return "success";
 	}
 
+	@SuppressWarnings("unchecked")
 	public String deleteMessage() {
 		log.info("App【删除消息】：" + "jsonStr=" + jsonStr);
 		long accid = 0;
-		ArrayList<Long> messageIds = null;
-
+		ArrayList<String> messageIds = new ArrayList<String>();
+		Gson gson = new Gson();
+		Map<String, Object> map = gson.fromJson(jsonStr, Map.class);
+		for (String key : map.keySet()) {
+			if ("mids".equals(key)) {
+				messageIds = (ArrayList) map.get(key);
+			}
+			if ("uid".equals(key)) {
+				accid = Long.parseLong(map.get(key).toString());
+			}
+		}
 		ArrayList<String> delSucMids = new ArrayList<String>();
-		for (Long mid : messageIds) {
-			Message message = messageService.find(mid);
-			if (message != null) {
-				MessageDeleteRecord mdr = new MessageDeleteRecord();
-				mdr.setAccid(accid);
-				mdr.setMsgid(mid);
-				mdr.setDeleteTime(new Date());
-				messageDeleteRecordService.save(mdr);
-				delSucMids.add(mid + "");
+		if (accid != 0 && accountService.find(accid) != null) {
+			for (String mid : messageIds) {
+				Long msgid = Long.parseLong(mid);
+				Message message = messageService.find(msgid);
+				if (message != null) {
+					MessageDeleteRecord existMDR = messageDeleteRecordService.find(accid,
+							msgid);
+					if (existMDR == null) {
+						MessageDeleteRecord mdr = new MessageDeleteRecord();
+						mdr.setAccid(accid);
+						mdr.setMsgid(msgid);
+						mdr.setDeleteTime(new Date());
+						messageDeleteRecordService.save(mdr);
+					}
+					delSucMids.add(mid + "");
+				}
 			}
 		}
 		Map<String, Object> dataMap = new HashMap<String, Object>();
@@ -712,46 +734,53 @@ public class AppServer {
 	 * @return
 	 */
 	public String sendCode() {
-		log.info("App【发送验证码】：" + "手机号=" + phone);
+		log.info("App【发送验证码】：" + "手机号=" + phone + " codeType=" + codeType);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
+		dataMap.put("result", 0);
+		dataMap.put("code", "");
+		dataMap.put("sendtime", "");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String smscode = StringGenerator.SerialNumber(4);
+		String smscontent = "";
+		if (codeType == 1) {// 注册验证码
+			if (accountService.findByUsername(phone) != null) {// 用户名(手机号)存在
+				dataMap.put("result", 3);// 手机号已被注册
+				dataFillStream(dataMap);
+				return "success";
+			}
+			smscontent = "本次验证码为：" + smscode + "，请在3分钟内完成注册。";
+		} else if (codeType == 2) {// 找回密码
+			if (accountService.findByUsername(phone) == null) {// 用户名(手机号)不存在
+				dataMap.put("result", 6);// 手机号不存在
+				dataFillStream(dataMap);
+				return "success";
+			}
+			smscontent = "本次验证码为：" + smscode + "，请在3分钟内完成密码找回。";
+		} else {
+			dataMap.put("result", 12);// 验证码类型错误
+			dataFillStream(dataMap);
+			return "success";
+		}
+
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String smscode = StringGenerator.SerialNumber(4);
-			String smscontent = "本次验证码为：" + smscode;
 			boolean sendresult = shortMessageService.sendCode(phone, smscode, smscontent);
 			if (sendresult) {
 				dataMap.put("result", 1);
 				dataMap.put("code", smscode);
 				dataMap.put("sendtime", sdf.format(new Date()));
-			} else {
-				dataMap.put("result", 0);
-				dataMap.put("code", "");
-				dataMap.put("sendtime", "");
 			}
 		} catch (Exception e) {
-			dataMap.put("result", 0);
-			dataMap.put("code", "");
-			dataMap.put("sendtime", "");
+			// e.printStackTrace();
 		}
 		dataFillStream(dataMap);
 		return "success";
 	}
 
 	public static void main(String[] args) {
-		String str = "{\"x\":234,\"y\":1346},{\"x\":232,\"y\":1347},{\"x\":-1,\"y\":0},{\"x\":229,\"y\":1345},{\"x\":229,\"y\":1347},{\"x\":229,\"y\":1347},{\"x\":230,\"y\":1347},{\"x\":230,\"y\":1347},{\"x\":230,\"y\":1347},{\"x\":231,\"y\":1347},{\"x\":236,\"y\":1346},{\"x\":241,\"y\":1345},{\"x\":262,\"y\":1339},{\"x\":273,\"y\":1337},{\"x\":275,\"y\":1337},{\"x\":275,\"y\":1338},{\"x\":271,\"y\":1342},{\"x\":-1,\"y\":0},{\"x\":247,\"y\":1348},{\"x\":246,\"y\":1354},{\"x\":248,\"y\":1361},{\"x\":249,\"y\":1368},{\"x\":250,\"y\":1384},{\"x\":250,\"y\":1402},{\"x\":249,\"y\":1405},{\"x\":242,\"y\":1399},{\"x\":238,\"y\":1394},{\"x\":235,\"y\":1388},{\"x\":233,\"y\":1382},{\"x\":-1,\"y\":0},{\"x\":261,\"y\":1353},{\"x\":261,\"y\":1355},{\"x\":261,\"y\":1358},{\"x\":260,\"y\":1364},{\"x\":260,\"y\":1370},{\"x\":260,\"y\":1375},{\"x\":261,\"y\":1380},{\"x\":262,\"y\":1384},{\"x\":266,\"y\":1388},{\"x\":268,\"y\":1389},{\"x\":271,\"y\":1387},{\"x\":271,\"y\":1377},{\"x\":270,\"y\":1374},{\"x\":268,\"y\":1373},{\"x\":263,\"y\":1373},{\"x\":259,\"y\":1374},{\"x\":249,\"y\":1378},{\"x\":-1,\"y\":0},{\"x\":226,\"y\":1349},{\"x\":228,\"y\":1350},{\"x\":228,\"y\":1350},{\"x\":228,\"y\":1350},{\"x\":227,\"y\":1351},{\"x\":226,\"y\":1353},{\"x\":218,\"y\":1362},{\"x\":204,\"y\":1380},{\"x\":204,\"y\":1382},{\"x\":229,\"y\":1392},{\"x\":229,\"y\":1392},{\"x\":229,\"y\":1392},{\"x\":229,\"y\":1393},{\"x\":228,\"y\":1393},{\"x\":-1,\"y\":0},{\"x\":176,\"y\":1360},{\"x\":188,\"y\":1365},{\"x\":197,\"y\":1370},{\"x\":200,\"y\":1373},{\"x\":192,\"y\":1399},{\"x\":187,\"y\":1406},{\"x\":191,\"y\":1407},{\"x\":195,\"y\":1407},{\"x\":199,\"y\":1407},{\"x\":205,\"y\":1406},{\"x\":209,\"y\":1405},{\"x\":214,\"y\":1402},{\"x\":-1,\"y\":0},{\"x\":296,\"y\":1354},{\"x\":299,\"y\":1355},{\"x\":299,\"y\":1356},{\"x\":288,\"y\":1366},{\"x\":283,\"y\":1371},{\"x\":278,\"y\":1378},{\"x\":280,\"y\":1379},{\"x\":289,\"y\":1382},{\"x\":300,\"y\":1383},{\"x\":302,\"y\":1384},{\"x\":303,\"y\":1385},{\"x\":304,\"y\":1386},{\"x\":303,\"y\":1387},{\"x\":-1,\"y\":0},{\"x\":311,\"y\":1346},{\"x\":314,\"y\":1346},{\"x\":317,\"y\":1346},{\"x\":325,\"y\":1350},{\"x\":327,\"y\":1354},{\"x\":326,\"y\":1357},{\"x\":321,\"y\":1364},{\"x\":312,\"y\":1370},{\"x\":306,\"y\":1372},{\"x\":317,\"y\":1375},{\"x\":326,\"y\":1380},{\"x\":329,\"y\":1383},{\"x\":331,\"y\":1386},{\"x\":330,\"y\":1387},{\"x\":326,\"y\":1391},{\"x\":323,\"y\":1393},{\"x\":318,\"y\":1394},{\"x\":303,\"y\":1395},{\"x\":294,\"y\":1395},{\"x\":-1,\"y\":0}";
-		Gson gson = new Gson();
-		String[] strq = { str };
-
-		System.out.println(gson.toJson(strq));
-		// Map<String, Object> data = new HashMap<String, Object>();
-		// data.put("result", "1");
-		// List<String> names = new ArrayList<String>();
-		// names.add("jack");
-		// names.add("tom");
-		// names.add("lily");
-		// data.put("names", names);
-		// Gson gson = new Gson();
-		// System.out.println(gson.toJson(names));
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		dataMap.put("result", 0);
+		dataMap.put("result", 1);
+		System.out.println(dataMap.get("result"));
 
 	}
 
@@ -905,6 +934,30 @@ public class AppServer {
 
 	public void setJsonStr(String jsonStr) {
 		this.jsonStr = jsonStr;
+	}
+
+	public int getCodeType() {
+		return codeType;
+	}
+
+	public void setCodeType(int codeType) {
+		this.codeType = codeType;
+	}
+
+	public String getBackname() {
+		return backname;
+	}
+
+	public void setBackname(String backname) {
+		this.backname = backname;
+	}
+
+	public String getBackaccount() {
+		return backaccount;
+	}
+
+	public void setBackaccount(String backaccount) {
+		this.backaccount = backaccount;
 	}
 
 }

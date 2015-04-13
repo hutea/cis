@@ -1,5 +1,6 @@
 package com.hydom.task.service;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -194,5 +195,63 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 				.setParameter(1, tid).setParameter(2, 1).setMaxResults(1)
 				.getSingleResult();
 		return (Object[]) obj;
+	}
+
+	@Override
+	public long count(long accid) {
+		return (Long) em
+				.createQuery(
+						"select count(t.id) from TaskRecord t where t.account.id=?1 and t.identState=?2")
+				.setParameter(1, accid).setParameter(2, 1).getSingleResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public double countProcessTime(long accid) {
+		List<Double> seconds = em
+				.createQuery(
+						"select t.postTime-t.matchTime from TaskRecord t where t.account.id=?1 and t.identState=?2")
+				.setParameter(1, accid).setParameter(2, 1).getResultList();
+		double allTime = 0;
+		for (Double s : seconds) {
+			if (s != null) {
+				allTime = allTime + s;
+			}
+		}
+		long count = count(accid);
+		if (count != 0) {
+			return Math.round(allTime / count);
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
+	public double countRightPercent(long accid) {
+		long countRight = (Long) em
+				.createQuery(
+						"select count(t.id) from TaskRecord t where t.account.id=?1 and t.identState=?2 and t.sign=?3")
+				.setParameter(1, accid).setParameter(2, 1).setParameter(3, 1)
+				.getSingleResult();
+		long count = count(accid);
+		if (count != 0) {
+			DecimalFormat df = new DecimalFormat(".0000");
+			String result = df.format((double) countRight / count);
+			return Double.parseDouble(result);
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
+	public long countThisMonth(long accid) {
+		Date now = new Date();
+		Date endDate = HelperUtil.addDays(now, 1);
+		Date startDate = HelperUtil.dayLastMoth(now);
+		return (Long) em
+				.createQuery(
+						"select count(t.id) from TaskRecord t where t.account.id=?1 and t.identState=?2 and t.postTime>?3 and t.postTime<?4")
+				.setParameter(1, accid).setParameter(2, 1).setParameter(3, startDate)
+				.setParameter(4, endDate).getSingleResult();
 	}
 }

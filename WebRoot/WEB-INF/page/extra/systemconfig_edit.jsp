@@ -119,7 +119,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">超时时间 </label>
 								    <div class="col-sm-9">
-								      <input id="valueLong" name="config.valueLong" type="text"  value="${config.valueLong}"  class="form-control">
+								    	<div class="input-group">
+								     	 <input style="text-align: right;"  id="valueLong" name="config.valueLong" type="text"  value="${config.valueLong}"  class="form-control">
+								    	 <div class="input-group-addon">ms</div>
+								    	</div>
 								    </div>
 						   		 </div>
 						   	</div>

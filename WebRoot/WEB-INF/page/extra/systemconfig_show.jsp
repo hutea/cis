@@ -26,7 +26,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
-
+		<style type="text/css">
+			.sycon{
+				word-break: break-all;
+				word-wrap: break-word;
+			}
+		</style>
     <body>
         <header>    
         <%@ include file="/WEB-INF/page/common/head.jsp" %>
@@ -83,12 +88,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 		<div class="input-group col-md-7">
 							    <div class="input-group-addon">超时时间</div>
      					     	<input type="text" readonly value="${config.valueLong}"  class="form-control"  >
+     					     	<div class="input-group-addon">ms</div>
      					     	</div>
     					 	</div>
     					 </div>
     					 <div id="" <c:if test="${scid!='manual'}">style="display: none"</c:if>  >
     					 	<div style="line-height: 50px;">
-    					 		<span>积分说明 </span>
+    					 		<span class="sycon">积分说明 </span>
     					 	</div >
     					 	<div style="line-height: 50px;">
     					 		<span>${config.valueContent}</span>
@@ -99,7 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 		<span>关于我们 </span>
     					 	</div >
     					 	<div style="line-height: 50px;">
-    					 		<span>${config.valueContent}</span>
+    					 		<span class="sycon">${config.valueContent}</span>
     					 	</div >
     					 </div>
     					 <div id="" <c:if test="${scid!='phone'}">style="display: none"</c:if>  >
@@ -107,7 +113,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 		<span>联系我们</span>
     					 	</div >
     					 	<div style="line-height: 50px;">
-    					 		<span>${config.valueContent}</span>
+    					 		<span class="sycon">${config.valueContent}</span>
     					 	</div >
     					 </div>
 						</div>  <!-- content  -->

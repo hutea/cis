@@ -17,6 +17,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 帐户表：用户、管理员共用此表，通过type区别
@@ -62,6 +65,15 @@ public class Account {
 	@ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JoinTable(name = "t_account_group", joinColumns = @JoinColumn(name = "acc_id"), inverseJoinColumns = @JoinColumn(name = "g_id"))
 	private Set<PrivilegeGroup> groups = new HashSet<PrivilegeGroup>();// 权限组
+
+	@Transient
+	private long count_all; // 识别总数
+	@Transient
+	private long count_month; // 当月识别总数
+	@Transient
+	private double count_rightPercent; // 正确率
+	@Transient
+	private double count_processTime;// 平均处理速度
 
 	public Account() {
 
@@ -120,6 +132,38 @@ public class Account {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public long getCount_all() {
+		return count_all;
+	}
+
+	public void setCount_all(long countAll) {
+		count_all = countAll;
+	}
+
+	public long getCount_month() {
+		return count_month;
+	}
+
+	public void setCount_month(long countMonth) {
+		count_month = countMonth;
+	}
+
+	public double getCount_rightPercent() {
+		return count_rightPercent;
+	}
+
+	public void setCount_rightPercent(double countRightPercent) {
+		count_rightPercent = countRightPercent;
+	}
+
+	public double getCount_processTime() {
+		return count_processTime;
+	}
+
+	public void setCount_processTime(double countProcessTime) {
+		count_processTime = countProcessTime;
 	}
 
 	public double getScore() {

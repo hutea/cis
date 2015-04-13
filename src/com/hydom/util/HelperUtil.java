@@ -13,6 +13,21 @@ import java.util.GregorianCalendar;
  */
 public class HelperUtil {
 
+	/**
+	 * 判断是否是手机号<br>
+	 * 说明：phone=null or phone="" 均返回false
+	 * 
+	 * @param phone
+	 * @return
+	 */
+	public static boolean isPhoneNumber(String phone) {
+		if (phone == null || "".equals(phone)) {
+			return false;
+		}
+		String regex = "^[1](3|5|8)[0-9]{9}$";
+		return phone.matches(regex);
+	}
+
 	public static void printLog() {
 		System.out.println(Thread.currentThread().getStackTrace()[1].getClassName());
 		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
@@ -32,6 +47,26 @@ public class HelperUtil {
 		Calendar cale = Calendar.getInstance();
 		cale.setTime(srcDate);
 		cale.set(Calendar.DATE, cale.get(Calendar.DATE) + day);
+		Date date = null;
+		try {
+			date = dft.parse(dft.format(cale.getTime()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+	/***
+	 * 获取上一月的日期
+	 * 
+	 * @param srcDate：2015-03-21
+	 * @return：2015-2-21
+	 */
+	public static Date dayLastMoth(Date srcDate) {
+		SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar cale = Calendar.getInstance();
+		cale.setTime(srcDate);
+		cale.add(Calendar.MONTH, -1);
 		Date date = null;
 		try {
 			date = dft.parse(dft.format(cale.getTime()));
@@ -86,8 +121,6 @@ public class HelperUtil {
 	}
 
 	public static void main(String[] args) {
-		Date now  = new Date();
-		System.out.println(now);
-		System.out.println(addms(now, 60000000000l));
+		System.out.println(isPhoneNumber("1875689895"));
 	}
 }
