@@ -960,4 +960,20 @@ public class AppServer {
 		this.backaccount = backaccount;
 	}
 
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getMaxresult() {
+		return maxresult;
+	}
+
+	public void setMaxresult(int maxresult) {
+		this.maxresult = maxresult;
+	}
+
 }
