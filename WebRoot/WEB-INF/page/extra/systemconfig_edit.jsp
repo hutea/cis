@@ -90,7 +90,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 <c:if test="${config.id=='match'}">
     					 <div id="configblock" class="form-horizontal">
     					 	<div style="line-height: 50px;">
-    					 		<span>工单设置</span>
+    					 		<span>工单区块设置</span>
     					 	</div>
     					 	
     					 	<div class="form-horizontal" style="width: 400px;">
@@ -134,11 +134,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 	<div style="line-height: 50px;">
     					 		<span>积分说明</span>
     					 	</div>
-    					 	<div style="line-height: 50px;">
-    					 		<textarea name="config.valueContent" cols="50" rows="8" style="width:500px;height:200px;visibility:hidden;">
-    					 			${config.valueContent }
-    					 		</textarea>
-    					 	</div>
+    					 	<div  style="width: 500px;">
+	    					 	<div class="form-group">
+								    <div class="input-group col-md-6">
+								    	 <div class="input-group-addon">积分设置</div>
+								     	 <input style="text-align: right;"  id="valueLong" name="config.valueDouble"  type="text"   value="${config.valueDouble}"  class="form-control">
+								    	 <div class="input-group-addon">分</div>
+								    </div>
+								    <div class="input-group col-md-6">
+								    	<div>每个区块识别正确可以获得的积分</div>
+								    </div>
+							   	</div>
+							   	<hr/>
+							   	<div class="form-group">
+	    					 		<textarea name="config.valueContent" cols="55" rows="8" style="width:500px;height:200px;visibility:hidden;">
+	    					 			${config.valueContent }
+	    					 		</textarea>
+	    					 	</div>
+	    					 </div>
     					 </div><!-- configblock  -->
     					 
     					 </c:if>

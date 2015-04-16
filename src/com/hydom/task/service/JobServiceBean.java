@@ -89,11 +89,11 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 			Map<String, String> map = new LinkedHashMap<String, String>();
 			map.put("lineNo", task.getLineNo() + "");
 			map.put("inLineNo", task.getInLineNo() + "");
-			map.put("originalData", task.getResult());
+			map.put("originalData", task.getResult() == null ? "" : task.getResult());
 			if (task.getRation() >= task.getAccuracy()) {// 实际比例>指定的正确比例：不需纠正
-				map.put("status", "false");
-			} else {
 				map.put("status", "true");
+			} else {
+				map.put("status", "false");
 			}
 			list.add(map);
 		}

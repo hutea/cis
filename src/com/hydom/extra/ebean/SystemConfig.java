@@ -7,7 +7,7 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 /**
- * 基本配置信息： id=about：关于、id=manual：积分说明、id=phone：客户电话、 id=math：(short->分配初会、 int->分配上限、double=percent：正确比例、long=overtime：超时时间)、
+ * 基本配置信息： id=about：关于、id=manual：积分说明、id=phone：客户电话、 id=math：(short->分配初值、 int->分配上限、double=percent：正确比例、long=overtime：超时时间)、
  * 
  * @author www.hydom.cn [heou]
  * 

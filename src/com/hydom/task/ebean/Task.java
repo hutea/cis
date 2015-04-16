@@ -36,7 +36,7 @@ public class Task {
 	@Lob
 	private String metricPoint;// 切分后用户答题数据
 	@Column
-	private Long recycleTime;// 超时时间:以ms为单位
+	private Long recycleTime;// 超时时间:以ms为单位:来源于系统配置
 	@Column
 	private Integer matchNum;// 分配上限，默认来源系统配置
 	@Column
@@ -48,11 +48,11 @@ public class Task {
 	@Column
 	private Integer canNum;// 可分配，起始值=initNum，后面通过计算设定
 	@Column
-	private Integer resultNum=0;// 返回了识别结果的人数
+	private Integer resultNum = 0;// 返回了识别结果的人数
 	@Column
 	private Double accuracy;// 指定的正确比例
 	@Column
-	private Integer recycleType;// 回收类型：1=超时回收
+	private Integer recycleType = 0;// 回收类型：0为初值表示没有被回收 1=超时回收
 	@Column(length = 2000)
 	private String result;// 计算出的正确结果
 	@Column
@@ -65,6 +65,9 @@ public class Task {
 	private Date matchFirstTime; // 分配给第一个用户的时间
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date matchLastTime; // 分配给最后一个用户的时间
+	@Column
+	private Double score = 0.0;// 完成本题可得到的分数
+
 	@ManyToOne(cascade = { CascadeType.REFRESH, }, optional = false)
 	@JoinColumn(name = "job_id")
 	private Job job;// 
@@ -245,6 +248,14 @@ public class Task {
 
 	public void setCanNum(Integer canNum) {
 		this.canNum = canNum;
+	}
+
+	public Double getScore() {
+		return score;
+	}
+
+	public void setScore(Double score) {
+		this.score = score;
 	}
 
 }

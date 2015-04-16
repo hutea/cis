@@ -1,5 +1,7 @@
 package com.hydom.server;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class SvgImage {
@@ -7,8 +9,8 @@ public class SvgImage {
 	private String data; // 原始JSON数据
 	// 解析出的数据：<line x1="234" y1="1346" x2="232" y2="1347" ... /> ...
 	private String svgdata;
-	private int minX = 10000;// 最小的x
-	private int minY = 10000;// 最小的y
+	private int minX = 100000;// 最小的x
+	private int minY = 100000;// 最小的y
 
 	/**
 	 * 
@@ -42,43 +44,69 @@ public class SvgImage {
 			if (ary.startsWith(",")) {
 				ary = ary.replaceFirst(",", "");
 			}
+			// System.out.println("每笔："+ary);
 			String[] ss = ary.split("\\},");
-			String p1 = ss[0].replace("{x=", "").replace("y=", "").replace("}", "");
+			String p1 = ss[0]; // .replace("{x=", "").replace("y=",
+			// "").replace("}", "");
 			for (int i = 1; i < ss.length; i++) {// 点
 				if (random) {// 随机rgb
 					rgb = "(" + this.random(1, 255) + "," + this.random(1, 255) + ","
 							+ this.random(1, 255) + ")";
 				}
-				String p2 = ss[i].replace("{x=", "").replace("y=", "").replace("}", "");
-				String[] xy1 = p1.split(",");
-				String[] xy2 = p2.split(",");
+				String p2 = ss[i];// .replace("{x=", "").replace("y=",
+				// "").replace("}", "");
+				Map<String, Integer> xy1 = xy(p1);
+				Map<String, Integer> xy2 = xy(p2);
+				int x1 = xy1.get("x");
+				int y1 = xy1.get("y");
+				int x2 = xy2.get("x");
+				int y2 = xy2.get("y");
+				if (x1 != -1 && x2 != -1 && y1 != 0 && y2 != 0) {
+					String line = "<line x1=\"" + x1 + "\" y1=\"" + y1 + "\"" + " x2=\""
+							+ x2 + "\" y2=\"" + y2 + "\"  style=\"stroke:rgb" + rgb
+							+ ";stroke-width:" + w + "\" />";
+					result.append(line);
 
-				int x1 = Math.round(Float.parseFloat(xy1[0]));
-				int y1 = Math.round(Float.parseFloat(xy1[1]));
-				int x2 = Math.round(Float.parseFloat(xy2[0]));
-				int y2 = Math.round(Float.parseFloat(xy2[1]));
+					if (x1 < this.getMinX()) {
+						this.setMinX(x1);
+					}
+					if (x2 < this.getMinX()) {
+						this.setMinX(x2);
+					}
 
-				String line = "<line x1=\"" + x1 + "\" y1=\"" + y1 + "\"" + " x2=\"" + x2
-						+ "\" y2=\"" + y2 + "\"  style=\"stroke:rgb" + rgb
-						+ ";stroke-width:" + w + "\" />";
-				if (x1 < this.getMinX()) {
-					this.setMinX(x1);
+					if (y1 < this.getMinY()) {
+						this.setMinY(y1);
+					}
+					if (y2 < this.getMinY()) {
+						this.setMinY(y2);
+					}
 				}
-				if (x2 < this.getMinX()) {
-					this.setMinX(x2);
-				}
-
-				if (y1 < this.getMinY()) {
-					this.setMinY(y1);
-				}
-				if (y2 < this.getMinY()) {
-					this.setMinY(y2);
-				}
-				result.append(line);
 				p1 = p2;
 			}
 		}
 		this.setSvgdata(result.toString());
+	}
+
+	public static Map<String, Integer> xy(String str) {
+		// String str = "{x=1083.0, y=1151.0";
+		// String str = "{y=1083.0, x=1151.0";
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		str = str.replace("}", "");
+		int xi = str.indexOf("x=");
+		int i = str.indexOf(",");
+		int yi = str.indexOf("y=");
+		if (xi < i) {
+			String x = str.substring(xi + 2, i);
+			String y = str.substring(yi + 2);
+			map.put("x", Math.round(Float.parseFloat(x)));
+			map.put("y", Math.round(Float.parseFloat(y)));
+		} else {
+			String x = str.substring(xi + 2);
+			String y = str.substring(yi + 2, i);
+			map.put("x", Math.round(Float.parseFloat(x)));
+			map.put("y", Math.round(Float.parseFloat(y)));
+		}
+		return map;
 	}
 
 	/**
@@ -99,7 +127,8 @@ public class SvgImage {
 		System.out.println(svg.getSvgdata());
 		System.out.println(svg.getMinX());
 		System.out.println(svg.getMinY());
-		// String data2 = "{x=1083.0, y=1151.0},{x=1083.0, y=1150.0},{x=-1.0, y=0.0},{x=1083.0, y=1150.0}";
+		// String data2 =
+		// "{x=1083.0, y=1151.0},{x=1083.0, y=1150.0},{x=-1.0, y=0.0},{x=1083.0, y=1150.0}";
 		// data2.split("\\{x=-1.0, y=0.0\\}") ;
 	}
 

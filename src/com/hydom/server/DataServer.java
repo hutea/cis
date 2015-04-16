@@ -72,12 +72,12 @@ public class DataServer {
 				job.setInitNum(job.getMatchNum());
 			}
 			job.setCreateTime(currentTime);
-			jobService.save(job);
 			int count = 0;
+			List<Task> tasks = new ArrayList<Task>();
 			for (Map<String, Object> map : taskData.getMessage()) {
 				Task task = new Task();
 				/** 拼装metricPoint字串 START **/
-				// log.info("~~~:"+map.get("metricPoint").getClass()+"--"+map.get("metricPoint"));
+				//log.info("~~~:"+map.get("metricPoint").getClass()+"--"+map.get("metricPoint"));
 				List<Object> array = (List<Object>) map.get("metricPoint");
 				StringBuffer metricPoint = new StringBuffer();
 				for (Object obj : array) {
@@ -91,20 +91,31 @@ public class DataServer {
 				task.setInLineNo(Integer.parseInt((String) map.get("inLineNo")));// 设置行内号
 				task.setMetricPoint(metricPoint.toString());// 设置切分数据
 				log.info("metricPoint:" + metricPoint.toString());
-				task.setRecycleTime(Long.parseLong(taskData.getRecycleTime()));// 设置超时时间
+				task.setRecycleTime(config.getValueLong());// 设置超时时间
 				task.setAccuracy(Double.parseDouble(taskData.getAccuracy()));// 设置正确率
 				task.setInitNum(job.getInitNum());// 设置分配初值
 				task.setMatchNum(job.getMatchNum());// 设置分配上限
 				task.setPostNum(task.getInitNum());// 设置要达到的提交数等于分配初值
 				task.setCanNum(task.getInitNum());// 设置可分配的值
 				task.setCreateTime(currentTime);
-				task.setJob(job);
 				task.setTaskId(taskData.getTaskId());
-				taskService.save(task);
+				try{
+					SvgImage svgimg = new SvgImage(task.getMetricPoint());
+					tasks.add(task);
+				}catch (Exception e) {
+					dataMap.put("exception", "metriPoint格式错误");
+					dataMap.put("result", "false");
+					dataFillStream(dataMap);
+					return "success";
+				}
 				count++;
 			}
 			job.setTaskCount(count);// 设置区块（task）总数
-			jobService.update(job);
+			jobService.save(job);
+			for(Task task :tasks ){
+				task.setJob(job);
+				taskService.save(task) ;
+			}
 			dataMap.put("result", "true");
 		} catch (Exception e) {
 			dataMap.put("exception", e.toString());
@@ -157,7 +168,7 @@ public class DataServer {
 				map.put("lineNo", task.getLineNo());
 				map.put("inLineNo", task.getInLineNo());
 				map.put("originalData", task.getResult());
-				if (task.getRation() < task.getAccuracy()) {// 实际正确比例小于设定的正确比例
+				if (task.getRation()==null || task.getRation() < task.getAccuracy()) {// 实际正确比例小于设定的正确比例
 					map.put("status", 1);// 表示要纠正
 				} else {
 					map.put("status", 0);

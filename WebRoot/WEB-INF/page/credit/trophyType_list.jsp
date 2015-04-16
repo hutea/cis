@@ -39,6 +39,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		}
 		function showEdit(id,itext){
+			var itext = "";
+			if(window.navigator.userAgent.toLowerCase().indexOf("firefox")!=-1){
+				itext =document.getElementById("con_"+id).textContent;
+      		}else{
+      			itext =document.getElementById("con_"+id).innerText=name;
+      		}	
 			document.getElementById("tname").value = itext; 
 			document.getElementById("htid").value = id; 
 			if(window.navigator.userAgent.toLowerCase().indexOf("firefox")!=-1){
@@ -125,7 +131,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				                           		 <td >
 				                           		 	<span style="cursor: pointer;" id="con_${entry.id}" ondblclick="javascript:showEdit('${entry.id}','${entry.name}')" title="双击修改" >${entry.name}</span>
 				                           		 </td> 
-				                           		 <td><a href="javascript:del('${entry.id}')">删除</a></td> 
+				                           		 <td>
+				                           		 	<a href="javascript:del('${entry.id}')">删除</a>
+				                           		 	<a href="javascript:showEdit('${entry.id}')">修改</a>
+				                           		 </td> 
 				                           	  	</tr>
 				                           	  </c:forEach>
 			                            </tbody>

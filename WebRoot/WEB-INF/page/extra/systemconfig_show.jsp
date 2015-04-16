@@ -96,6 +96,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 	<div style="line-height: 50px;">
     					 		<span class="sycon">积分说明 </span>
     					 	</div >
+    					 	
+    					 	<div class="input-group col-md-6">
+							    <div class="input-group-addon">积分设置</div>
+							     	 <input style="text-align: right;"  readonly  type="text"   value="${config.valueDouble}"  class="form-control">
+							    	 <div class="input-group-addon">分</div>
+							    </div>
+							    <div class="input-group col-md-6">
+							    	<div>每个区块识别正确可以获得的积分</div>
+							</div>
+    					 	<hr/>
     					 	<div style="line-height: 50px;">
     					 		<span>${config.valueContent}</span>
     					 	</div >

@@ -60,6 +60,7 @@ public class SystemConfigAction {
 		entity.setValueLong(config.getValueLong());
 		entity.setValueShort(config.getValueShort());
 		entity.setValueText(config.getValueText());
+		entity.setValueDouble(config.getValueDouble());
 		systemConfigService.update(entity);
 		return "success";
 	}

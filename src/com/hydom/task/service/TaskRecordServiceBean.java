@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import com.hydom.account.ebean.Account;
@@ -26,12 +28,30 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 	@Resource
 	private JobService jobService;
 
+	private Log log = LogFactory.getLog("testLog");
+
 	@Override
 	public TaskRecord fetchTaskRecord(long accountId) {
+		/**
+		 * 【step1】查看用户是否有未提交并且未超时的任务：如果有则直接将此任务进行分配 <br>
+		 * 这样可以在用户退出程序再进入时仍可以继续做前一次任务
+		 */
+		try {
+			Date now = HelperUtil.addms(new Date(), 60000);// 超时时间距离当前时间至少要大于1分钟
+			return (TaskRecord) em
+					.createQuery(
+							"select o from TaskRecord o where o.account.id=?1 and o.effectiveTime>=?2 and o.postTime is null")
+					.setParameter(1, accountId).setParameter(2, now).setMaxResults(1)
+					.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		/** 【step2】正常的分配流程 **/
 		try {
 			Task task = (Task) em
 					.createQuery(
-							"select t from Task t where t.matchedNum<t.matchNum and t.canNum>0 and t.id not in (select r.task.id from TaskRecord r where r.account.id=?1) order by t.id asc")
+							"select t from Task t where t.matchedNum<t.matchNum and t.canNum>0 and t.recycleType=0 and t.id not in (select r.task.id from TaskRecord r where r.account.id=?1) order by t.id asc")
 					.setParameter(1, accountId).setMaxResults(1).getSingleResult();
 			TaskRecord taskRecord = new TaskRecord();
 			Date currentTime = new Date();
@@ -91,7 +111,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 			int samePerson = ((Long) countResult[1]).intValue();// 计算出相同答案的人数
 			double currentPercent = (double) (samePerson / task.getMatchedNum());// 当前比例
 			if (currentPercent >= task.getAccuracy()) {// 达到正确比例
-				System.out.println("---->达到正确比例");
+				log.info("---->达到正确比例");
 				task.setResult((String) countResult[0]);// 设置结果
 				task.setRation(currentPercent);// 设置：计算实际比例
 				task.setFinishTime(new Date());// 设置完成时间
@@ -101,9 +121,8 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 				jobService.update(job);
 				update_TaskRecordSign(task.getId(), (String) countResult[0]);
 				jobService.postJob(job.getId());// 反馈工单
-			}
-			if (task.getMatchedNum() >= task.getMatchNum()) {// 已分配人数达到分配上限
-				System.out.println("---->已分配人数达到分配上限");
+			} else if (task.getMatchedNum() >= task.getMatchNum()) {// 已分配人数达到分配上限
+				log.info("---->已分配人数达到分配上限");
 				task.setResult((String) countResult[0]);// 设置结果：当前结果
 				task.setRation(currentPercent);// 设置：计算实际比例
 				task.setFinishTime(new Date());// 设置完成时间
@@ -177,7 +196,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		Date now = new Date();
 		return em
 				.createQuery(
-						"select t from TaskRecord t where t.effectiveTime<=?1 and t.identState!=0")
+						"select t from TaskRecord t where t.effectiveTime<=?1 and t.identState is not null")
 				.setParameter(1, now).getResultList();
 	}
 
