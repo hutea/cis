@@ -132,20 +132,20 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 				jobService.update(job);
 				update_TaskRecordSign(task.getId(), null);
 				jobService.postJob(job.getId());// 反馈工单
+			} else {/* 未达到指定比例并且已分配人数未达到分配上限：计算可再次进行分配的人数 */
+				long moreNum = Math
+						.round((task.getAccuracy() * task.getMatchedNum() + samePerson)
+								/ (task.getAccuracy() + 1));
+				int canNum = (int) moreNum;
+				if ((moreNum + task.getMatchedNum()) > task.getMatchNum()) {// （再次分配人数+已分配人数）>分配上限
+					canNum = task.getMatchNum() - task.getMatchedNum();
+				}
+				System.out.println("canNum=" + canNum + " postNum=" + task.getPostNum());
+				task.setCanNum(canNum);// 设置再次分配的人数
+				task.setPostNum(task.getPostNum() + canNum);// 设置提交总数应达到的值
+				task.setResultNum(task.getResultNum() + 1);// 对返回了识别结果的人数+1
+				taskService.update(task);
 			}
-			/* 未达到指定比例并且已分配人数未达到分配上限：计算可再次进行分配的人数 */
-			long moreNum = Math
-					.round((task.getAccuracy() * task.getMatchedNum() + samePerson)
-							/ (task.getAccuracy() + 1));
-			int canNum = (int) moreNum;
-			if ((moreNum + task.getMatchedNum()) > task.getMatchNum()) {// （再次分配人数+已分配人数）>分配上限
-				canNum = task.getMatchNum() - task.getMatchedNum();
-			}
-			System.out.println("canNum=" + canNum + " postNum=" + task.getPostNum());
-			task.setCanNum(canNum);// 设置再次分配的人数
-			task.setPostNum(task.getPostNum() + canNum);// 设置提交总数应达到的值
-			task.setResultNum(task.getResultNum() + 1);// 对返回了识别结果的人数+1
-			taskService.update(task);
 		} else {
 			System.out.println("---->实际提交数未达到指定的提交数");
 			task.setResultNum(task.getResultNum() + 1);// 对返回了识别结果的人数+1

@@ -97,15 +97,10 @@ public class AppServer {
 	 * @return
 	 */
 	public String signup() {
-		log.info("App【用户注册】：" + "用户名=" + username + " 密码=" + password + " 验证码="
-				+ code);
+		log.info("App【用户注册】：" + "用户名=" + username + " 密码=" + password + " 验证码=" + code);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
-			if (code != null
-					&& code
-							.equals(shortMessageService.find(username)
-									.getCode())) { // 验证码通过
-
+			if (code != null && code.equals(shortMessageService.find(username).getCode())) { // 验证码通过
 				if (!HelperUtil.isPhoneNumber(username)) {// 手机号格式不正确
 					dataMap.put("result", 10);
 				} else if (password.length() > 12 || password.length() < 6) {// 密码长度不符合规范
@@ -140,8 +135,8 @@ public class AppServer {
 			accountService.update(account);
 			dataMap.put("result", 1);
 			dataMap.put("username", account.getUsername());
-			dataMap.put("nickname", account.getNickname() == null ? ""
-					: account.getNickname());
+			dataMap.put("nickname", account.getNickname() == null ? "" : account
+					.getNickname());
 			dataMap.put("uid", account.getId());
 		} else {
 			dataMap.put("result", 4);// 用户名或密码错误
@@ -154,8 +149,7 @@ public class AppServer {
 	}
 
 	public String signout() {
-		log.info("App【用户登出】：" + "用户名=" + username + " 密码=" + password
-				+ " 用户ID=" + uid);
+		log.info("App【用户登出】：" + "用户名=" + username + " 密码=" + password + " 用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.findByUP(username, password);
 		if (account != null) { // 注销成功
@@ -183,8 +177,8 @@ public class AppServer {
 		if (taskRecord != null) {
 			dataMap.put("tid", taskRecord.getId());
 			// 处理MetricPoint对象
-			String[] data = taskRecord.getTask().getMetricPoint().replaceAll(
-					"},", "}#").split("#");
+			String[] data = taskRecord.getTask().getMetricPoint().replaceAll("},", "}#")
+					.split("#");
 			List<Map<String, Integer>> lineList = new ArrayList<Map<String, Integer>>();
 			for (String str : data) {
 				Map<String, Integer> xy = SvgImage.xy(str);
@@ -229,8 +223,7 @@ public class AppServer {
 			} else if (record.getPostTime() != null) {// 提交过
 				dataMap.put("result", 13);// 重复提交
 			} else {
-				int result = taskRecordService.processTaskRecord(tid,
-						result_str);
+				int result = taskRecordService.processTaskRecord(tid, result_str);
 				dataMap.put("result", result);
 			}
 		} catch (Exception e) {
@@ -270,8 +263,7 @@ public class AppServer {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		PageView<TaskRecord> pageView = new PageView<TaskRecord>(maxresult,
-				page);
+		PageView<TaskRecord> pageView = new PageView<TaskRecord>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
 		orderby.put("id", "desc");
 		StringBuffer jpql = new StringBuffer(
@@ -280,17 +272,17 @@ public class AppServer {
 		params.add(true);
 		params.add(uid);
 		params.add(sign);
-		pageView.setQueryResult(taskRecordService.getScrollData(pageView
-				.getFirstResult(), maxresult, jpql.toString(),
-				params.toArray(), orderby));
+		pageView.setQueryResult(taskRecordService.getScrollData(
+				pageView.getFirstResult(), maxresult, jpql.toString(), params.toArray(),
+				orderby));
 		List<TaskRecord> records = pageView.getRecords();
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for (TaskRecord tr : records) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>();
 			/** 处理MetricPoint对象START **/
-			String[] data = tr.getTask().getMetricPoint()
-					.replaceAll("},", "}#").split("#");
+			String[] data = tr.getTask().getMetricPoint().replaceAll("},", "}#").split(
+					"#");
 			List<Map<String, Integer>> lineList = new ArrayList<Map<String, Integer>>();
 			for (String str : data) {
 				Map<String, Integer> xy = SvgImage.xy(str);
@@ -337,9 +329,9 @@ public class AppServer {
 			StringBuffer jpql = new StringBuffer("o.visible=?1");
 			List<Object> params = new ArrayList<Object>();
 			params.add(true);
-			pageView.setQueryResult(trophyService.getScrollData(pageView
-					.getFirstResult(), maxresult, jpql.toString(), params
-					.toArray(), orderby));
+			pageView.setQueryResult(trophyService.getScrollData(
+					pageView.getFirstResult(), maxresult, jpql.toString(), params
+							.toArray(), orderby));
 			for (Trophy tr : pageView.getRecords()) {
 				Map<String, Object> map = new LinkedHashMap<String, Object>();
 				map.put("tid", tr.getId());
@@ -372,8 +364,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String exchangeTrophy() {
-		log.info("App【提交奖品兑换信息】：" + "用户ID=" + uid + "奖品ID=" + tid + "奖品数量="
-				+ num);
+		log.info("App【提交奖品兑换信息】：" + "用户ID=" + uid + "奖品ID=" + tid + "奖品数量=" + num);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.find(uid);
 		Trophy trophy = trophyService.find(tid);
@@ -408,17 +399,17 @@ public class AppServer {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		PageView<TrophyRecord> pageView = new PageView<TrophyRecord>(maxresult,
-				page);
+		PageView<TrophyRecord> pageView = new PageView<TrophyRecord>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
 		orderby.put("id", "desc");
 		StringBuffer jpql = new StringBuffer("o.visible=?1 and o.account.id=?2");
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);
 		params.add(uid);
-		pageView.setQueryResult(trophyRecordService.getScrollData(pageView
-				.getFirstResult(), maxresult, jpql.toString(),
-				params.toArray(), orderby));
+		pageView
+				.setQueryResult(trophyRecordService.getScrollData(pageView
+						.getFirstResult(), maxresult, jpql.toString(), params.toArray(),
+						orderby));
 
 		List<TrophyRecord> records = pageView.getRecords();
 		for (TrophyRecord tr : records) {
@@ -483,9 +474,8 @@ public class AppServer {
 	 * @return
 	 */
 	public String updateProfile() {
-		log.info("App【更新个人资料】：" + "用户ID=" + uid + " 用户昵称=" + nickname
-				+ " 银行名称=" + backname + " 银行帐号=" + backaccount + " 支付宝帐号="
-				+ pay);
+		log.info("App【更新个人资料】：" + "用户ID=" + uid + " 用户昵称=" + nickname + " 银行名称="
+				+ backname + " 银行帐号=" + backaccount + " 支付宝帐号=" + pay);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.find(uid);
 		if (nickname != null && !"".equals(nickname)) {
@@ -523,8 +513,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String resetPassword() {
-		log.info("App【找回密码】：" + "用户名=" + username + " 新密码=" + password
-				+ " 验证码=" + code);
+		log.info("App【找回密码】：" + "用户名=" + username + " 新密码=" + password + " 验证码=" + code);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			String sysCode = shortMessageService.findCode(username); // username为手机号
@@ -553,8 +542,8 @@ public class AppServer {
 	 * @return
 	 */
 	public String updatePassword() {
-		log.info("App【更改密码】：" + "用户ID=" + uid + "用户名=" + username + " 原密码="
-				+ oripwd + " 新密码=" + newpwd);
+		log.info("App【更改密码】：" + "用户ID=" + uid + "用户名=" + username + " 原密码=" + oripwd
+				+ " 新密码=" + newpwd);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.find(uid);
 		if (account != null) {
@@ -604,9 +593,8 @@ public class AppServer {
 		}
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);
-		pageView.setQueryResult(messageService.getScrollData(pageView
-				.getFirstResult(), maxresult, jpql.toString(),
-				params.toArray(), orderby));
+		pageView.setQueryResult(messageService.getScrollData(pageView.getFirstResult(),
+				maxresult, jpql.toString(), params.toArray(), orderby));
 
 		List<Message> messages = pageView.getRecords();
 		for (Message message : messages) {
@@ -650,8 +638,8 @@ public class AppServer {
 				Long msgid = Long.parseLong(mid);
 				Message message = messageService.find(msgid);
 				if (message != null) {
-					MessageDeleteRecord existMDR = messageDeleteRecordService
-							.find(accid, msgid);
+					MessageDeleteRecord existMDR = messageDeleteRecordService.find(accid,
+							msgid);
 					if (existMDR == null) {
 						MessageDeleteRecord mdr = new MessageDeleteRecord();
 						mdr.setAccid(accid);
@@ -680,20 +668,17 @@ public class AppServer {
 		log.info("App【获取关于等信息】：" + "用户ID=" + uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
-			dataMap.put("manual", systemConfigService.find("manual")
-					.getValueText());
+			dataMap.put("manual", systemConfigService.find("manual").getValueText());
 		} catch (Exception e) {
 			dataMap.put("manual", "");
 		}
 		try {
-			dataMap.put("about", systemConfigService.find("about")
-					.getValueText());
+			dataMap.put("about", systemConfigService.find("about").getValueText());
 		} catch (Exception e) {
 			dataMap.put("about", "");
 		}
 		try {
-			dataMap.put("phone", systemConfigService.find("phone")
-					.getValueText());
+			dataMap.put("phone", systemConfigService.find("phone").getValueText());
 		} catch (Exception e) {
 			dataMap.put("phone", "");
 		}
@@ -707,8 +692,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String postSense() {
-		log.info("App【提交建议】：" + "用户ID=" + uid + " 联系方式=" + contact + " 内容="
-				+ content);
+		log.info("App【提交建议】：" + "用户ID=" + uid + " 联系方式=" + contact + " 内容=" + content);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			Sense sense = new Sense();
@@ -773,8 +757,7 @@ public class AppServer {
 		}
 
 		try {
-			boolean sendresult = shortMessageService.sendCode(phone, smscode,
-					smscontent);
+			boolean sendresult = shortMessageService.sendCode(phone, smscode, smscontent);
 			if (sendresult) {
 				dataMap.put("result", 1);
 				dataMap.put("code", smscode);

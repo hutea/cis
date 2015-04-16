@@ -6,27 +6,48 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 
 import com.hydom.util.HttpSender;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 public class JobTest {
 
 	public static void main(String[] args) {
 
+	}
+
+	public static void process_2() {
 		for (int i = 0; i < 20; i++) {
-			if (i % 3 == 0) {
-				PhoneThread p1 = new PhoneThread(2, "正确123");
-				PhoneThread p2 = new PhoneThread(3, "正确123");
-				PhoneThread p3 = new PhoneThread(4, "正确123");
+			long s = System.currentTimeMillis();
+			PhoneThread p1 = new PhoneThread(4, "正确123");
+			PhoneThread p2 = new PhoneThread(5, "正确123");
+			PhoneThread p3 = new PhoneThread(6, "正确123");
+			p1.run();
+			p2.run();
+			p3.run();
+			long e = System.currentTimeMillis();
+			System.out.println(i + ":" + (e - s));
+		}
+	}
+
+	public static void process_1() {
+		for (int i = 0; i < 20; i++) {
+			long s = System.currentTimeMillis();
+			if (i % 2 == 0) {
+				PhoneThread p1 = new PhoneThread(1, "正确123");
+				PhoneThread p2 = new PhoneThread(2, "正确123");
+				PhoneThread p3 = new PhoneThread(3, "正确123");
 				p1.run();
 				p2.run();
 				p3.run();
 			} else {
-				PhoneThread p1 = new PhoneThread(2, "abc");
-				PhoneThread p2 = new PhoneThread(3, "xyz");
-				PhoneThread p3 = new PhoneThread(4, "test");
+				PhoneThread p1 = new PhoneThread(1, "abc");
+				PhoneThread p2 = new PhoneThread(2, "xyz");
+				PhoneThread p3 = new PhoneThread(3, "test");
 				p1.run();
 				p2.run();
 				p3.run();
 			}
+			long e = System.currentTimeMillis();
+			System.out.println(i + ":" + (e - s));
 		}
 	}
 
@@ -71,7 +92,7 @@ class PhoneThread implements Runnable {
 		System.out.println("开始提交：");
 		Map<String, String> fetchParam = new HashMap<String, String>();
 		fetchParam.put("tid", tid + "");
-		fetchParam.put("result", postData);
+		fetchParam.put("result_str", postData);
 		try {
 			InputStream inputStream = HttpSender.postFromHttpClient(postUrl, fetchParam,
 					"utf-8");
