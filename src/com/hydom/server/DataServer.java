@@ -77,15 +77,13 @@ public class DataServer {
 			for (Map<String, Object> map : taskData.getMessage()) {
 				Task task = new Task();
 				/** 拼装metricPoint字串 START **/
-				//log.info("~~~:"+map.get("metricPoint").getClass()+"--"+map.get("metricPoint"));
+				// log.info("~~~:"+map.get("metricPoint").getClass()+"--"+map.get("metricPoint"));
 				List<Object> array = (List<Object>) map.get("metricPoint");
 				StringBuffer metricPoint = new StringBuffer();
 				for (Object obj : array) {
-					log.info("obj:" + obj.getClass() + "--" + obj);
 					metricPoint.append(obj + ",");
 				}
 				metricPoint.deleteCharAt(metricPoint.length() - 1);
-
 				/** 拼装metricPoint字串 END **/
 				task.setLineNo(Integer.parseInt((String) map.get("lineNo")));// 设置行号
 				task.setInLineNo(Integer.parseInt((String) map.get("inLineNo")));// 设置行内号
@@ -97,12 +95,15 @@ public class DataServer {
 				task.setMatchNum(job.getMatchNum());// 设置分配上限
 				task.setPostNum(task.getInitNum());// 设置要达到的提交数等于分配初值
 				task.setCanNum(task.getInitNum());// 设置可分配的值
-				task.setCreateTime(currentTime);
+				task.setCreateTime(currentTime);// 设置生成时间
+				SystemConfig scoreConfig = systemConfigService.find("manual");
+				task.setScore(scoreConfig.getValueDouble());// 设置积分
 				task.setTaskId(taskData.getTaskId());
-				try{
+				try {
+					@SuppressWarnings("unused")
 					SvgImage svgimg = new SvgImage(task.getMetricPoint());
 					tasks.add(task);
-				}catch (Exception e) {
+				} catch (Exception e) {
 					dataMap.put("exception", "metriPoint格式错误");
 					dataMap.put("result", "false");
 					dataFillStream(dataMap);
@@ -112,9 +113,9 @@ public class DataServer {
 			}
 			job.setTaskCount(count);// 设置区块（task）总数
 			jobService.save(job);
-			for(Task task :tasks ){
+			for (Task task : tasks) {
 				task.setJob(job);
-				taskService.save(task) ;
+				taskService.save(task);
 			}
 			dataMap.put("result", "true");
 		} catch (Exception e) {
@@ -138,13 +139,14 @@ public class DataServer {
 		dataFillStream(dataMap);
 		return "success";
 	}
+
 	/**
 	 * 工单反馈：定时调用反馈失败的工单
 	 * 
 	 * @return
 	 */
 	public String backTaskTimer() {
-		
+
 		return "success";
 	}
 
@@ -168,7 +170,7 @@ public class DataServer {
 				map.put("lineNo", task.getLineNo());
 				map.put("inLineNo", task.getInLineNo());
 				map.put("originalData", task.getResult());
-				if (task.getRation()==null || task.getRation() < task.getAccuracy()) {// 实际正确比例小于设定的正确比例
+				if (task.getRation() == null || task.getRation() < task.getAccuracy()) {// 实际正确比例小于设定的正确比例
 					map.put("status", 1);// 表示要纠正
 				} else {
 					map.put("status", 0);

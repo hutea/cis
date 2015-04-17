@@ -21,8 +21,10 @@ import org.springframework.stereotype.Controller;
 import com.google.gson.Gson;
 import com.hydom.account.ebean.Account;
 import com.hydom.account.service.AccountService;
+import com.hydom.credit.ebean.ScoreRecord;
 import com.hydom.credit.ebean.Trophy;
 import com.hydom.credit.ebean.TrophyRecord;
+import com.hydom.credit.service.ScoreRecordService;
 import com.hydom.credit.service.TrophyRecordService;
 import com.hydom.credit.service.TrophyService;
 import com.hydom.dao.PageView;
@@ -66,6 +68,9 @@ public class AppServer {
 	private SenseService senseService;
 	@Resource
 	private MessageDeleteRecordService messageDeleteRecordService;
+	@Resource
+	private ScoreRecordService scoreRecordService;
+
 	private Log log = LogFactory.getLog("appServerLog");
 
 	private String username;
@@ -227,6 +232,7 @@ public class AppServer {
 				dataMap.put("result", result);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			dataMap.put("result", 0);
 		}
 		dataFillStream(dataMap);
@@ -335,12 +341,12 @@ public class AppServer {
 			for (Trophy tr : pageView.getRecords()) {
 				Map<String, Object> map = new LinkedHashMap<String, Object>();
 				map.put("tid", tr.getId());
-				map.put("name", tr.getName());
-				map.put("detail", tr.getDetail());
+				map.put("name", tr.getName() + "");
+				map.put("detail", tr.getDetail() + "");
 				map.put("stock", tr.getStock());
 				map.put("score", tr.getScore());
-				map.put("type", tr.getTrophyType().getName());
-				map.put("image", tr.getImage());
+				map.put("type", tr.getTrophyType().getName() + "");
+				map.put("image", tr.getImage() + "");
 				list.add(map);
 			}
 			if (list.size() > 0) {
@@ -370,18 +376,30 @@ public class AppServer {
 		Trophy trophy = trophyService.find(tid);
 		double theScore = num * trophy.getScore(); // 本次兑换需要的积分
 		if (theScore > account.getScore()) {// 如果用户积分不足够兑换，直接返回
-			dataMap.put("result", "0");
+			dataMap.put("result", "14"); // 积分不足
 			dataMap.put("rid", "");
 			dataFillStream(dataMap);
 			return "success";
 		}
 		TrophyRecord record = new TrophyRecord();
-		record.setPostTime(new Date());// 设置提交兑换的时间为当前时间
+		record.setPostTime(new Date()); // 设置提交兑换的时间为当前时间
 		record.setAccount(account);
 		record.setNumber(num);
 		record.setScore(theScore);
 		record.setTrophy(trophy);
 		trophyRecordService.save(record);
+		/** 处理积分相关 **/
+		ScoreRecord scoreRecord = new ScoreRecord();
+		scoreRecord.setAccount(account);
+		scoreRecord.setSign(false);
+		scoreRecord.setCreateTime(new Date());
+		scoreRecord.setDetail("完成任务获得积分");
+		scoreRecord.setTrophyRecord(record);
+		scoreRecord.setScore(theScore);
+		account.setScore(account.getScore() - scoreRecord.getScore());
+		accountService.update(account);
+		scoreRecordService.save(scoreRecord);
+		/** 处理积分相关 **/
 		dataMap.put("result", "1");
 		dataMap.put("rid", record.getId());
 		dataFillStream(dataMap);

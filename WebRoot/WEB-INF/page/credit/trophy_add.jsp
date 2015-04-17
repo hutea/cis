@@ -78,12 +78,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	<div class="content-m"  >
                          <div>奖品添加</div>
                          <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
-                         <s:form action="trophy_add" name="myform" namespace="/manage/credit" method="post" enctype="multipart/form-data"  id="pageList"> 
+                         <s:form action="trophy_add" id="myform" name="myform" namespace="/manage/credit" method="post" enctype="multipart/form-data" > 
 	    					<div class="form-horizontal">
 		    					 <div class="form-group">
 								    <label  class="col-sm-2 control-label">奖品名称</label>
 								    <div class="col-sm-4">
 								      <input type="text" class="form-control" name="trophy.name" placeholder="奖品名称">
+								      <span></span>
 								    </div>
 								    <label  class="col-sm-2 control-label">兑换状态</label>
 								    <div class="col-sm-4">
@@ -97,16 +98,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								    <label  class="col-sm-2 control-label">价值</label>
 								    <div class="col-sm-4">
 								      <input type="text" class="form-control"  name="trophy.money"  placeholder="价值">
+								      <span></span>
 								    </div>
 								    <label  class="col-sm-2 control-label">所需积分</label>
 								    <div class="col-sm-4">
-								      <input type="text" class="form-control" name="trophy.score" placeholder="所需积分">
+								      <input type="text" class="form-control" name="trophy.score" placeholder="所需积分" onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}" >
+								      <span></span>
 								    </div>
 								 </div>
 		    					 <div class="form-group">
 								    <label  class="col-sm-2 control-label">库存</label>
 								    <div class="col-sm-4">
-								      <input type="text" class="form-control" name="trophy.stock" placeholder="库存">
+								      <input type="text" class="form-control" name="trophy.stock" placeholder="库存" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'')">
+								      <span></span>
 								    </div>
 								    <label  class="col-sm-2 control-label">类别</label>
 								    <div class="col-sm-4">
@@ -163,8 +167,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap-wizard.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/select2.min.js"></script>
 
-        <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
+        <!-- 验证框架 -->
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/trophy.js"></script>
+		
+		<script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
-
     </body>
 </html>

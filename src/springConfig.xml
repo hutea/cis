@@ -51,10 +51,10 @@
 	<!-- 设置执行时间 -->
 	<bean id="resetMatchTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="resetMatchTask" />
-		<!-- cron表达式 --><!-- 每隔3分钟执行一次-->
-		<property name="cronExpression" value="0 0/3 * * * ?" />
+		<!-- cron表达式 --><!-- 每隔1分钟执行一次-->
+		<property name="cronExpression" value="0 0/1 * * * ?" />
 	</bean>
-	
+
 	<!-- 定时提交失败的工单-->
 	<bean id="postFailJob"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -76,9 +76,9 @@
 		<property name="triggers">
 			<list>
 				<!-- 
+				 -->
 				<ref bean="resetMatchTaskTrigger" />
 				<ref bean="postFailJobTrigger" />
-				 -->
 			</list>
 		</property>
 	</bean>

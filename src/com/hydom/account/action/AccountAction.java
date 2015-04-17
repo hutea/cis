@@ -42,6 +42,8 @@ public class AccountAction {
 
 	private long accid;
 
+	private String username;
+
 	public String list() {
 		request = ServletActionContext.getRequest();
 		PageView<Account> pageView = new PageView<Account>(maxresult, page);
@@ -78,6 +80,20 @@ public class AccountAction {
 		pageView.setQueryResult(accountService.getScrollData(pageView.getFirstResult(),
 				maxresult, jpql.toString(), params.toArray(), orderby));
 		request.setAttribute("pageView", pageView);
+		return "success";
+	}
+
+	public String checkUsername() {
+		Account account = accountService.findByUsername(username);
+		try {
+			if (account != null) {
+				inputStream = new ByteArrayInputStream("0".getBytes("UTF-8"));
+			} else {
+				inputStream = new ByteArrayInputStream("1".getBytes("UTF-8"));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return "success";
 	}
 
@@ -180,6 +196,14 @@ public class AccountAction {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }

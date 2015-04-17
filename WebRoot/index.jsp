@@ -22,12 +22,7 @@
         <title>Chain Responsive Bootstrap3 Admin</title>
 
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
-		<style type="text/css">
-			.errorStyle{
-				font-size: 13px;
-				color: red;
-			}
-		</style>
+
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="js/html5shiv.js"></script>
@@ -49,13 +44,11 @@
                     
                     <div class="mb30"></div>
                     
-                    <form action="signin.action" method="post" id="myform">
-                        <div></div>
+                    <form action="signin.action" method="post">
                         <div class="input-group mb15">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                             <input type="text" class="form-control" placeholder="Username" name="username" value="${uname }">
                         </div><!-- input-group -->
-                        <div></div>
                         <div class="input-group mb15">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                             <input type="password" class="form-control" placeholder="Password" name="password" value="${pwd}">
@@ -76,7 +69,7 @@
                     
                 </div><!-- panel-body -->
                 <div class="panel-footer">
-                    <a href="" class="btn btn-primary btn-block">准星云学后台管理平台</a>
+                    <a href="" class="btn btn-primary btn-block">注册链接【备用】</a>
                 </div><!-- panel-footer -->
             </div><!-- panel -->
         </section>
@@ -89,42 +82,6 @@
         <script src="${pageContext.request.contextPath}/resource/chain/js/retina.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/jquery.cookies.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
-		<!-- 验证框架 -->
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
-  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
-		<script type="text/javascript">
-		/*页面校验*/
-		$(function() {
-			var validator = $("#myform").validate( {
-				debug : true,
-				errorClass : "errorStyle",
-				submitHandler : function(form) {
-					form.submit();
-				},
-				rules : {
-					"username" : {
-						required : true
-					},
-					"password" : {
-						required : true
-					}
-				},
-				messages : {
-					"username" : {
-						required : "用户名不能为空"
-					},
-					"password" : {
-						required : "密码不能为空"
-					}
-				},
-				errorPlacement : function(error, element) {
-					error.appendTo(element.parent().prev("div"));
-				},
-				highlight : function(element, errorClass) {
-					$(element).addClass(errorClass);
-				}
-			});
-		});
-		</script>
+
     </body>
 </html>

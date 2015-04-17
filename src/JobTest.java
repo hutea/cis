@@ -11,7 +11,7 @@ import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 public class JobTest {
 
 	public static void main(String[] args) {
-
+		process_1();
 	}
 
 	public static void process_2() {
@@ -29,7 +29,7 @@ public class JobTest {
 	}
 
 	public static void process_1() {
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 6; i++) {
 			long s = System.currentTimeMillis();
 			if (i % 2 == 0) {
 				PhoneThread p1 = new PhoneThread(1, "正确123");
@@ -47,7 +47,7 @@ public class JobTest {
 				p3.run();
 			}
 			long e = System.currentTimeMillis();
-			System.out.println(i + ":" + (e - s));
+			System.out.println("第" + i + "次，用时【ms】=" + (e - s));
 		}
 	}
 
@@ -77,7 +77,7 @@ class PhoneThread implements Runnable {
 				System.out.println("没有可以分配的题目了");
 			} else {
 				tid = Long.parseLong(tidStr);
-				System.out.println("分配结果：" + uid + ":" + tid);
+				System.out.println("分配结果：uid=" + uid + " tid=" + tid);
 			}
 		} catch (Exception e) {
 			// e.printStackTrace();

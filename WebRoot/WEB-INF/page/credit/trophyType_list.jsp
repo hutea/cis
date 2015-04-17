@@ -45,7 +45,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       		}else{
       			itext =document.getElementById("con_"+id).innerText=name;
       		}	
-			document.getElementById("tname").value = itext; 
+			document.getElementById("tname").value = itext+""; 
 			document.getElementById("htid").value = id; 
 			if(window.navigator.userAgent.toLowerCase().indexOf("firefox")!=-1){
 				document.getElementById("tid").textContent = "ID:"+id; 
@@ -56,6 +56,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		function postEdit(){
 		  var name = document.getElementById("tname").value;
+		  if(name==""){
+			  alert("名称不能为空");
+			  return ;
+		  }
 		  var id = document.getElementById("htid").value;
 		  $.post("${pageContext.request.contextPath}/manage/credit/trophyType_edit.action", 
 		  {id:id,name:name},
@@ -102,8 +106,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                      <div class="container">
 				        <div class="row" style="margin-bottom: 10px;">
 				            <div class="col-md-12">
-				                <form class="form-inline" action="${pageContext.request.contextPath}/manage/credit/trophyType_add.action" method="post">
+				                <form class="form-inline" id="myform" action="${pageContext.request.contextPath}/manage/credit/trophyType_add.action" method="post" >
 				                     <input type="text" name="type.name" class="form-control" name="" placeholder="类别名称">
+                        			 <span></span>
                         			 <input type="submit" class="btn btn-primary" name="" value="提交">
 				                </form>
 				            </div>
@@ -150,6 +155,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			                            	<span class="text-primary" id="tid"></span>
 			                            </div>
 				            			<div class="form-inline">
+				            				<label>奖品类别名称</label>
 			                            	<input type="text" class="form-control" id="tname"  >
 			                            	<input type="hidden" id="htid" />
 			                            	<input type="button" class="btn btn-primary btn-md" onclick="javascript:postEdit('${entry.id}')" value="确定">
@@ -183,9 +189,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/raphael-2.1.0.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap-wizard.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/select2.min.js"></script>
-
+        
+        <!-- 验证框架 -->
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/trophyType.js"></script>
+		
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
-
     </body>
 </html>

@@ -76,6 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <th>用户ID</th>
                                     <th>分配时间</th>
                                     <th>提交时间</th>
+                                    <th>识别结果</th>
                                     <th>是否超时</th>
                                     <th>操作</th>
                               </tr>
@@ -87,7 +88,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td>${entry.account.id}</td> 
                            		 <td><fmt:formatDate value="${entry.matchTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td><c:if test="${entry.postTime==null}">未提交</c:if><fmt:formatDate value="${entry.postTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
-                           		 <td>${entry.identState==1?'未超时':'超时'}</td> 
+                           		 <td>${entry.sign==null?'未计算':entry.sign==1?'识别正确':'识别错误'}</td> 
+                           		 <td>${entry.identState==0?'超时':entry.postTime==null?'未提交':''}</td> 
                         		 <td><a href='javascript:show(${entry.id})'>查看笔迹</a> 
                            	  	</tr>
                            	  </c:forEach>

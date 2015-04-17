@@ -98,7 +98,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td><fmt:formatDate value="${entry.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td>
-                           		  <a href='#'>详细</a>
                            		  <a href='<s:url action="scoreRecord_listheap" namespace="/manage/credit" />?accid=${entry.id}'>积分详细</a>
                            		  <a href='<s:url action="scoreRecord_listuse" namespace="/manage/credit" />?accid=${entry.id}'>消费详细</a>
                            		 </td> 

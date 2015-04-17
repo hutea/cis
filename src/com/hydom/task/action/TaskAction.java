@@ -35,7 +35,7 @@ public class TaskAction {
 		request = ServletActionContext.getRequest();
 		PageView<Task> pageView = new PageView<Task>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
-		orderby.put("id", "asc");
+		orderby.put("finishTime", "asc");
 		StringBuffer jpql = new StringBuffer("o.visible=?1 and o.job.id=?2");
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);

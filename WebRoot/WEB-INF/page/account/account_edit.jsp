@@ -83,31 +83,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	<div class="content-s" >
                          <div>帐户修改</div>
                          <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
-                         <s:form action="account_edit" name="myform" namespace="/manage/account" method="post"  id="pageList"> 
+                         <s:form action="account_edit" id="myform" name="myform" namespace="/manage/account" method="post"  > 
 	    					<s:hidden name="accid" />
 	    					<div class="form-horizontal">
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">用户名</label>
 								    <div class="col-sm-9">
 								      <input type="text" class="form-control" value="${account.username}" disabled="disabled" name="account.username"  placeholder="用户名">
+								   	  <span></span>
 								    </div>
 								  </div>
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">密码</label>
 								    <div class="col-sm-9">
 								      <input type="text" class="form-control" value="${account.password}" name="account.password"  placeholder="密码">
+								   	  <span></span>
 								    </div>
 								  </div>
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">手机号</label>
 								    <div class="col-sm-9">
 								      <input type="text" class="form-control" value="${account.phone}"  name="account.phone"  placeholder="手机号">
+								   	  <span></span>
 								    </div>
 								  </div>
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">昵称</label>
 								    <div class="col-sm-9">
 								      <input type="text" class="form-control" value="${account.nickname}"   name="account.nickname" placeholder="昵称">
+								   	  <span></span>
 								    </div>
 								  </div>
 	    					 
@@ -143,7 +147,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/raphael-2.1.0.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap-wizard.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/select2.min.js"></script>
-
+		
+		<!-- 验证框架 -->
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/account.js"></script>
+		
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
 

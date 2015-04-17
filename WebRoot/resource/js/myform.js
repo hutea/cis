@@ -24,15 +24,3 @@ function confirmQuery() {
 	form.page.value = 1;
 	form.submit();
 }
-// poshytip提示框
-$(function() {
-	$(".titleStyle").poshytip( {
-		className : 'tip-skyblue',
-		alignTo : 'target',
-		alignX : 'right',
-		alignY : 'bottom',
-		offsetX : -80,
-		offsetY : 0,
-		showTimeout : 5
-	});
-});

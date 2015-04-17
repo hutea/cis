@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.hydom.account.ebean.Account;
 import com.hydom.account.service.AccountService;
+import com.hydom.credit.ebean.ScoreRecord;
+import com.hydom.credit.service.ScoreRecordService;
 import com.hydom.dao.DAOSupport;
 import com.hydom.task.ebean.Job;
 import com.hydom.task.ebean.Task;
 import com.hydom.task.ebean.TaskRecord;
 import com.hydom.util.HelperUtil;
+import com.sun.xml.internal.ws.encoding.soap.SOAP12Constants;
 
 @Service
 public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
@@ -27,6 +30,8 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 	private TaskService taskService;
 	@Resource
 	private JobService jobService;
+	@Resource
+	private ScoreRecordService scoreRecordService;
 
 	private Log log = LogFactory.getLog("testLog");
 
@@ -112,22 +117,30 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 			double currentPercent = (double) (samePerson / task.getMatchedNum());// 当前比例
 			if (currentPercent >= task.getAccuracy()) {// 达到正确比例
 				log.info("---->达到正确比例");
+				Date now = new Date();
 				task.setResult((String) countResult[0]);// 设置结果
 				task.setRation(currentPercent);// 设置：计算实际比例
-				task.setFinishTime(new Date());// 设置完成时间
+				task.setFinishTime(now);// 设置完成时间
 				Job job = task.getJob();
 				job.setTaskFinishCount(job.getTaskFinishCount() + 1);// 对任务区块完成数+1
+				if (job.getTaskFinishCount().intValue() == job.getTaskCount().intValue()) {
+					job.setFinishTime(now);
+				}
 				taskService.update(task);
 				jobService.update(job);
 				update_TaskRecordSign(task.getId(), (String) countResult[0]);
 				jobService.postJob(job.getId());// 反馈工单
 			} else if (task.getMatchedNum() >= task.getMatchNum()) {// 已分配人数达到分配上限
 				log.info("---->已分配人数达到分配上限");
+				Date now = new Date();
 				task.setResult((String) countResult[0]);// 设置结果：当前结果
 				task.setRation(currentPercent);// 设置：计算实际比例
-				task.setFinishTime(new Date());// 设置完成时间
+				task.setFinishTime(now);// 设置完成时间
 				Job job = task.getJob();
 				job.setTaskFinishCount(job.getTaskFinishCount() + 1);// 对任务区块完成数+1
+				if (job.getTaskFinishCount().intValue() == job.getTaskCount().intValue()) {
+					job.setFinishTime(now);
+				}
 				taskService.update(task);
 				jobService.update(job);
 				update_TaskRecordSign(task.getId(), null);
@@ -169,16 +182,41 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		return count.intValue();
 	}
 
+	/**
+	 * 更新用户taskrecord的识别结果状态，并处理积分
+	 * 
+	 * @param taskid
+	 * @param result
+	 */
+	@SuppressWarnings("unchecked")
 	private void update_TaskRecordSign(long taskid, String result) {
 		em.createQuery("update TaskRecord o SET o.sign=0 where o.task.id=?")
 				.setParameter(1, taskid).executeUpdate();
 		if (result != null && !"".equals(result)) {// 有正确的计算结果
-			System.out.println("设置每个用户结果标识:" + result);
 			em
 					.createQuery(
 							"update TaskRecord o SET o.sign=?1 where o.result=?2 and o.task.id=?3")
 					.setParameter(1, 1).setParameter(2, result).setParameter(3, taskid)
 					.executeUpdate();
+			/** 处理积分相关 **/
+			List<TaskRecord> taskRecords = em.createQuery(
+					"select o from TaskRecord o where o.task.id=?1 and o.sign=?2")
+					.setParameter(1, taskid).setParameter(2, 1).getResultList();
+			Date now = new Date();
+			for (TaskRecord tr : taskRecords) {
+				Account account = tr.getAccount();
+				ScoreRecord scoreRecord = new ScoreRecord();
+				scoreRecord.setAccount(account);
+				scoreRecord.setSign(true);
+				scoreRecord.setCreateTime(now);
+				scoreRecord.setDetail("完成任务获得积分");
+				scoreRecord.setTaskRecord(tr);
+				scoreRecord.setScore(tr.getTask().getScore());
+				account.setScore(account.getScore() + scoreRecord.getScore());
+				accountService.update(account);
+				scoreRecordService.save(scoreRecord);
+			}
+			/** 处理积分相关 **/
 		}
 	}
 
@@ -196,7 +234,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		Date now = new Date();
 		return em
 				.createQuery(
-						"select t from TaskRecord t where t.effectiveTime<=?1 and t.identState is not null")
+						"select t from TaskRecord t where t.effectiveTime<=?1 and t.identState is null")
 				.setParameter(1, now).getResultList();
 	}
 

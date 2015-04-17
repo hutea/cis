@@ -29,8 +29,9 @@ public class TaskServiceBean extends DAOSupport<Task> implements TaskService {
 			task.setCanNum(task.getCanNum() + 1);
 			taskRecordService.update(record);
 			this.update(task);
+			log.info("超时重置：TaskRecord Id=" + record.getId());
 		}
-		log.info("本次重置分配数完成，共计："+taskRecords.size());
+		log.info("本次重置分配数完成，共计：" + taskRecords.size());
 	}
 
 	@Override

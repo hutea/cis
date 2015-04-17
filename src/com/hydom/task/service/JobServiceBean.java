@@ -101,7 +101,7 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 		Gson gson = new Gson();
 		String jsonStr = gson.toJson(dataMap);
 		log.info("DataServer【工单反馈】：" + "提交jsonStr=" + jsonStr);
-		String path = "http://172.16.40.21:8080/tem-rest-support/rest/phoneTask/backTaskByQuestion"; // 地址
+		String path = "http://182.150.21.99:60000/tem-rest-support/rest/phoneTask/backTaskByQuestion"; // 地址
 		// http://172.16.40.21:8080/tem-rest-support/rest/phoneTask/backTaskByQuestion
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("jsonStr", jsonStr);

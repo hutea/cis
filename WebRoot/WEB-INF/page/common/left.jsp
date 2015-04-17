@@ -15,13 +15,13 @@
                     <ul class="nav nav-pills nav-stacked">
                         <li <c:if test="${param.m==0||m==0}">class="active"</c:if>><a href="<s:url action="index" namespace="/manage" />"><i class="fa fa-home"></i> <span>首页</span></a></li>
                        
-                        <li <c:if test="${param.m==1||m==1}">class="active parent"</c:if>  class="parent" ><a href=""><i class="fa fa-suitcase"></i> <span>工单管理</span></a>
+                        <li <c:if test="${param.m==1||m==1}">class="active parent"</c:if>  class="parent" ><a href=""><i class="fa fa-bars"></i> <span>工单管理</span></a>
                             <ul class="children">
   								<li><a href='<s:url action="job_list" namespace="/manage/task" />'>工单分配</a></li> 
                             </ul>
                         </li>
                         
-                        <li <c:if test="${param.m==2||m==2}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-edit"></i> <span>用户管理</span></a>
+                        <li <c:if test="${param.m==2||m==2}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-user"></i> <span>用户管理</span></a>
                             <ul class="children"> 
                                 <li>
                                 	<a href='<s:url action="user_list" namespace="/manage/account" />'>用户查看</a>
@@ -32,7 +32,7 @@
                             </ul>
                         </li>
                         
-                        <li <c:if test="${param.m==3||m==3}">class="active parent"</c:if> class="parent" ><a href=""><i class="fa fa-bars"></i> <span>奖品管理</span></a>
+                        <li <c:if test="${param.m==3||m==3}">class="active parent"</c:if> class="parent" ><a href=""><i class="fa fa-suitcase"></i> <span>奖品管理</span></a>
                             <ul class="children">
   								<li>
   									<a href='<s:url action="trophy_list" namespace="/manage/credit" />'>奖品列表</a>
@@ -46,7 +46,7 @@
                             </ul>
                         </li>
                         
-                        <li <c:if test="${param.m==4||m==4}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-file-text"></i> <span>系统管理</span></a>
+                        <li <c:if test="${param.m==4||m==4}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-edit"></i> <span>系统管理</span></a>
                             <ul class="children">
                                 <li><a href='<s:url action="account_list" namespace="/manage/account" />'>系统帐号</a></li>
                                 <li><a href='<s:url action="message_list" namespace="/manage/extra" />'>消息管理</a></li>
@@ -56,7 +56,7 @@
                             </ul>
                         </li>
                         
-                        <li <c:if test="${param.m==5||m==5}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-file-text"></i> <span>系统设置</span></a>
+                        <li <c:if test="${param.m==5||m==5}">class="active parent"</c:if> class="parent"><a href=""><i class="fa fa-cog"></i> <span>系统设置</span></a>
                             <ul class="children">
                                 <li>
                                 	<a href='<s:url action="config_show" namespace="/manage/extra" />?scid=match'>工单设置</a>

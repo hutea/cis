@@ -47,20 +47,21 @@ public class SystemConfigAction {
 	public String edit() {
 		SystemConfig entity = systemConfigService.find(scid);
 		entity.setValueContent(config.getValueContent());
-		if ("match".equals(scid)) {// 
-			if (config.getValueDouble() >= 1) {// 如果大于1除100：计算精准百分比
-				BigDecimal b1 = new BigDecimal(Double.toString(config.getValueDouble()));
-				BigDecimal b2 = new BigDecimal("100");
-				entity.setValueDouble(b1.divide(b2).doubleValue());
-			} else {
-				entity.setValueDouble(config.getValueDouble());
-			}
-		}
 		entity.setValueInt(config.getValueInt());
 		entity.setValueLong(config.getValueLong());
 		entity.setValueShort(config.getValueShort());
 		entity.setValueText(config.getValueText());
 		entity.setValueDouble(config.getValueDouble());
+		if ("match".equals(scid)) {// 
+			if (config.getValueDouble() >= 1) {// 如果大于1除100：计算精准百分比
+				BigDecimal b1 = new BigDecimal(Double.toString(config.getValueDouble()));
+				BigDecimal b2 = new BigDecimal("100");
+				System.out.println(b1.divide(b2).doubleValue()); 
+				entity.setValueDouble(b1.divide(b2).doubleValue());
+			} else {
+				entity.setValueDouble(config.getValueDouble());
+			}
+		}
 		systemConfigService.update(entity);
 		return "success";
 	}

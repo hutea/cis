@@ -26,9 +26,13 @@
 		<hr/>
 		<div>
 			计算出的正确结果：
+			
         </div>
 			\[\begin{matrix}
         	${task.result}
 			\end{matrix} \]
+			<div style="color: red;font-size: 12px;">
+				${task.ration<task.accuracy?"此结果为相同答案最多的结果，非达到正确比例的结果":""}
+			</div>
 	</body>
 </html>

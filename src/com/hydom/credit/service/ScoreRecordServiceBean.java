@@ -16,14 +16,7 @@ public class ScoreRecordServiceBean extends DAOSupport<ScoreRecord> implements
 	private AccountService accountService;
 
 	public void record(ScoreRecord scoreRecord) {
-		this.save(scoreRecord);
-		Account account = accountService.find(scoreRecord.getAccount().getId());
-		if (scoreRecord.getSign()) {
-			account.setScore(account.getScore() + scoreRecord.getScore());
-		} else {
-			account.setScore(account.getScore() - scoreRecord.getScore());
-		}
-		accountService.update(account);
+		
 
 	}
 }

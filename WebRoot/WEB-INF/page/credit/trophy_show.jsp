@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/page/common/taglib.jsp" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":"
@@ -54,15 +55,17 @@
             <div class="col-sm-4">
                 <input readonly type="text" class="form-control" name="trophy.stock" value="${trophy.stock}">
             </div>
-            <label class="col-sm-2 control-label">类别 </label>
+            <label class="col-sm-2 control-label">类别</label>
             <div class="col-sm-4">
                 <input readonly type="text" class="form-control" name="trophy.stock" value="${trophy.trophyType.name}">
             </div>
         </div>
-        <div class="form-group">
-	   		 <img class="col-sm-12 img-responsive img-thumbnail"   src="${pageContext.request.contextPath}/${trophy.image}"/>
-        </div>
-        <div class="form-group">
+        <c:if test="${trophy.image!=null}">
+	        <div class="form-group">
+		   		 <img class="col-sm-12 img-responsive img-thumbnail"   src="${pageContext.request.contextPath}/${trophy.image}"/>
+	        </div>
+        </c:if>
+        <div class="form-group" style="padding: 10px;">
   			  <p>${trophy.detail}</p>
         </div>
     </div>

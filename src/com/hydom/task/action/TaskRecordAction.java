@@ -36,7 +36,7 @@ public class TaskRecordAction {
 		request = ServletActionContext.getRequest();
 		PageView<TaskRecord> pageView = new PageView<TaskRecord>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
-		orderby.put("id", "asc");
+		orderby.put("sign", "desc");
 		StringBuffer jpql = new StringBuffer("o.visible=?1 and o.task.id=?2");
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);

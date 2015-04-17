@@ -85,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td>${entry.inLineNo}</td> 
                            		 <td>${entry.matchedNum}</td> 
                            		 <td>${entry.matchNum}</td> 
-                           		 <td>${entry.accuracy} ${entry.ration}</td> 
+                           		 <td>${entry.accuracy} ${entry.ration!=null?"/":""} ${entry.ration}</td> 
                            		 <td><fmt:formatDate value="${entry.matchFirstTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td><c:if test="${entry.finishTime==null}">未完成</c:if> <fmt:formatDate value="${entry.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td>${entry.recycleTime}</td> 

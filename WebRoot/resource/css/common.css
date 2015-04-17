@@ -141,3 +141,8 @@ table {
 	text-align: center;
 	padding: 2px 8px;
 }
+
+.errorStyle{
+	font-size: 13px;
+	color: red;
+}

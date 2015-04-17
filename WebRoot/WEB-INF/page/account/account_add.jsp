@@ -31,7 +31,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
-
+		<script type="text/javascript">
+		function checkUsername(){
+			var username = $("#username").val();
+				$.post("${pageContext.request.contextPath}/manage/account/checkUsername.action", {
+					username : username
+				}, function(data) {
+					if(data==0 && username != "" && username != null){//表示 帐户存在
+						$("#username_error").html("用户名已经存在");
+						$("#repeat").val("");
+					}else{
+						$("#username_error").html("");
+						$("#repeat").val("success");
+					}
+				});
+			}
+		</script>
     <body>
         <header>    
         <%@ include file="/WEB-INF/page/common/head.jsp" %>
@@ -61,30 +76,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	<div class="content-s" >
                          <div>帐户添加</div>
                          <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
-                         <s:form action="account_add" name="myform" namespace="/manage/account" method="post"  id="pageList"> 
+                         <s:form action="account_add" id="myform" name="myform" namespace="/manage/account" method="post"  > 
 	    					<div class="form-horizontal">
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">用户名</label>
 								    <div class="col-sm-9">
-								      <input type="text" class="form-control" name="account.username" placeholder="用户名">
+								      <input type="text" class="form-control" name="account.username"  onkeyup="checkUsername()" placeholder="用户名" id="username">
+								      <span class="errorStyle" id="username_error"></span>
+ 									  <s:hidden name="repeat" id="repeat" value=""/>
 								    </div>
 								  </div>
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">密码</label>
 								    <div class="col-sm-9">
 								      <input type="text" class="form-control" name="account.password"  placeholder="密码">
+								      <span></span>
 								    </div>
 								  </div>
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">手机号</label>
 								    <div class="col-sm-9">
 								      <input type="text" class="form-control"  name="account.phone"  placeholder="手机号">
+								      <span></span>
 								    </div>
 								  </div>
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">昵称</label>
 								    <div class="col-sm-9">
 								      <input type="text" class="form-control" name="account.nickname" placeholder="昵称">
+								      <span></span>
 								    </div>
 								  </div>
 	    					 
@@ -120,7 +140,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/raphael-2.1.0.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap-wizard.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/select2.min.js"></script>
-
+		
+		<!-- 验证框架 -->
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/account.js"></script>
+		
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
 

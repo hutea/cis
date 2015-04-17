@@ -33,6 +33,9 @@
         	\[\begin{matrix}
 			${taskRecord.task.result}
 			\end{matrix} \]
+			<div style="color: red;font-size: 12px;">
+				${taskRecord.task.ration<taskRecord.task.accuracy?"此结果为相同答案最多的结果，非达到正确比例的结果":""}
+			</div>
 		<hr/>
 		<div>
 			用户识别结果：
