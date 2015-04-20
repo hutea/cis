@@ -31,7 +31,7 @@
 		<c:if test="${pageView.pageIndex.endindex<pageView.totalPage-2}" ><span><a>...</a></span></c:if>
 		
 		<c:if  test="${pageView.totalPage>=4}">
-		<span <c:if test="${page==pageView.totalPage-1}">class="crupage"</c:if>>
+		<span <c:if test="${page==pageView.totalPage-1}">class="curpage"</c:if>>
 			<a href='javascript:topage(${pageView.totalPage-1})' >${pageView.totalPage-1}</a>
 		</span>
 		</c:if>

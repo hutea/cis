@@ -107,7 +107,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								      <span></span>
 								    </div>
 								  </div>
-	    					 
+		    					 <div class="form-group">
+								    <div class="col-sm-12">
+								      <c:forEach items="${groups}" var="group" varStatus="s">
+								      	<input type="checkbox" name="gids" value="${group.id}" />${group.name}
+								      </c:forEach>
+								    </div>
+								  </div>
+	    					 	
 	    					 	<div style="line-height: 50px;text-align: center;">
 	    					 		<span><input type="reset" value="重置" class="btn btn-primary"/></span>
 	    					 		<span><input type="submit" value="提交" class="btn btn-primary"/></span>

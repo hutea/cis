@@ -1,5 +1,6 @@
 package com.hydom.task.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.hydom.dao.DAO;
@@ -78,4 +79,71 @@ public interface TaskRecordService extends DAO<TaskRecord> {
 	 * @return
 	 */
 	public long countThisMonth(long accid);
+
+	/**
+	 * 
+	 * 计算用户今天识别数
+	 * <ul>
+	 * <li>sign= 1 统计用户识别正确的数目</li>
+	 * <li>sign= 0 统计用户识别错误的数目</li>
+	 * <li>sign=-1 统计用户识别总数</li>
+	 * </ul>
+	 * 
+	 * @param uid
+	 *            用户ID
+	 * @param sign
+	 * @return
+	 */
+	public long calcToday(long uid, int sign);
+
+	/**
+	 * 
+	 * 计算用户本月识别数
+	 * <ul>
+	 * <li>sign= 1 统计用户识别正确的数目</li>
+	 * <li>sign= 0 统计用户识别错误的数目</li>
+	 * <li>sign=-1 统计用户识别总数</li>
+	 * </ul>
+	 * 
+	 * @param uid
+	 *            用户ID
+	 * @param sign
+	 * @return
+	 */
+	public long calcMonth(long uid, int sign);
+
+	/**
+	 * 计算用户今日识别成功超过其他用户的百分比
+	 * 
+	 * @param uid
+	 * @return
+	 */
+	public long calcTodayExceedPercent(long uid);
+
+	/**
+	 * 计算用户今日积分超过其他用户的百分比
+	 * 
+	 * @param uid
+	 * @return
+	 */
+	public long calcTodayScoreExceedPercent(long uid);
+
+	/**
+	 * 计算用户本月识别成功率
+	 * 
+	 * @param uid
+	 * @return
+	 */
+	public long calcMonthPercent(long uid);
+
+	/**
+	 * 计算指定日期内用户获得的积分
+	 * 
+	 * @param uid
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public double calcScore(long uid, Date startDate, Date endDate);
+
 }

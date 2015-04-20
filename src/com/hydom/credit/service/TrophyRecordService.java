@@ -30,7 +30,7 @@ public interface TrophyRecordService extends DAO<TrophyRecord> {
 	 * @param uid
 	 * @return
 	 */
-	public int countMonth(long uid);
+	public long countMonth(long uid);
 
 	/**
 	 * 统计指定用户兑换总次数
@@ -38,6 +38,6 @@ public interface TrophyRecordService extends DAO<TrophyRecord> {
 	 * @param uid
 	 * @return
 	 */
-	public int countAll(long uid);
+	public long countAll(long uid);
 
 }

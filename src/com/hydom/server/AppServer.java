@@ -140,8 +140,7 @@ public class AppServer {
 			accountService.update(account);
 			dataMap.put("result", 1);
 			dataMap.put("username", account.getUsername());
-			dataMap.put("nickname", account.getNickname() == null ? "" : account
-					.getNickname());
+			dataMap.put("nickname", account.getNickname() == null ? "" : account.getNickname());
 			dataMap.put("uid", account.getId());
 		} else {
 			dataMap.put("result", 4);// 用户名或密码错误
@@ -182,8 +181,7 @@ public class AppServer {
 		if (taskRecord != null) {
 			dataMap.put("tid", taskRecord.getId());
 			// 处理MetricPoint对象
-			String[] data = taskRecord.getTask().getMetricPoint().replaceAll("},", "}#")
-					.split("#");
+			String[] data = taskRecord.getTask().getMetricPoint().replaceAll("},", "}#").split("#");
 			List<Map<String, Integer>> lineList = new ArrayList<Map<String, Integer>>();
 			for (String str : data) {
 				Map<String, Integer> xy = SvgImage.xy(str);
@@ -272,23 +270,20 @@ public class AppServer {
 		PageView<TaskRecord> pageView = new PageView<TaskRecord>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
 		orderby.put("id", "desc");
-		StringBuffer jpql = new StringBuffer(
-				"o.visible=?1 and o.account.id=?2 and o.sign=?3");
+		StringBuffer jpql = new StringBuffer("o.visible=?1 and o.account.id=?2 and o.sign=?3");
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);
 		params.add(uid);
 		params.add(sign);
-		pageView.setQueryResult(taskRecordService.getScrollData(
-				pageView.getFirstResult(), maxresult, jpql.toString(), params.toArray(),
-				orderby));
+		pageView.setQueryResult(taskRecordService.getScrollData(pageView.getFirstResult(),
+				maxresult, jpql.toString(), params.toArray(), orderby));
 		List<TaskRecord> records = pageView.getRecords();
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		for (TaskRecord tr : records) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>();
 			/** 处理MetricPoint对象START **/
-			String[] data = tr.getTask().getMetricPoint().replaceAll("},", "}#").split(
-					"#");
+			String[] data = tr.getTask().getMetricPoint().replaceAll("},", "}#").split("#");
 			List<Map<String, Integer>> lineList = new ArrayList<Map<String, Integer>>();
 			for (String str : data) {
 				Map<String, Integer> xy = SvgImage.xy(str);
@@ -335,9 +330,8 @@ public class AppServer {
 			StringBuffer jpql = new StringBuffer("o.visible=?1");
 			List<Object> params = new ArrayList<Object>();
 			params.add(true);
-			pageView.setQueryResult(trophyService.getScrollData(
-					pageView.getFirstResult(), maxresult, jpql.toString(), params
-							.toArray(), orderby));
+			pageView.setQueryResult(trophyService.getScrollData(pageView.getFirstResult(),
+					maxresult, jpql.toString(), params.toArray(), orderby));
 			for (Trophy tr : pageView.getRecords()) {
 				Map<String, Object> map = new LinkedHashMap<String, Object>();
 				map.put("tid", tr.getId());
@@ -393,7 +387,7 @@ public class AppServer {
 		scoreRecord.setAccount(account);
 		scoreRecord.setSign(false);
 		scoreRecord.setCreateTime(new Date());
-		scoreRecord.setDetail("完成任务获得积分");
+		scoreRecord.setDetail("兑换奖品");
 		scoreRecord.setTrophyRecord(record);
 		scoreRecord.setScore(theScore);
 		account.setScore(account.getScore() - scoreRecord.getScore());
@@ -413,6 +407,7 @@ public class AppServer {
 	 */
 	public String listHistory() {
 		log.info("App【获取历史兑换列表】：" + "用户ID=" + uid);
+		Account account = accountService.find(uid);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -424,21 +419,18 @@ public class AppServer {
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);
 		params.add(uid);
-		pageView
-				.setQueryResult(trophyRecordService.getScrollData(pageView
-						.getFirstResult(), maxresult, jpql.toString(), params.toArray(),
-						orderby));
-
+		pageView.setQueryResult(trophyRecordService.getScrollData(pageView.getFirstResult(),
+				maxresult, jpql.toString(), params.toArray(), orderby));
 		List<TrophyRecord> records = pageView.getRecords();
 		for (TrophyRecord tr : records) {
 			Map<String, Object> map = new LinkedHashMap<String, Object>();
 			map.put("tid", tr.getTrophy().getId());
 			map.put("name", tr.getTrophy().getName());
+			map.put("image", tr.getTrophy().getImage());
 			map.put("type", tr.getTrophy().getTrophyType().getName());
 			map.put("detail", tr.getTrophy().getDetail());
+			map.put("rid", tr.getId());
 			map.put("score", tr.getScore());
-			map.put("image", tr.getTrophy().getImage());
-			map.put("image", tr.getTrophy().getImage());
 			map.put("post_time", sdf.format(tr.getPostTime()));
 			list.add(map);
 		}
@@ -447,7 +439,17 @@ public class AppServer {
 			dataMap.put("pages", pageView.getTotalPage());
 		} else {
 			dataMap.put("result", 1);
-			dataMap.put("pages", 0);// 列表为空
+			dataMap.put("pages", 0);// 设置总页数为0
+		}
+		if (account != null) {
+			dataMap.put("result", 9);// 用户ID不存在
+			dataMap.put("score", account.getScore());// 用户总积分
+			dataMap.put("month", trophyRecordService.countMonth(uid));
+			dataMap.put("total", trophyRecordService.countAll(uid));
+		} else {
+			dataMap.put("score", 0);
+			dataMap.put("month", 0);
+			dataMap.put("total", 0);
 		}
 		dataMap.put("list", list);
 		dataFillStream(dataMap);
@@ -487,13 +489,65 @@ public class AppServer {
 	}
 
 	/**
+	 * 统计相关积分信息：
+	 * 
+	 * @return
+	 */
+	public String countScore() {
+		log.info("App【统计用户积分信息】：" + "用户ID=" + uid);
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
+		try {
+			Account account = accountService.find(uid);
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String todayStr = sdf.format(now);
+			Date todayStartDate = sdf.parse(todayStr);
+			Date todayEndDate = HelperUtil.addDays(todayStartDate, 1);
+			if (account != null) {
+				dataMap.put("result", 1);
+				dataMap.put("score", account.getScore());
+				dataMap.put("tnum", taskRecordService.calcToday(uid, 1));
+				dataMap.put("tnumper", taskRecordService.calcTodayExceedPercent(uid));
+				dataMap.put("tscore", taskRecordService
+						.calcScore(uid, todayStartDate, todayEndDate));
+				dataMap.put("tscoreper", taskRecordService.calcTodayExceedPercent(uid));
+				dataMap.put("mscore", taskRecordService.calcScore(uid, HelperUtil
+						.firstDayThisMonth(), HelperUtil.lastDayThisMonth()));
+				dataMap.put("mper", taskRecordService.calcMonthPercent(uid));
+				dataFillStream(dataMap);
+			} else {
+				dataMap.put("result", 9);// 用户ID不存在
+				dataMap.put("score", 0);
+				dataMap.put("tnum", 0);
+				dataMap.put("tnumper", 0);
+				dataMap.put("tscore", 0);
+				dataMap.put("tscoreper", 0);
+				dataMap.put("mscore", 0);
+				dataMap.put("mper", 0);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			dataMap.put("result", 0);
+			dataMap.put("score", 0);
+			dataMap.put("tnum", 0);
+			dataMap.put("tnumper", 0);
+			dataMap.put("tscore", 0);
+			dataMap.put("tscoreper", 0);
+			dataMap.put("mscore", 0);
+			dataMap.put("mper", 0);
+		}
+		dataFillStream(dataMap);
+		return "success";
+	}
+
+	/**
 	 * 更新个人资料
 	 * 
 	 * @return
 	 */
 	public String updateProfile() {
-		log.info("App【更新个人资料】：" + "用户ID=" + uid + " 用户昵称=" + nickname + " 银行名称="
-				+ backname + " 银行帐号=" + backaccount + " 支付宝帐号=" + pay);
+		log.info("App【更新个人资料】：" + "用户ID=" + uid + " 用户昵称=" + nickname + " 银行名称=" + backname
+				+ " 银行帐号=" + backaccount + " 支付宝帐号=" + pay);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.find(uid);
 		if (nickname != null && !"".equals(nickname)) {
@@ -560,8 +614,8 @@ public class AppServer {
 	 * @return
 	 */
 	public String updatePassword() {
-		log.info("App【更改密码】：" + "用户ID=" + uid + "用户名=" + username + " 原密码=" + oripwd
-				+ " 新密码=" + newpwd);
+		log.info("App【更改密码】：" + "用户ID=" + uid + "用户名=" + username + " 原密码=" + oripwd + " 新密码="
+				+ newpwd);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Account account = accountService.find(uid);
 		if (account != null) {
@@ -585,8 +639,7 @@ public class AppServer {
 	 * @return
 	 */
 	public String listMessage() {
-		log.info("App【获取消息列表】：" + "用户ID=" + uid + "page=" + page + "maxresult="
-				+ maxresult);
+		log.info("App【获取消息列表】：" + "用户ID=" + uid + "page=" + page + "maxresult=" + maxresult);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -611,8 +664,8 @@ public class AppServer {
 		}
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);
-		pageView.setQueryResult(messageService.getScrollData(pageView.getFirstResult(),
-				maxresult, jpql.toString(), params.toArray(), orderby));
+		pageView.setQueryResult(messageService.getScrollData(pageView.getFirstResult(), maxresult,
+				jpql.toString(), params.toArray(), orderby));
 
 		List<Message> messages = pageView.getRecords();
 		for (Message message : messages) {
@@ -656,8 +709,7 @@ public class AppServer {
 				Long msgid = Long.parseLong(mid);
 				Message message = messageService.find(msgid);
 				if (message != null) {
-					MessageDeleteRecord existMDR = messageDeleteRecordService.find(accid,
-							msgid);
+					MessageDeleteRecord existMDR = messageDeleteRecordService.find(accid, msgid);
 					if (existMDR == null) {
 						MessageDeleteRecord mdr = new MessageDeleteRecord();
 						mdr.setAccid(accid);

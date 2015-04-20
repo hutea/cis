@@ -43,14 +43,13 @@
                         <img src="${pageContext.request.contextPath}/resource/chain/images/logo-primary.png" alt="Chain Logo" >
                     </div>
                     <br />
-                    <h4 class="text-center mb5">Already a Member?</h4>
-                    <p class="text-center">Sign in to your account</p>
-                    <p class="text-center" style="color: red;">${error}</p>
+                    <h4 class="text-center mb5">准星云</h4>
+                    <p class="text-center">系统帐户登录</p>
                     
                     <div class="mb30"></div>
-                    
+
                     <form action="signin.action" method="post" id="myform">
-                        <div></div>
+                        <div><p id="ser" class="text-center" style="color: red;">${error}</p></div>
                         <div class="input-group mb15">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                             <input type="text" class="form-control" placeholder="Username" name="username" value="${uname }">
@@ -124,6 +123,8 @@
 					$(element).addClass(errorClass);
 				}
 			});
+			//
+			$("input").click(function(){$("#ser").hide()})
 		});
 		</script>
     </body>

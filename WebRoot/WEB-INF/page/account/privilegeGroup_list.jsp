@@ -115,11 +115,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     		</div>
                     		
                     		<div class="col-sm-6 col-md-6" style="border: 1px solid #d3d3d3;padding-top: 8px;">
-                    			<form  action ="${pageContext.request.contextPath}/manage/account/group_add.action"  method="post" >
+                    			<form  id="myform" action ="${pageContext.request.contextPath}/manage/account/group_add.action"  method="post" >
                     				<div class="form-group">
                     					<label class="col-sm-2 control-label">角色名称</label>
                     					<div class="col-sm-6">
                     						<input type="text" class="form-control" name="group.name" />
+                    						 <span></span>
                     					</div>
                     				</div>
                     				<div class="form-group">
@@ -195,7 +196,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/raphael-2.1.0.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap-wizard.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/select2.min.js"></script>
-
+		
+		<!-- 验证框架 -->
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/privilegeGroup.js"></script>
+		
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
     </body>

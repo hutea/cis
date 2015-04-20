@@ -121,6 +121,5 @@ public class HelperUtil {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(isPhoneNumber("1875689895"));
 	}
 }

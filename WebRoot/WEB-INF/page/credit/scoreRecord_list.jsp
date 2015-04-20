@@ -85,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                               <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
                               <tr id="tr_${entry.id}">
                                     <td>${s.index+1}</td>
-                                    <td>${entry.account.username}</td>
+                                    <td>${entry.account.id}</td>
                                     <td>${entry.sign?"+":"-"}${entry.score}</td>
                                     <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                                     <td>${entry.taskRecord!=null?"完成任务":"兑换"}</td>

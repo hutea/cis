@@ -19,10 +19,10 @@ public class Test {
 	// style="stroke:rgb(99,99,99);stroke-width:2" />
 
 	public static void main(String[] args) {
-		long s = 1;
-		long e = 3;
-		double r =(double) s / e;
-		System.out.println(r);
+		int samePerson  = 3;
+		
+		double currentPercent = 58/5;
+		System.out.println(58.0/100);
 	}
 
 	public static String getdata() {

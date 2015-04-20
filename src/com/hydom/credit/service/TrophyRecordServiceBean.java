@@ -29,17 +29,17 @@ public class TrophyRecordServiceBean extends DAOSupport<TrophyRecord> implements
 	}
 
 	@Override
-	public int countAll(long uid) {
+	public long countAll(long uid) {
 		return (Integer) em.createQuery(
 				"select count(t.id) from TrophyRecord t where t.account.id=?1")
 				.setParameter(1, uid).getSingleResult();
 	}
 
 	@Override
-	public int countMonth(long uid) {
+	public long countMonth(long uid) {
 		Date firtDayThisMonth = HelperUtil.firstDayThisMonth();
 		Date lastDayThisMonth = HelperUtil.lastDayThisMonth();
-		return (Integer) em
+		return (Long) em
 				.createQuery(
 						"select count(t.id) from TrophyRecord t where t.account.id=?1 and t.postTime>=?2 and t.postTime<?3")
 				.setParameter(1, uid).setParameter(2, firtDayThisMonth).setParameter(3,

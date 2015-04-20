@@ -1,6 +1,9 @@
 package com.hydom.task.service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -19,11 +22,9 @@ import com.hydom.task.ebean.Job;
 import com.hydom.task.ebean.Task;
 import com.hydom.task.ebean.TaskRecord;
 import com.hydom.util.HelperUtil;
-import com.sun.xml.internal.ws.encoding.soap.SOAP12Constants;
 
 @Service
-public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
-		TaskRecordService {
+public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements TaskRecordService {
 	@Resource
 	private AccountService accountService;
 	@Resource
@@ -49,7 +50,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 					.setParameter(1, accountId).setParameter(2, now).setMaxResults(1)
 					.getSingleResult();
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 
 		/** 【step2】正常的分配流程 **/
@@ -64,8 +65,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 			taskRecord.setAccount(account);
 			taskRecord.setTask(task);
 			taskRecord.setMatchTime(currentTime);
-			taskRecord.setEffectiveTime(HelperUtil.addms(currentTime, task
-					.getRecycleTime()));// 设置有效时间
+			taskRecord.setEffectiveTime(HelperUtil.addms(currentTime, task.getRecycleTime()));// 设置有效时间
 			this.save(taskRecord);
 			account.setState(1);// 设置用户状态为1，表示在识别中
 			accountService.update(account);
@@ -98,8 +98,8 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		Task task = entity.getTask();
 		entity.setResult(result_str);
 		entity.setPostTime(postTime);
-		boolean overtime = entity.getPostTime().getTime()
-				- entity.getMatchTime().getTime() > entity.getTask().getRecycleTime();
+		boolean overtime = entity.getPostTime().getTime() - entity.getMatchTime().getTime() > entity
+				.getTask().getRecycleTime();
 		if (overtime) {// 超时
 			entity.setIdentState(0);// 设置状态为：超时
 			result = 8;
@@ -113,8 +113,8 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		int postCount = this.countPostNum(task.getId());// 查出本区块所有提交数
 		if (postCount >= task.getPostNum()) {// 实际提交数达到指定的提交数
 			Object[] countResult = this.countResult(task.getId());
-			int samePerson = ((Long) countResult[1]).intValue();// 计算出相同答案的人数
-			double currentPercent = (double) (samePerson / task.getMatchedNum());// 当前比例
+			double samePerson = ((Long) countResult[1]).doubleValue();// 计算出相同答案的人数:转成double型，防止(3/5=0)情况
+			double currentPercent = (samePerson / task.getMatchedNum());// 当前比例
 			if (currentPercent >= task.getAccuracy()) {// 达到正确比例
 				log.info("---->达到正确比例");
 				Date now = new Date();
@@ -146,9 +146,8 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 				update_TaskRecordSign(task.getId(), null);
 				jobService.postJob(job.getId());// 反馈工单
 			} else {/* 未达到指定比例并且已分配人数未达到分配上限：计算可再次进行分配的人数 */
-				long moreNum = Math
-						.round((task.getAccuracy() * task.getMatchedNum() + samePerson)
-								/ (task.getAccuracy() + 1));
+				long moreNum = Math.round((task.getAccuracy() * task.getMatchedNum() + samePerson)
+						/ (task.getAccuracy() + 1));
 				int canNum = (int) moreNum;
 				if ((moreNum + task.getMatchedNum()) > task.getMatchNum()) {// （再次分配人数+已分配人数）>分配上限
 					canNum = task.getMatchNum() - task.getMatchedNum();
@@ -190,18 +189,19 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 	 */
 	@SuppressWarnings("unchecked")
 	private void update_TaskRecordSign(long taskid, String result) {
+		Task task = taskService.find(taskid);
 		em.createQuery("update TaskRecord o SET o.sign=0 where o.task.id=?")
 				.setParameter(1, taskid).executeUpdate();
 		if (result != null && !"".equals(result)) {// 有正确的计算结果
 			em
 					.createQuery(
-							"update TaskRecord o SET o.sign=?1 where o.result=?2 and o.task.id=?3")
-					.setParameter(1, 1).setParameter(2, result).setParameter(3, taskid)
-					.executeUpdate();
+							"update TaskRecord o SET o.sign=?1 , o.score=?2 where o.result=?3  and o.task.id=?4")
+					.setParameter(1, 1).setParameter(2, task.getScore()).setParameter(3, result)
+					.setParameter(4, taskid).executeUpdate();
 			/** 处理积分相关 **/
 			List<TaskRecord> taskRecords = em.createQuery(
-					"select o from TaskRecord o where o.task.id=?1 and o.sign=?2")
-					.setParameter(1, taskid).setParameter(2, 1).getResultList();
+					"select o from TaskRecord o where o.task.id=?1 and o.sign=?2").setParameter(1,
+					taskid).setParameter(2, 1).getResultList();
 			Date now = new Date();
 			for (TaskRecord tr : taskRecords) {
 				Account account = tr.getAccount();
@@ -223,8 +223,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<TaskRecord> listTaskRecord(long accountId, int sign) {
-		return em.createQuery(
-				"select t from TaskRecord t where t.account.id=?1 and t.sign=?2")
+		return em.createQuery("select t from TaskRecord t where t.account.id=?1 and t.sign=?2")
 				.setParameter(1, accountId).setParameter(2, sign).getResultList();
 	}
 
@@ -232,9 +231,8 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 	@Override
 	public List<TaskRecord> listOverTimeRecord() {
 		Date now = new Date();
-		return em
-				.createQuery(
-						"select t from TaskRecord t where t.effectiveTime<=?1 and t.identState is null")
+		return em.createQuery(
+				"select t from TaskRecord t where t.effectiveTime<=?1 and t.identState is null")
 				.setParameter(1, now).getResultList();
 	}
 
@@ -249,51 +247,45 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		Object obj = em
 				.createQuery(
 						"select t.result,count(t.id) from TaskRecord t where t.task.id=?1 and t.identState=?2 group by result having(count(t.id)>=1) order by count(t.id) desc")
-				.setParameter(1, tid).setParameter(2, 1).setMaxResults(1)
-				.getSingleResult();
+				.setParameter(1, tid).setParameter(2, 1).setMaxResults(1).getSingleResult();
 		return (Object[]) obj;
 	}
 
 	@Override
 	public long count(long accid) {
-		return (Long) em
-				.createQuery(
-						"select count(t.id) from TaskRecord t where t.account.id=?1 and t.identState=?2")
+		return (Long) em.createQuery(
+				"select count(t.id) from TaskRecord t where t.account.id=?1 and t.identState=?2")
 				.setParameter(1, accid).setParameter(2, 1).getSingleResult();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public double countProcessTime(long accid) {
-		List<Double> seconds = em
-				.createQuery(
-						"select t.postTime-t.matchTime from TaskRecord t where t.account.id=?1 and t.identState=?2")
-				.setParameter(1, accid).setParameter(2, 1).getResultList();
-		double allTime = 0;
-		for (Double s : seconds) {
-			if (s != null) {
-				allTime = allTime + s;
+		try {
+			double allTime = (Double) em
+					.createQuery(
+							"select sum(t.postTime-t.matchTime) from TaskRecord t where t.account.id=?1 and t.identState=?2")
+					.setParameter(1, accid).setParameter(2, 1).getSingleResult();
+			long count = count(accid);
+			if (count != 0) {
+				return Math.round(allTime / count);
+			} else {
+				return 0;
 			}
-		}
-		long count = count(accid);
-		if (count != 0) {
-			return Math.round(allTime / count);
-		} else {
+		} catch (Exception e) {
 			return 0;
 		}
 	}
 
 	@Override
 	public double countRightPercent(long accid) {
-		long countRight = (Long) em
-				.createQuery(
-						"select count(t.id) from TaskRecord t where t.account.id=?1 and t.identState=?2 and t.sign=?3")
-				.setParameter(1, accid).setParameter(2, 1).setParameter(3, 1)
-				.getSingleResult();
 		long count = count(accid);
 		if (count != 0) {
-			DecimalFormat df = new DecimalFormat(".0000");
-			String result = df.format((double) countRight / count);
+			long countRight = (Long) em
+					.createQuery(
+							"select count(t.id) from TaskRecord t where t.account.id=?1 and t.identState=?2 and t.sign=?3")
+					.setParameter(1, accid).setParameter(2, 1).setParameter(3, 1).getSingleResult();
+			DecimalFormat df = new DecimalFormat(".00");
+			String result = df.format((double) countRight * 100 / count);
 			return Double.parseDouble(result);
 		} else {
 			return 0;
@@ -308,7 +300,152 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements
 		return (Long) em
 				.createQuery(
 						"select count(t.id) from TaskRecord t where t.account.id=?1 and t.identState=?2 and t.postTime>?3 and t.postTime<?4")
-				.setParameter(1, accid).setParameter(2, 1).setParameter(3, startDate)
-				.setParameter(4, endDate).getSingleResult();
+				.setParameter(1, accid).setParameter(2, 1).setParameter(3, startDate).setParameter(
+						4, endDate).getSingleResult();
 	}
+
+	@Override
+	public long calcMonth(long uid, int sign) {
+		Date startDate = HelperUtil.firstDayThisMonth();
+		Date endDate = HelperUtil.lastDayThisMonth();
+		return calc(uid, sign, startDate, endDate);
+	}
+
+	@Override
+	public long calcMonthPercent(long uid) {
+		Date startDate = HelperUtil.firstDayThisMonth();
+		Date endDate = HelperUtil.lastDayThisMonth();
+		long rightNum = calc(uid, 1, startDate, endDate);
+		long allNum = calc(uid, -1, startDate, endDate);
+		return Math.round(((double) rightNum / allNum) * 100);
+	}
+
+	@Override
+	public long calcToday(long uid, int sign) {
+		try {
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String todayStr = sdf.format(now);
+			Date startDate = sdf.parse(todayStr);
+			Date endDate = HelperUtil.addDays(startDate, 1);
+			return calc(uid, sign, startDate, endDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public long calcTodayExceedPercent(long uid) {
+		try {
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String todayStr = sdf.format(now);
+			Date startDate = sdf.parse(todayStr);
+			Date endDate = HelperUtil.addDays(startDate, 1);
+			// 计算用户总数
+			long userNum = (Long) em.createQuery(
+					"select count(o.id) from Account o where o.type=?1 and o.visible=?2")
+					.setParameter(1, 1).setParameter(2, true).getSingleResult();
+			// 计算当前用户今日识别成功数<>
+			long identNum = this.calc(uid, 1, startDate, endDate);
+			// 计算小于当前用户今日识别成功数 的用户数
+
+			/**
+			 * 查询SQL原型： select count(uid) from (select count(id) as num, t.account_id as uid from t_taskrecord as t where t.sign=1
+			 * GROUP BY t.account_id ) as ct where (ct.num>1)
+			 */
+			BigInteger numLessIdent = (BigInteger) em
+					.createNativeQuery(
+							"select count(uid) from "
+									+ "(select count(id) as num, t.account_id as uid from t_TaskRecord as t where t.sign=?1 and t.identState=?2 and t.postTime>?3 and t.postTime<?4  GROUP BY t.account_id ) as ct "
+									+ "where (ct.num<?5)").setParameter(1, 1).setParameter(2, 1)
+					.setParameter(3, startDate).setParameter(4, endDate).setParameter(5, identNum)
+					.getSingleResult();
+			return Math.round((numLessIdent.doubleValue() / userNum) * 100);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public long calcTodayScoreExceedPercent(long uid) {
+		try {
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String todayStr = sdf.format(now);
+			Date startDate = sdf.parse(todayStr);
+			Date endDate = HelperUtil.addDays(startDate, 1);
+			// 计算用户总数
+			long userNum = (Long) em.createQuery(
+					"select count(o.id) from Account o where o.type=?1 and o.visible=?2")
+					.setParameter(1, 1).setParameter(2, true).getSingleResult();
+			// 计算当前用户今日识别所得积分<>
+			double identScore = calcScore(uid, startDate, endDate);
+
+			// 计算小于当前用户今日识别得分 的用户数
+			/**
+			 * 查询SQL原型： select count(uid) from (select SUM(score) as score, t.account_id as uid from t_taskrecord as t where
+			 * t.sign=1 GROUP BY t.account_id ) as ct where (ct.score>1)
+			 */
+			BigInteger scoreLessIdent = (BigInteger) em
+					.createNativeQuery(
+							"select count(uid) from "
+									+ "(select sum(score) as score, t.account_id as uid from TaskRecord as t where t.sign=?1 and t.identState=?2 and t.postTime>?3 and t.postTime<?4  GROUP BY t.account_id ) as ct "
+									+ "where (ct.score<?5)").setParameter(1, 1).setParameter(2, 1)
+					.setParameter(3, startDate).setParameter(4, endDate)
+					.setParameter(5, identScore).getSingleResult();
+			return Math.round((scoreLessIdent.doubleValue() / userNum) * 100);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	/**
+	 * 统计指定日期范围用户识别数：超时识别不纳入统计范围
+	 * <ul>
+	 * <li>sign= 1 统计用户识别正确的数目</li>
+	 * <li>sign= 0 统计用户识别错误的数目</li>
+	 * <li>sign=-1 统计用户识别总数</li>
+	 * </ul>
+	 * 
+	 * @param uid
+	 * @param sign
+	 * @param staDate
+	 *            统计的开始日期
+	 * @param endDate
+	 *            统计的结束日期
+	 * @return
+	 */
+	private long calc(long uid, int sign, Date startDate, Date endDate) {
+		if (sign > -1) {
+			return (Long) em
+					.createQuery(
+							"select count(t.id) from TaskRecord t where t.account.id=?1 and t.identState=?2 and t.postTime>?3 and t.postTime<?4 and t.sign=?5")
+					.setParameter(1, uid).setParameter(2, 1).setParameter(3, startDate)
+					.setParameter(4, endDate).setParameter(5, sign).getSingleResult();
+		} else {
+			return (Long) em
+					.createQuery(
+							"select count(t.id) from TaskRecord t where t.account.id=?1 and t.identState=?2 and t.postTime>?3 and t.postTime<?4")
+					.setParameter(1, uid).setParameter(2, 1).setParameter(3, startDate)
+					.setParameter(4, endDate).getSingleResult();
+		}
+	}
+
+	@Override
+	public double calcScore(long uid, Date startDate, Date endDate) {
+		try {
+			return (Double) em
+					.createQuery(
+							"select sum(t.score) from TaskRecord t where t.sign=?1 and t.identState=?2 and t.postTime>?3 and t.postTime<?4 and t.account.id=?5")
+					.setParameter(1, 1).setParameter(2, 1).setParameter(3, startDate).setParameter(
+							4, endDate).setParameter(5, uid).getSingleResult();
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
 }

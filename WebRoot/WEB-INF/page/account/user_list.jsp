@@ -93,7 +93,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td>${entry.score}</td> 
                            		 <td>${entry.count_month}</td> 
                            		 <td>${entry.count_all}</td> 
-                           		 <td>${entry.count_rightPercent*100}%</td> 
+                           		 <td>${entry.count_rightPercent}%</td> 
                            		 <td>${entry.count_processTime}</td> 
                            		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td><fmt:formatDate value="${entry.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 

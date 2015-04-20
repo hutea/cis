@@ -7,13 +7,13 @@ $(function() {
 			form.submit();
 		},
 		rules : {
-			"type.name" : {
+			"group.name" : {
 				required : true
 			}
 		},
 		messages : {
-			"type.name" : {
-				required : "奖品类别名称不能为空"
+			"group.name" : {
+				required : "角色名称不能为空"
 			}
 		},
 		errorPlacement : function(error, element) {

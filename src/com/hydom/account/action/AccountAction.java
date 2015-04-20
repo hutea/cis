@@ -18,7 +18,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.hydom.account.ebean.Account;
+import com.hydom.account.ebean.PrivilegeGroup;
 import com.hydom.account.service.AccountService;
+import com.hydom.account.service.PrivilegeGroupService;
 import com.hydom.dao.PageView;
 import com.hydom.util.HelperUtil;
 
@@ -27,7 +29,8 @@ import com.hydom.util.HelperUtil;
 public class AccountAction {
 	@Resource
 	private AccountService accountService;
-
+	@Resource
+	private PrivilegeGroupService groupService;
 	private InputStream inputStream;
 
 	private HttpServletRequest request;
@@ -41,6 +44,7 @@ public class AccountAction {
 	private String query_createTime;
 
 	private long accid;
+	private String[] gids;
 
 	private String username;
 
@@ -98,6 +102,9 @@ public class AccountAction {
 	}
 
 	public String addUI() {
+		request = ServletActionContext.getRequest();
+		List<PrivilegeGroup> groups = groupService.getScrollData().getResultList();
+		request.setAttribute("groups", groups);
 		return "success";
 	}
 
@@ -204,6 +211,14 @@ public class AccountAction {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String[] getGids() {
+		return gids;
+	}
+
+	public void setGids(String[] gids) {
+		this.gids = gids;
 	}
 
 }

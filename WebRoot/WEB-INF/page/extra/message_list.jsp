@@ -29,17 +29,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
-        $(function() {
-			$(".titleStyle").poshytip( {
-				className : 'tip-skyblue',
-				alignTo : 'target',
-				alignX : 'right',
-				alignY : 'bottom',
-				offsetX : -80,
-				offsetY : 0,
-				showTimeout : 5
-			});
-		});
 		function del(id){
 			if (confirm('您确定要删除此信息吗')) {
 			  $.get("${pageContext.request.contextPath}/manage/extra/message_delete.action", 
@@ -50,8 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		       	}
 			   });
 			}
-			}
-		
+		}
         </script>
         <style type="text/css">
         	.mleft {
@@ -97,12 +85,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="contentpanel">
                       <div class="row">
                       		<div class="col-md-6">
-                      			<s:form action="message_add" namespace="/manage/extra" method="post" > 
+                      			<s:form id="myform" action="message_add" namespace="/manage/extra" method="post" > 
 		                         <div   class="form-horizontal mleft"> 
 		                         	<div class="form-group">
 		                         		 <label class="col-md-1 control-label sr-only">消息主题</label>
 							             <div class="col-md-6">
 							                <input type="text" class="form-control" name="message.title" placeholder="消息主题">
+							             	<span></span>
 							             </div>
 							             <div class="col-md-4">
 							             		<div class="input-group">
@@ -124,11 +113,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                         		 <label class="col-md-1 control-label sr-only">消息内容</label>
 							             <div class="col-md-10">
 							               <textarea row="4" class="form-control"  placeholder="消息内容" name="message.content"></textarea>
+							               <span></span>
 							             </div>
 		                         	</div>
 		                         	<div class="form-group">
 		                         		<div class="col-md-4 col-md-push-3">
-		                         		 <button type="reset" class="btn btn-primary ">重置</button>
+		                         		 <button type="reset" class="btn btn-primary">重置</button>
 		                         		 <button type="submit" class="btn btn-primary">推送</button>
 		                         		</div>
 		                         	</div>
@@ -178,12 +168,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td><fmt:formatDate value="${entry.issueTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td>${entry.pushTimeToLive}</td> 
                            		 <td>${entry.title}</td> 
-                           		 <td   data-toggle="tooltip" title="${entry.content }" >
+                           		 <td >
 	                           		 <span style="width:200px;display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
 	                           		 	${entry.content }
 	                           		 </span>
                            		 </td> 
                            		 <td>
+	                             <a href="#" class="js-pop" data-toggle="popover" data-trigger="focus" data-placement="left" title="${entry.title}" data-content="${entry.content}">详细内容</a>
                            		 <a href="javascript:del('${entry.id}')">删除</a>
                            		 </td> 
                            	  	</tr>
@@ -218,8 +209,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap-wizard.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/select2.min.js"></script>
 
+		<!-- 验证框架 -->
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/message.js"></script>
+
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
-
+		<script type="text/javascript">
+			$(".js-pop").popover(); //工具提示框
+		</script>
     </body>
 </html>

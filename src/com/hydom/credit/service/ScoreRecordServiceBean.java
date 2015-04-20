@@ -15,8 +15,6 @@ public class ScoreRecordServiceBean extends DAOSupport<ScoreRecord> implements
 	@Resource
 	private AccountService accountService;
 
-	public void record(ScoreRecord scoreRecord) {
-		
-
-	}
+	
+	
 }

@@ -7,13 +7,19 @@ $(function() {
 			form.submit();
 		},
 		rules : {
-			"type.name" : {
+			"message.title" : {
+				required : true
+			},
+			"message.content" : {
 				required : true
 			}
 		},
 		messages : {
-			"type.name" : {
-				required : "奖品类别名称不能为空"
+			"message.title" : {
+				required : "消息主题不能为空"
+			},
+			"message.content" : {
+				required : "消息内容不能为空"
 			}
 		},
 		errorPlacement : function(error, element) {
