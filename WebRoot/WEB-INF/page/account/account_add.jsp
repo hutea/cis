@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>Chain Responsive Bootstrap3 Admin</title>
+        <title>系统帐号添加</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
@@ -73,8 +73,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                    	<div class="content-s" >
-                         <div>帐户添加</div>
+                    	<div class="content-m" >
+                         <div>系统帐号添加</div>
                          <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
                          <s:form action="account_add" id="myform" name="myform" namespace="/manage/account" method="post"  > 
 	    					<div class="form-horizontal">
@@ -107,10 +107,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								      <span></span>
 								    </div>
 								  </div>
-		    					 <div class="form-group">
-								    <div class="col-sm-12">
+		    					 <div class="form-group" style="border: 1px solid #d3d3dd;">
+								    <label  class="col-sm-2 control-label">角色选择</label>
+								    <div class="col-sm-10">
 								      <c:forEach items="${groups}" var="group" varStatus="s">
-								      	<input type="checkbox" name="gids" value="${group.id}" />${group.name}
+								      	<div class="col-sm-6">
+								      		<input type="checkbox" name="gids" value="${group.id}" />
+								      		<a class="pls" href="#" data-toggle="tooltip"  data-placement="bottom" 
+								      		data-title="${group.name}"  data-trigger="focus"
+								      		data-content="
+								      		<c:forEach items="${group.privileges}"  var="p" >
+													【${p.name}】    
+											</c:forEach> 
+											" >${group.name}</a>
+								      	</div>
 								      </c:forEach>
 								    </div>
 								  </div>
@@ -155,6 +165,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
-
+		<script type="text/javascript">
+			$('[data-toggle="tooltip"]').popover();
+		</script>
     </body>
 </html>

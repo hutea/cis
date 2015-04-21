@@ -19,8 +19,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.springframework.transaction.annotation.Transactional;
-
 /**
  * 帐户表：用户、管理员共用此表，通过type区别
  * 
@@ -58,6 +56,10 @@ public class Account {
 	private Date createTime;// 创建时间
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastSigninTime;// 最后登录时间
+	@Column
+	private String lastSignIp;// 最后登录IP
+	@Column
+	private String lastSignPosition;// 最后登录地点
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastSignoutTime;// 最后注销时间
 	@Column
@@ -244,6 +246,22 @@ public class Account {
 
 	public void setPay(String pay) {
 		this.pay = pay;
+	}
+
+	public String getLastSignIp() {
+		return lastSignIp;
+	}
+
+	public void setLastSignIp(String lastSignIp) {
+		this.lastSignIp = lastSignIp;
+	}
+
+	public String getLastSignPosition() {
+		return lastSignPosition;
+	}
+
+	public void setLastSignPosition(String lastSignPosition) {
+		this.lastSignPosition = lastSignPosition;
 	}
 
 }

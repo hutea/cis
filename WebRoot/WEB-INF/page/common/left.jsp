@@ -2,12 +2,14 @@
 <%@ include file="/WEB-INF/page/common/taglib.jsp" %>
 <div class="leftpanel">
                     <div class="media profile-left">
-                        <a class="pull-left profile-thumb" href="profile.html">
+                        <a class="pull-left profile-thumb" href='<s:url action="myProfile" namespace="/manage/account" />' >
                             <img class="img-circle" src="${pageContext.request.contextPath}/resource/chain/images/photos/profile.png" alt="">
                         </a>
                         <div class="media-body">
-                            <h4 class="media-heading">Elen Adarna</h4>
-                            <small class="text-muted">Beach Lover</small>
+                            <h4 class="media-heading">${loginAccount.nickname}</h4>
+                            <small class="text-muted">
+                            <fmt:formatDate value="${loginAccount.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/> 
+                           </small>
                         </div>
                     </div><!-- media -->
                     
@@ -28,6 +30,9 @@
                                 </li>
                                 <li>
                                 	<a href='<s:url action="scoreRecord_list" namespace="/manage/credit" />'>积分中心</a>
+                                </li>
+                                <li>
+                                	<a href='<s:url action="trophyRecord_list" namespace="/manage/credit" />'>兑换管理</a>
                                 </li>
                             </ul>
                         </li>

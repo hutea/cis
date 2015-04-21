@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>帐户管理</title>
+        <title>角色修改</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
@@ -84,12 +84,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <div class="contentpanel">
                     	<div class="row">
                     		<div class="col-md-6" style="border: 1px solid #d3d3d3;">
-                    			<form  action ="${pageContext.request.contextPath}/manage/account/group_edit.action"  method="post" >
+                    			<form id="myform" action ="${pageContext.request.contextPath}/manage/account/group_edit.action"  method="post" >
                     				<input type="hidden" name="gid" value="${group.id}"/>
                     				<div class="form-group">
                     					<label class="col-sm-2 control-label">角色名称</label>
                     					<div class="col-sm-6">
                     						<input type="text" class="form-control" name="group.name" value="${group.name}" />
+	                    					<span></span>
                     					</div>
                     					<div class="col-sm-2" >
                     						<div class="form-label text-danger"><c:if test="${param.error!=null}">角色名已存在</c:if></div>
@@ -168,6 +169,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/raphael-2.1.0.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap-wizard.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/select2.min.js"></script>
+		
+		<!-- 验证框架 -->
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/privilegeGroup.js"></script>
 
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>

@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>系统帐号修改</title>
+        <title>Chain Responsive Bootstrap3 Admin</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
@@ -21,16 +21,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/myform.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/art/artDialog.js?skin=blue"></script>
         <script src="${pageContext.request.contextPath}/resource/art/plugins/iframeTools.js"></script>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/kindeditor/themes/default/default.css" />
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.css" />
-		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/kindeditor.js"></script>
-		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/lang/zh_CN.js"></script>
-		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.js"></script>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/respond.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+			function process(trid){
+				if (confirm('您确定兑换吗')) {
+				  $.get("${pageContext.request.contextPath}/manage/credit/trophyRecord_process.action", 
+				  {trid:trid},
+				  function(data) {
+			      	if(data.length==19){
+			      		if(window.navigator.userAgent.toLowerCase().indexOf("firefox")!=-1){
+							document.getElementById("pt_"+trid).textContent = data;
+							document.getElementById("a_"+trid).textContent = "兑换完成";
+			      		}else{
+			      			document.getElementById("pt_"+trid).innerText= data;
+			      			document.getElementById("a_"+trid).innerText= "兑换完成";
+			      		}
+			      		document.getElementById("a_"+trid).onclick= function(){return false;};
+			       	}
+				   });
+				}
+			}
+        </script>
+    </head>
 
     <body>
         <header>    
@@ -50,73 +66,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>account edit</li>
+                                    <li>trophyrecord list</li>
                                 </ul>
-                                <h4>系统帐号修改</h4>
+                                <h4>积分兑换管理</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                    	<div class="content-m" >
-                         <div>帐号修改</div>
-                         <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
-                         <s:form action="account_edit" id="myform" name="myform" namespace="/manage/account" method="post"  > 
-	    					<s:hidden name="accid" />
-	    					<div class="form-horizontal">
-		    					 <div class="form-group">
-								    <label  class="col-sm-3 control-label">用户名</label>
-								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.username}" disabled="disabled" name="account.username"  placeholder="用户名">
-								   	  <span></span>
-								    </div>
-								  </div>
-		    					 <div class="form-group">
-								    <label  class="col-sm-3 control-label">密码</label>
-								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.password}" name="account.password"  placeholder="密码">
-								   	  <span></span>
-								    </div>
-								  </div>
-		    					 <div class="form-group">
-								    <label  class="col-sm-3 control-label">手机号</label>
-								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.phone}"  name="account.phone"  placeholder="手机号">
-								   	  <span></span>
-								    </div>
-								  </div>
-		    					 <div class="form-group">
-								    <label  class="col-sm-3 control-label">昵称</label>
-								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.nickname}"   name="account.nickname" placeholder="昵称">
-								   	  <span></span>
-								    </div>
-								  </div>
-	    					 	 <div class="form-group" style="border: 1px solid #d3d3dd;">
-								    <label  class="col-sm-2 control-label">角色选择</label>
-								    <div class="col-sm-10">
-								      <c:forEach items="${groups}" var="group" varStatus="s">
-								      	<div class="col-sm-6"> 
-								      		<input type="checkbox" name="gids" value="${group.id}" ${fn:contains(ugs, group.id)?"checked='checked'":""}/>
-								      		<a class="pls" href="#" data-toggle="tooltip"  data-placement="bottom" 
-								      		data-title="${group.name}" data-trigger="focus"
-								      		data-content="
-								      		<c:forEach items="${group.privileges}"  var="p" >
-													【${p.name}】    
-											</c:forEach> 
-											" >${group.name}</a>
-								      	</div>
-								      </c:forEach>
-								    </div>
-								  </div>
-	    					 	<div style="line-height: 50px;text-align: center;">
-	    					 		<span><input type="reset" value="重置" class="btn btn-primary"/></span>
-	    					 		<span><input type="submit" value="提交" class="btn btn-primary"/></span>
-	    					 	</div>
-	    					</div>
-    					 </s:form>
-						</div>  <!-- content  -->
-
+                       <s:form action="trophyRecord_list" namespace="/manage/credit" method="post" id="pageList"> 
+                         <s:hidden name="page" />
+                         <s:hidden name="m" />
+    					 <table class="table table-bordered table-striped">
+							 <tr>
+                                    <th>#</th>
+                                    <th>用户ID</th>
+                                    <th>奖品名称</th>
+                                    <th>价值</th>
+                                    <th>兑换数量</th>
+                                    <th>兑换消耗积分</th>
+                                    <th>兑换时间</th>
+                                    <th>处理时间</th>
+                                    <th>操作</th>
+                              </tr>
+                              <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
+                              <tr id="tr_${entry.id}">
+                                    <td>${s.index+1}</td>
+                                    <td>${entry.account.id}</td>
+                                    <td>${entry.trophy.name}</td>
+                                    <td>${entry.trophy.money}</td>
+                                    <td>${entry.number}</td>
+                                    <td>${entry.score}</td>
+                                    <td><fmt:formatDate value="${entry.postTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
+                                    <td><span id="pt_${entry.id}"><fmt:formatDate value="${entry.processTime}" pattern="yyyy-MM-dd HH:mm:ss"/></span> </td> 
+                                    <td>
+                                    	<c:if test="${!entry.sign}">
+                           				 <a id="a_${entry.id }" href="javascript:process('${entry.id}')" >确认兑换</a>
+                                    	</c:if>
+                                    	<c:if test="${entry.sign}">
+                           				 <a id="a_${entry.id }" href="javascript:void(0)" >兑换完成</a>
+                                    	</c:if>
+                                    </td>
+                              </tr>
+                              </c:forEach>
+						 </table>
+						</s:form>
+                       	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
+                            <!-- code block hydom -->
+                        
+                        
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>
@@ -141,17 +139,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/raphael-2.1.0.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap-wizard.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/select2.min.js"></script>
-		
-		<!-- 验证框架 -->
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
-  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
-  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/account.js"></script>
-		
+
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
-    	<script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
-		
-		<script type="text/javascript">
-			$('[data-toggle="tooltip"]').popover();
-		</script>
+
     </body>
 </html>

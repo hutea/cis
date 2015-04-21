@@ -47,8 +47,8 @@ public class IpLook {
 			IpInfo ipInfo = gson.fromJson(JsonObject, IpInfo.class);
 			if (ipInfo != null) {
 				if (ipInfo.getProvince() != null && ipInfo.getCity() != null) {
-					sb.append(ipInfo.getProvince() + ipInfo.getCity() + "("
-							+ ipInfo.getIsp() + ip + ")");
+					sb.append(ipInfo.getProvince() + ipInfo.getCity() + "(" + ipInfo.getIsp() + ip
+							+ ")");
 				} else {
 					sb.append("æ÷”ÚÕ¯µÿ÷∑" + ip);
 				}
@@ -61,8 +61,8 @@ public class IpLook {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String ip = sinaIpLookup("118.125.65.89");
-System.out.println(ip);
+		String ip = sinaIpLookup("118.225.65.89");
+		System.out.println(ip);
 
 	}
 

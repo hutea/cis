@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.ServletActionContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -31,6 +33,7 @@ import com.hydom.dao.PageView;
 import com.hydom.extra.ebean.Message;
 import com.hydom.extra.ebean.MessageDeleteRecord;
 import com.hydom.extra.ebean.Sense;
+import com.hydom.extra.ebean.SystemConfig;
 import com.hydom.extra.service.MessageDeleteRecordService;
 import com.hydom.extra.service.MessageService;
 import com.hydom.extra.service.SenseService;
@@ -103,7 +106,7 @@ public class AppServer {
 	 */
 	public String signup() {
 		log.info("App【用户注册】：" + "用户名=" + username + " 密码=" + password + " 验证码=" + code);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		try {
 			if (code != null && code.equals(shortMessageService.find(username).getCode())) { // 验证码通过
 				if (!HelperUtil.isPhoneNumber(username)) {// 手机号格式不正确
@@ -133,7 +136,7 @@ public class AppServer {
 	 */
 	public String signin() {
 		log.info("App【用户登录】：" + "用户名=" + username + " 密码=" + password);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		Account account = accountService.findByUP(username, password);
 		if (account != null) { // 登录成功
 			account.setLastSigninTime(new Date());
@@ -154,7 +157,7 @@ public class AppServer {
 
 	public String signout() {
 		log.info("App【用户登出】：" + "用户名=" + username + " 密码=" + password + " 用户ID=" + uid);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		Account account = accountService.findByUP(username, password);
 		if (account != null) { // 注销成功
 			account.setState(2);// 设置状态为注销
@@ -215,7 +218,7 @@ public class AppServer {
 	 */
 	public String postNote() {
 		log.info("App【提交识别结果】：" + "tid=" + tid + " 识别结果=" + result_str);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		try {
 			TaskRecord record = taskRecordService.find(tid);
 			if (record.getIdentState() != null && record.getIdentState() == 0) {// 超时程序检查设置了超时
@@ -244,7 +247,7 @@ public class AppServer {
 	 */
 	public String breakNote() {
 		log.info("App【休息一下】：" + "用户ID=" + uid);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		try {
 			Account entity = accountService.find(uid);
 			entity.setState(0);
@@ -264,7 +267,7 @@ public class AppServer {
 	 */
 	public String synNote() {
 		log.info("App【同步识别结果】：" + "用户ID=" + uid + " sign=" + sign);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		PageView<TaskRecord> pageView = new PageView<TaskRecord>(maxresult, page);
@@ -320,7 +323,7 @@ public class AppServer {
 	 */
 	public String listTrophy() {
 		log.info("App【获取所有奖品列表】：" + "用户ID=" + uid);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		Account account = accountService.find(uid);
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		if (account != null) {
@@ -365,7 +368,7 @@ public class AppServer {
 	 */
 	public String exchangeTrophy() {
 		log.info("App【提交奖品兑换信息】：" + "用户ID=" + uid + "奖品ID=" + tid + "奖品数量=" + num);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		Account account = accountService.find(uid);
 		Trophy trophy = trophyService.find(tid);
 		double theScore = num * trophy.getScore(); // 本次兑换需要的积分
@@ -407,11 +410,20 @@ public class AppServer {
 	 */
 	public String listHistory() {
 		log.info("App【获取历史兑换列表】：" + "用户ID=" + uid);
-		Account account = accountService.find(uid);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Account account = accountService.find(uid);
+		if (account == null) {
+			dataMap.put("result", 9);// 用户ID不存在
+			dataMap.put("pages", 0);
+			dataMap.put("score", 0);
+			dataMap.put("month", 0);
+			dataMap.put("total", 0);
+			dataMap.put("list", list);
+			dataFillStream(dataMap);
+			return "success";
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 		PageView<TrophyRecord> pageView = new PageView<TrophyRecord>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
 		orderby.put("id", "desc");
@@ -434,23 +446,17 @@ public class AppServer {
 			map.put("post_time", sdf.format(tr.getPostTime()));
 			list.add(map);
 		}
+
+		dataMap.put("result", 1);
 		if (list.size() > 0) {
-			dataMap.put("result", 1);
 			dataMap.put("pages", pageView.getTotalPage());
 		} else {
-			dataMap.put("result", 1);
 			dataMap.put("pages", 0);// 设置总页数为0
 		}
-		if (account != null) {
-			dataMap.put("result", 9);// 用户ID不存在
-			dataMap.put("score", account.getScore());// 用户总积分
-			dataMap.put("month", trophyRecordService.countMonth(uid));
-			dataMap.put("total", trophyRecordService.countAll(uid));
-		} else {
-			dataMap.put("score", 0);
-			dataMap.put("month", 0);
-			dataMap.put("total", 0);
-		}
+
+		dataMap.put("score", account.getScore());// 用户总积分
+		dataMap.put("month", trophyRecordService.countMonth(uid));
+		dataMap.put("total", trophyRecordService.countAll(uid));
 		dataMap.put("list", list);
 		dataFillStream(dataMap);
 		return "success";
@@ -463,7 +469,7 @@ public class AppServer {
 	 */
 	public String clearHistory() {
 		log.info("App【清空历史兑换列表】：" + "用户ID=" + uid);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		try {
 			trophyRecordService.clear(uid);
 			dataMap.put("result", 1);
@@ -753,6 +759,13 @@ public class AppServer {
 			dataMap.put("phone", "");
 		}
 		dataFillStream(dataMap);
+		return "success";
+	}
+
+	public String manual() {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		SystemConfig config = systemConfigService.find("manual");
+		request.setAttribute("config", config);
 		return "success";
 	}
 

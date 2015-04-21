@@ -75,7 +75,7 @@
                     
                 </div><!-- panel-body -->
                 <div class="panel-footer">
-                    <a href="" class="btn btn-primary btn-block">准星云学后台管理平台</a>
+                    <a href="#" class="btn btn-primary btn-block">准星云</a>
                 </div><!-- panel-footer -->
             </div><!-- panel -->
         </section>

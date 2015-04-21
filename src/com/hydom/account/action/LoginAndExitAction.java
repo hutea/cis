@@ -43,16 +43,16 @@ public class LoginAndExitAction {
 				WebUtil.delCookie(request, response, "password");
 				WebUtil.delCookie(request, response, "rememberMe");
 			}
-
 			HttpSession session = request.getSession();
-			session.setMaxInactiveInterval(2 * 60 * 60); // 设置有效时间为2*60分钟
+			// session.setMaxInactiveInterval(2 * 60 * 60); // 设置有效时间为2*60分钟:可在tomcat、或项目中中配置
 			account.setLastSigninTime(new Date());
+			String lastIP = WebUtil.getClientIP(request);
+			String lastSignPosition = IpLook.sinaIpLookup(lastIP);
+			account.setLastSignPosition(lastIP);
+			account.setLastSignPosition(lastSignPosition);
 			accountService.update(account);
 			session.setAttribute("loginAccount", account);
-			session.removeAttribute("msg");
-			log.info("后台管理员登录信息：登录IP【"
-					+ IpLook.sinaIpLookup(WebUtil.getClientIP(request)) + "】，登录时间【"
-					+ new Date() + "】");
+			log.info("后台管理员登录信息：登录IP【" + lastIP + "】，登录位置【" + lastSignPosition + "】");
 			return "success";
 		} else {
 			request.setAttribute("error", "用户名或密码错误");
@@ -62,7 +62,13 @@ public class LoginAndExitAction {
 
 	public String signout() {
 		HttpServletRequest request = ServletActionContext.getRequest();
-		request.getSession().removeAttribute("loginAccount");
+		HttpSession session = request.getSession();
+		Account loginAccount = (Account) session.getAttribute("loginAccount");
+		if (loginAccount != null) {
+			Account entity = accountService.find(loginAccount.getId());
+			entity.setLastSignoutTime(new Date());
+			accountService.update(entity);
+		}
 		return "success";
 	}
 

@@ -40,9 +40,6 @@ public class ScoreRecord {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime; // 积分时间
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date processTime; // 处理时间
-
 	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
 	@JoinColumn(name = "account_id")
 	private Account account;// 用户
@@ -68,14 +65,6 @@ public class ScoreRecord {
 
 	public Long getId() {
 		return id;
-	}
-
-	public Date getProcessTime() {
-		return processTime;
-	}
-
-	public void setProcessTime(Date processTime) {
-		this.processTime = processTime;
 	}
 
 	public void setId(Long id) {

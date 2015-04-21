@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>系统帐号修改</title>
+        <title>My Profile</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
@@ -50,71 +50,69 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>account edit</li>
+                                    <li>My Profile</li>
                                 </ul>
-                                <h4>系统帐号修改</h4>
+                                <h4>个人信息</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
-                    	<div class="content-m" >
-                         <div>帐号修改</div>
+                    	<div class="content-m" style="width: 550px;">
+                         <div>My Profile</div>
                          <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
-                         <s:form action="account_edit" id="myform" name="myform" namespace="/manage/account" method="post"  > 
-	    					<s:hidden name="accid" />
-	    					<div class="form-horizontal">
-		    					 <div class="form-group">
-								    <label  class="col-sm-3 control-label">用户名</label>
-								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.username}" disabled="disabled" name="account.username"  placeholder="用户名">
-								   	  <span></span>
+						      <div class="panel panel-primary">
+						        <div class="panel-heading" style="padding: 10px 20px;">个人信息</div>
+						        <div class="panel-body"></div>
+						        	 <div class="form-group">
+									    <label  class="col-sm-3 control-label">用户名</label>
+									    <div class="col-sm-9">
+									      <input type="text" class="form-control" value="${loginAccount.username}" disabled="disabled"  placeholder="用户名">
+									   	  <span></span>
+									    </div>
+									  </div>
+			    					 <div class="form-group">
+									    <label  class="col-sm-3 control-label">密码</label>
+									    <div class="col-sm-9">
+									      <input type="password" class="form-control" value="${loginAccount.password}" disabled="disabled"  placeholder="密码">
+									   	  <span></span>
+									    </div>
+									  </div>
+			    					 <div class="form-group">
+									    <label  class="col-sm-3 control-label">手机号</label>
+									    <div class="col-sm-9">
+									      <input type="text" class="form-control" value="${loginAccount.phone}" disabled="disabled" >
+									   	  <span></span>
+									    </div>
+									  </div>
+			    					 <div class="form-group">
+									    <label  class="col-sm-3 control-label">昵称</label>
+									    <div class="col-sm-9">
+									      <input type="text" class="form-control" value="${loginAccount.nickname}" disabled="disabled">
+									   	  <span></span>
+									    </div>
+									  </div>
+			    					 <div class="form-group">
+									    <label  class="col-sm-3 control-label">最近登录时间</label>
+									    <div class="col-sm-9">
+									      <input type="text" class="form-control" value='<fmt:formatDate value="${loginAccount.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/> ' disabled="disabled">
+									   	  <span></span>
+									    </div>
+									  </div>
+			    					 <div class="form-group">
+									    <label  class="col-sm-3 control-label">上次注销时间</label>
+									    <div class="col-sm-9">
+									      <input type="text" class="form-control" value='<fmt:formatDate value="${loginAccount.lastSignoutTime}" pattern="yyyy-MM-dd HH:mm:ss"/> ' disabled="disabled" >
+									   	  <span></span>
+									    </div>
+									  </div>
+						        <div class="panel-footer" style="padding: 10px 20px;">
+										于<fmt:formatDate value="${loginAccount.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/> 
+										在 <small title="登录IP：${loginAccount.lastSignIp}">${loginAccount.lastSignPosition}</small> 登录 
 								    </div>
-								  </div>
-		    					 <div class="form-group">
-								    <label  class="col-sm-3 control-label">密码</label>
-								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.password}" name="account.password"  placeholder="密码">
-								   	  <span></span>
-								    </div>
-								  </div>
-		    					 <div class="form-group">
-								    <label  class="col-sm-3 control-label">手机号</label>
-								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.phone}"  name="account.phone"  placeholder="手机号">
-								   	  <span></span>
-								    </div>
-								  </div>
-		    					 <div class="form-group">
-								    <label  class="col-sm-3 control-label">昵称</label>
-								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.nickname}"   name="account.nickname" placeholder="昵称">
-								   	  <span></span>
-								    </div>
-								  </div>
-	    					 	 <div class="form-group" style="border: 1px solid #d3d3dd;">
-								    <label  class="col-sm-2 control-label">角色选择</label>
-								    <div class="col-sm-10">
-								      <c:forEach items="${groups}" var="group" varStatus="s">
-								      	<div class="col-sm-6"> 
-								      		<input type="checkbox" name="gids" value="${group.id}" ${fn:contains(ugs, group.id)?"checked='checked'":""}/>
-								      		<a class="pls" href="#" data-toggle="tooltip"  data-placement="bottom" 
-								      		data-title="${group.name}" data-trigger="focus"
-								      		data-content="
-								      		<c:forEach items="${group.privileges}"  var="p" >
-													【${p.name}】    
-											</c:forEach> 
-											" >${group.name}</a>
-								      	</div>
-								      </c:forEach>
-								    </div>
-								  </div>
-	    					 	<div style="line-height: 50px;text-align: center;">
-	    					 		<span><input type="reset" value="重置" class="btn btn-primary"/></span>
-	    					 		<span><input type="submit" value="提交" class="btn btn-primary"/></span>
-	    					 	</div>
-	    					</div>
-    					 </s:form>
+						        </div>
+						    </div>
+								  
 						</div>  <!-- content  -->
 
                     </div><!-- contentpanel -->

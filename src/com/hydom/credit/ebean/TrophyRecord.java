@@ -29,25 +29,24 @@ public class TrophyRecord {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
-	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
-	@JoinColumn(name = "trophy_id")
-	private Trophy trophy;// 奖品
 	@Column
 	private Integer number = 1;// 奖品的数量，给定默认值=1
 	@Column
-	private double score;// 本次兑换消费的积分
-
+	private double score;// 本次兑换共消费积分
 	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
 	@JoinColumn(name = "account_id")
 	private Account account;// 兑换用户
-
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date postTime;// 提交兑换时间
-
-	private Boolean sign;// 用记兑换领取结果：1=领取
-
+	@Column
+	private Boolean sign = false;// 标记兑换领取结果：true=领取
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date processTime; // 系统处理时间
+	@Column
 	private Boolean visible = true;// visieble=fasle表示用户清空
+	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
+	@JoinColumn(name = "trophy_id")
+	private Trophy trophy;// 奖品
 
 	public Long getId() {
 		return id;
@@ -111,6 +110,14 @@ public class TrophyRecord {
 
 	public void setSign(Boolean sign) {
 		this.sign = sign;
+	}
+
+	public Date getProcessTime() {
+		return processTime;
+	}
+
+	public void setProcessTime(Date processTime) {
+		this.processTime = processTime;
 	}
 
 }

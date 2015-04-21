@@ -30,7 +30,7 @@ public class TrophyRecordServiceBean extends DAOSupport<TrophyRecord> implements
 
 	@Override
 	public long countAll(long uid) {
-		return (Integer) em.createQuery(
+		return (Long) em.createQuery(
 				"select count(t.id) from TrophyRecord t where t.account.id=?1")
 				.setParameter(1, uid).getSingleResult();
 	}

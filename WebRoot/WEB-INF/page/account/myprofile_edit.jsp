@@ -26,6 +26,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/kindeditor.js"></script>
 		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/lang/zh_CN.js"></script>
 		<script charset="utf-8" src="${pageContext.request.contextPath}/resource/kindeditor/plugins/code/prettify.js"></script>
+		
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="${pageContext.request.contextPath}/resource/chain/js/html5shiv.js"></script>
@@ -61,54 +62,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     	<div class="content-m" >
                          <div>帐号修改</div>
                          <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
-                         <s:form action="account_edit" id="myform" name="myform" namespace="/manage/account" method="post"  > 
+                         <s:form action="myProfileEdit" id="myform" name="myform" namespace="/manage/account" method="post"  > 
 	    					<s:hidden name="accid" />
 	    					<div class="form-horizontal">
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">用户名</label>
 								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.username}" disabled="disabled" name="account.username"  placeholder="用户名">
+								      <input type="text" class="form-control" value="${loginAccount.username}" disabled="disabled" name="account.username"  placeholder="用户名">
 								   	  <span></span>
 								    </div>
 								  </div>
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">密码</label>
 								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.password}" name="account.password"  placeholder="密码">
+								      <input type="text" class="form-control" value="${loginAccount.password}" name="account.password"  placeholder="密码">
 								   	  <span></span>
 								    </div>
 								  </div>
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">手机号</label>
 								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.phone}"  name="account.phone"  placeholder="手机号">
+								      <input type="text" class="form-control" value="${loginAccount.phone}"  name="account.phone"  placeholder="手机号">
 								   	  <span></span>
 								    </div>
 								  </div>
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">昵称</label>
 								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.nickname}"   name="account.nickname" placeholder="昵称">
+								      <input type="text" class="form-control" value="${loginAccount.nickname}"   name="account.nickname" placeholder="昵称">
 								   	  <span></span>
 								    </div>
 								  </div>
-	    					 	 <div class="form-group" style="border: 1px solid #d3d3dd;">
-								    <label  class="col-sm-2 control-label">角色选择</label>
-								    <div class="col-sm-10">
-								      <c:forEach items="${groups}" var="group" varStatus="s">
-								      	<div class="col-sm-6"> 
-								      		<input type="checkbox" name="gids" value="${group.id}" ${fn:contains(ugs, group.id)?"checked='checked'":""}/>
-								      		<a class="pls" href="#" data-toggle="tooltip"  data-placement="bottom" 
-								      		data-title="${group.name}" data-trigger="focus"
-								      		data-content="
-								      		<c:forEach items="${group.privileges}"  var="p" >
-													【${p.name}】    
-											</c:forEach> 
-											" >${group.name}</a>
-								      	</div>
-								      </c:forEach>
-								    </div>
-								  </div>
+	    					 	 
 	    					 	<div style="line-height: 50px;text-align: center;">
 	    					 		<span><input type="reset" value="重置" class="btn btn-primary"/></span>
 	    					 		<span><input type="submit" value="提交" class="btn btn-primary"/></span>

@@ -2,7 +2,6 @@ package com.hydom.account.action;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
 import org.springframework.context.annotation.Scope;
@@ -81,8 +81,8 @@ public class AccountAction {
 			jpql.append(" and o.createTime<?" + (params.size() + 1));
 			params.add(endDate);
 		}
-		pageView.setQueryResult(accountService.getScrollData(pageView.getFirstResult(),
-				maxresult, jpql.toString(), params.toArray(), orderby));
+		pageView.setQueryResult(accountService.getScrollData(pageView.getFirstResult(), maxresult,
+				jpql.toString(), params.toArray(), orderby));
 		request.setAttribute("pageView", pageView);
 		return "success";
 	}
@@ -96,7 +96,7 @@ public class AccountAction {
 				inputStream = new ByteArrayInputStream("1".getBytes("UTF-8"));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			// e.printStackTrace();
 		}
 		return "success";
 	}
@@ -111,12 +111,26 @@ public class AccountAction {
 	public String add() {
 		account.setCreateTime(new Date());
 		account.setType(2);
+		/** 权限组操作 **/
+		if (gids != null && gids.length > 0) {
+			for (String gid : gids) {
+				account.getGroups().add(groupService.find(gid));
+			}
+		}
 		accountService.save(account);
 		return "success";
 	}
 
 	public String editUI() {
 		account = accountService.find(accid);
+		request = ServletActionContext.getRequest();
+		List<PrivilegeGroup> groups = groupService.getScrollData().getResultList();
+		request.setAttribute("groups", groups);
+		StringBuffer ugs = new StringBuffer();
+		for (PrivilegeGroup group : account.getGroups()) {
+			ugs.append("#" + group.getId());
+		}
+		request.setAttribute("ugs", ugs.toString());
 		return "success";
 	}
 
@@ -125,6 +139,13 @@ public class AccountAction {
 		entity.setPassword(account.getPassword());
 		entity.setNickname(account.getNickname());
 		entity.setPhone(account.getPhone());
+		/** 权限组操作 **/
+		entity.getGroups().clear();
+		if (gids != null && gids.length > 0) {
+			for (String gid : gids) {
+				entity.getGroups().add(groupService.find(gid));
+			}
+		}
 		accountService.update(entity);
 		return "success";
 	}
@@ -135,9 +156,34 @@ public class AccountAction {
 			entity.setVisible(false);
 			accountService.update(entity);
 			inputStream = new ByteArrayInputStream("1".getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "success";
+	}
+
+	/** myProfile相关 */
+	public String myProfile() {
+		return "success";
+	}
+
+	public String myProfileEditUI() {
+		return "success";
+	}
+
+	public String myProfileEdit() {
+		request = ServletActionContext.getRequest();
+		HttpSession session = request.getSession();
+		Account loginAccount = (Account) session.getAttribute("loginAccount");
+		if (loginAccount == null) {
+			return "fail";
+		}
+		Account entity = accountService.find(loginAccount.getId());
+		entity.setPassword(account.getPassword());
+		entity.setPhone(account.getPhone());
+		entity.setNickname(account.getNickname());
+		accountService.update(entity);
+		session.setAttribute("loginAccount", entity);
 		return "success";
 	}
 
