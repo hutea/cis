@@ -38,12 +38,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			   });
 			}
 		}
-		function showEdit(id,itext){
+		function showEdit(id){
 			var itext = "";
 			if(window.navigator.userAgent.toLowerCase().indexOf("firefox")!=-1){
 				itext =document.getElementById("con_"+id).textContent;
       		}else{
-      			itext =document.getElementById("con_"+id).innerText=name;
+      			itext =document.getElementById("con_"+id).innerText;
       		}	
 			document.getElementById("tname").value = itext+""; 
 			document.getElementById("htid").value = id; 

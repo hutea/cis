@@ -69,6 +69,7 @@ public class LoginAndExitAction {
 			entity.setLastSignoutTime(new Date());
 			accountService.update(entity);
 		}
+		session.removeAttribute("loginAccount");
 		return "success";
 	}
 

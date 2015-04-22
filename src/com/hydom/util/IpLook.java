@@ -1,7 +1,5 @@
 package com.hydom.util;
 
-import java.util.Date;
-
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,7 +29,6 @@ public class IpLook {
 			json = json.substring(json.indexOf("{"), json.indexOf("}") + 1);
 			return parserSinaLoopkUpIpInfo(json, ip);
 		} catch (Exception e) {
-			System.out.println(new Date() + "exce");
 			e.printStackTrace();
 			return "Î´ÖªµØµã(" + ip + ")";
 		}

@@ -21,12 +21,17 @@ INSERT INTO `t_systemprivilege` VALUES ('50004', 5, '联系我们', 'manage/extra/co
 
 alter table t_account AUTO_INCREMENT=10001;
 alter table t_job AUTO_INCREMENT=10001;
-alter table t_message AUTO_INCREMENT=10001;
-alter table t_privilegegroup AUTO_INCREMENT=10001;
-alter table t_sense AUTO_INCREMENT=10001;
 alter table t_task AUTO_INCREMENT=10001;
 alter table t_taskrecord AUTO_INCREMENT=10001;
+
+alter table t_scorerecord AUTO_INCREMENT=10001;
 alter table t_trophy AUTO_INCREMENT=10001;
+alter table t_trophyrecord AUTO_INCREMENT=10001;
 alter table t_trophytype AUTO_INCREMENT=10001;
+
+alter table t_appversion AUTO_INCREMENT=10001;
+alter table t_message AUTO_INCREMENT=10001;
+alter table t_sense AUTO_INCREMENT=10001;
+alter table t_privilegegroup AUTO_INCREMENT=10001;
 
 

@@ -76,8 +76,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          	<input type="text" style="width: 220px;display: inline-block;" name="query_username" value="${query_username}" class="form-control"  placeholder="用户名"  >
                          	<input type="text" style="width: 220px;display: inline-block;" name="query_phone" value="${query_phone}" class="form-control"  placeholder="手机号"  >
                          	<input type="text" style="width: 220px;display: inline-block;height: 38px;" name="query_createTime" value="${query_createTime}" class="Wdate"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="创建时间"  >
-                         		<input type="submit" style="margin: 0 50px;"  class="btn btn-primary"   value="查 询"  >
-                         		<a class="btn btn-success" href='<s:url action="account_addUI" namespace="/manage/account" />'>新增</a>
+                         	<input type="button" style="margin: 0 50px;"  class="btn btn-primary" onclick="javascript:confirmQuery()"  value="查 询"  >
+                         	<a class="btn btn-success" href='<s:url action="account_addUI" namespace="/manage/account" />'>新增</a>
                          </div>
     					 <table class="table table-bordered table-striped" >
 							 <tr >

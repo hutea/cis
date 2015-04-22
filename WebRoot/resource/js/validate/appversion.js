@@ -7,31 +7,19 @@ $(function() {
 			form.submit();
 		},
 		rules : {
-			"trophy.name" : {
+			"appVersion.version" : {
 				required : true
 			},
-			"trophy.money" : {
-				required : true
-			},
-			"trophy.score" : {
-				required : true
-			},
-			"trophy.stock" : {
+			"app" : {
 				required : true
 			}
 		},
 		messages : {
-			"trophy.name" : {
-				required : "奖品名称不能为空"
+			"appVersion.version" : {
+				required : "版本号不能为空"
 			},
-			"trophy.money" : {
-				required : "奖品价值不能为空"
-			},
-			"trophy.score" : {
-				required : "积分不能为空"
-			},
-			"trophy.stock" : {
-				required : "库存数不能为空"
+			"app" : {
+				required : "请选择要上传的app"
 			}
 		},
 		errorPlacement : function(error, element) {

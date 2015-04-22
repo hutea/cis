@@ -1,11 +1,7 @@
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import sun.applet.resources.MsgAppletViewer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -19,10 +15,7 @@ public class Test {
 	// style="stroke:rgb(99,99,99);stroke-width:2" />
 
 	public static void main(String[] args) {
-		int samePerson  = 3;
-		
-		double currentPercent = 58/5;
-		System.out.println(58.0/100);
+
 	}
 
 	public static String getdata() {

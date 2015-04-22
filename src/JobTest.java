@@ -3,17 +3,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.stereotype.Controller;
 
 import com.hydom.util.HttpSender;
 import com.hydom.util.StringGenerator;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 public class JobTest {
 
 	public static void main(String[] args) {
-		 process_1();
-		//process_2();
+		process_1();
+		// process_2();
 	}
 
 	public static void process_2() {

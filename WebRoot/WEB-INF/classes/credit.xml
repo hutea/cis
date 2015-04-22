@@ -73,6 +73,14 @@
 			method="list">
 			<result>/WEB-INF/page/credit/scoreRecord_list.jsp</result>
 		</action>
+		<action name="showTrophyRecord" class="scoreRecordAction"
+			method="showTrophyRecord">
+			<result>/WEB-INF/page/credit/scoreRecord_trophyRecordShow.jsp
+			</result>
+		</action>
+		<action name="showTaskRecord" class="scoreRecordAction" method="showTaskRecord">
+			<result>/WEB-INF/page/credit/scoreRecord_taskRecordShow.jsp</result>
+		</action>
 		<action name="scoreRecord_listuse" class="scoreRecordAction"
 			method="listUse">
 			<result>/WEB-INF/page/credit/scoreRecord_list_use.jsp</result>

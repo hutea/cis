@@ -156,7 +156,7 @@ public class DataServer {
 	public String recycleTaskByQuestion() {
 		log.info("DataServer【回收工单recycleTaskByQuestion】：" + "taskID=" + taskId + " 加收类型="
 				+ recycleType);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		try {
 			List<Task> tasks = taskService.listByTaskId(taskId);
 			if (tasks.size() > 0) {

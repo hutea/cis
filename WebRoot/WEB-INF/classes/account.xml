@@ -4,7 +4,7 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
 
-	<package name="account" namespace="/manage/account" extends="struts-default">
+	<package name="account" namespace="/manage/account" extends="pub-package">
 		<action name="account_list" class="accountAction" method="list">
 			<result>/WEB-INF/page/account/account_list.jsp</result>
 		</action>

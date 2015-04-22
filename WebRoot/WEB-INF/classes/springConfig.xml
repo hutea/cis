@@ -18,10 +18,10 @@
 		<property name="url" value="${url}" />
 		<property name="username" value="${username}" />
 		<property name="password" value="${password}" />
-		<property name="initialSize" value="100" />
-		<property name="maxActive" value="1000" />
-		<property name="maxIdle" value="100" />
-		<property name="minIdle" value="100" />
+		<property name="initialSize" value="${initialSize}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="maxIdle" value="${maxIdle}" />
+		<property name="minIdle" value="${minIdle}" />
 	</bean>
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -70,7 +70,7 @@
 		<property name="cronExpression" value="0 0/10 * * * ?" />
 	</bean>
 
-	<!--设置调度 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
+	<!--设置调度  总控制类 -->
 	<bean id="startQuertz" lazy-init="false" autowire="no"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">

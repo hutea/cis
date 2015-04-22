@@ -36,7 +36,7 @@ public class Job {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date finishTime; // 计算出所有区块的识别结果的完成时间
 	@Column
-	private Integer recycleType;// 回收类型：1=超时回收
+	private Integer recycleType=0;// 回收类型：0为初值表示没有被回收   1=超时回收
 	@Column
 	private boolean feedback = false;// 是否将此工单结果进行了反馈
 	@Column

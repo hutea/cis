@@ -26,30 +26,28 @@ public class ParticularInterceptor extends AbstractInterceptor {
 
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
-//		Account account = WebUtil.getlogonAccount(ServletActionContext.getRequest());
-//		HttpServletRequest request = ServletActionContext.getRequest();
-//		StringBuffer requestUrl = request.getRequestURL();
-//		if (request.getQueryString() != null && request.getQueryString().length() > 0) {
-//			requestUrl.append("_" + request.getQueryString());
-//		}
-//		String url = requestUrl.substring(requestUrl.indexOf("manage"));
-//		SystemPrivilege sp = systemPrivilegeService.findByURL(url);
-//		if (sp != null) { // 
-//			if (account != null && account.getGroups() != null) { // 
-//				for (PrivilegeGroup group : account.getGroups()) {
-//					if (group.getPrivileges().contains(sp)) { // 
-//						return invocation.invoke();
-//					}
-//				}
-//				return "unauth";
-//			} else {
-//				return "unauth";
-//			}
-//		} else {
-//			return invocation.invoke();
-//		}
-		return invocation.invoke();
+		Account account = WebUtil.getlogonAccount(ServletActionContext.getRequest());
+		HttpServletRequest request = ServletActionContext.getRequest();
+		StringBuffer requestUrl = request.getRequestURL();
+		if (request.getQueryString() != null && request.getQueryString().length() > 0) {
+			requestUrl.append("#" + request.getQueryString());
+		}
+		String url = requestUrl.substring(requestUrl.indexOf("manage"));
+		SystemPrivilege sp = systemPrivilegeService.findByURL(url);
+		if (sp != null) { // request url is required
+			if (account != null && account.getGroups() != null) {
+				for (PrivilegeGroup group : account.getGroups()) {
+					if (group.getPrivileges().contains(sp)) {
+						return invocation.invoke();
+					}
+				}
+				return "unauth";
+			} else {
+				return "unauth";
+			}
+		} else {
+			return invocation.invoke();
+		}
 	}
-	
-	
+
 }

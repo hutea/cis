@@ -173,6 +173,5 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/trophy.js"></script>
 		
 		<script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
-        <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
     </body>
 </html>

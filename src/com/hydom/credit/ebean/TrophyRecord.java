@@ -43,7 +43,7 @@ public class TrophyRecord {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date processTime; // 系统处理时间
 	@Column
-	private Boolean visible = true;// visieble=fasle表示用户清空
+	private Boolean visible = true;// visible=fasle表示用户清空
 	@ManyToOne(cascade = { CascadeType.REFRESH }, optional = false)
 	@JoinColumn(name = "trophy_id")
 	private Trophy trophy;// 奖品

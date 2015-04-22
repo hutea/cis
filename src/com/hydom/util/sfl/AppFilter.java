@@ -19,7 +19,9 @@ public class AppFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		String ip = WebUtil.getClientIP(request);
-		//..
+		if (ip != null) {
+
+		}
 	}
 
 	@Override

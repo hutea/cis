@@ -79,7 +79,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            	  <c:forEach items="${pageView.records}" var="entry" varStatus="s">  
                            	  	<tr>
                            		 <td>${s.index+1}</td> 
-                           		 <td>${entry.taskId}</td> 
+                           		 <td>${entry.taskId} 
+                           		 	<c:if test="${entry.recycleType==1}"><span style="color:red;">超时回收</span></c:if>
+                           		 </td> 
                            		 <td>${entry.taskCount}</td> 
                            		 <td>${entry.taskFinishCount}</td> 
                            		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 

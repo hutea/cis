@@ -17,14 +17,11 @@ import org.springframework.stereotype.Controller;
 import com.hydom.dao.PageView;
 import com.hydom.task.ebean.Job;
 import com.hydom.task.service.JobService;
-import com.hydom.task.service.TaskService;
 import com.hydom.util.HelperUtil;
 
 @Controller
 @Scope(value = "prototype")
 public class JobAction {
-	@Resource
-	private TaskService TaskService;
 	@Resource
 	private JobService jobService;
 
@@ -82,8 +79,8 @@ public class JobAction {
 			params.add(endDate);
 		}
 
-		pageView.setQueryResult(jobService.getScrollData(pageView.getFirstResult(),
-				maxresult, jpql.toString(), params.toArray(), orderby));
+		pageView.setQueryResult(jobService.getScrollData(pageView.getFirstResult(), maxresult, jpql
+				.toString(), params.toArray(), orderby));
 		request.setAttribute("pageView", pageView);
 
 		return "success";

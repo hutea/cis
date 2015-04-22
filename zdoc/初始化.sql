@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50623
 File Encoding         : 65001
 
-Date: 2015-04-17 09:36:28
+Date: 2015-04-22 17:38:50
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,6 +24,8 @@ CREATE TABLE `t_account` (
   `backaccount` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `backname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `createTime` datetime DEFAULT NULL,
+  `lastSignIp` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `lastSignPosition` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `lastSigninTime` datetime DEFAULT NULL,
   `lastSignoutTime` datetime DEFAULT NULL,
   `nickname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -37,11 +39,12 @@ CREATE TABLE `t_account` (
   `visible` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10002 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_account
 -- ----------------------------
+INSERT INTO `t_account` VALUES ('10001', null, null, '2015-04-22 15:50:33', null, '未知地点(127.0.0.1)', '2015-04-22 15:53:00', '2015-04-22 15:52:59', 'Admin', '123456', null, '12345678900', '0', null, '2', 'admin', '');
 
 -- ----------------------------
 -- Table structure for `t_account_group`
@@ -60,6 +63,7 @@ CREATE TABLE `t_account_group` (
 -- ----------------------------
 -- Records of t_account_group
 -- ----------------------------
+INSERT INTO `t_account_group` VALUES ('10001', '20150422154554970LGS');
 
 -- ----------------------------
 -- Table structure for `t_appversion`
@@ -75,7 +79,7 @@ CREATE TABLE `t_appversion` (
   `version` double DEFAULT NULL,
   `visible` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_appversion
@@ -162,6 +166,12 @@ CREATE TABLE `t_privilegegroup` (
 -- ----------------------------
 -- Records of t_privilegegroup
 -- ----------------------------
+INSERT INTO `t_privilegegroup` VALUES ('20150422154554970LGS', '2015-04-22 15:45:54', '', '超级管理组');
+INSERT INTO `t_privilegegroup` VALUES ('20150422154657488BIT', '2015-04-22 15:46:57', '', '工单管理组');
+INSERT INTO `t_privilegegroup` VALUES ('20150422154705300HQB', '2015-04-22 15:47:05', '', '用户管理组');
+INSERT INTO `t_privilegegroup` VALUES ('20150422154729868BMN', '2015-04-22 15:47:29', '', '奖品管理组');
+INSERT INTO `t_privilegegroup` VALUES ('20150422154746597FPZ', '2015-04-22 15:47:46', '', '系统管理组');
+INSERT INTO `t_privilegegroup` VALUES ('20150422154800429RNP', '2015-04-22 15:48:00', '', '系统设置组');
 
 -- ----------------------------
 -- Table structure for `t_pri_group`
@@ -180,6 +190,38 @@ CREATE TABLE `t_pri_group` (
 -- ----------------------------
 -- Records of t_pri_group
 -- ----------------------------
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '10001');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '20001');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '20002');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '20003');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '30001');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '30002');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '30003');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '40001');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '40002');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '40003');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '40004');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '40005');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '50001');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '50002');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '50003');
+INSERT INTO `t_pri_group` VALUES ('20150422154554970LGS', '50004');
+INSERT INTO `t_pri_group` VALUES ('20150422154657488BIT', '10001');
+INSERT INTO `t_pri_group` VALUES ('20150422154705300HQB', '20001');
+INSERT INTO `t_pri_group` VALUES ('20150422154705300HQB', '20002');
+INSERT INTO `t_pri_group` VALUES ('20150422154705300HQB', '20003');
+INSERT INTO `t_pri_group` VALUES ('20150422154729868BMN', '30001');
+INSERT INTO `t_pri_group` VALUES ('20150422154729868BMN', '30002');
+INSERT INTO `t_pri_group` VALUES ('20150422154729868BMN', '30003');
+INSERT INTO `t_pri_group` VALUES ('20150422154746597FPZ', '40001');
+INSERT INTO `t_pri_group` VALUES ('20150422154746597FPZ', '40002');
+INSERT INTO `t_pri_group` VALUES ('20150422154746597FPZ', '40003');
+INSERT INTO `t_pri_group` VALUES ('20150422154746597FPZ', '40004');
+INSERT INTO `t_pri_group` VALUES ('20150422154746597FPZ', '40005');
+INSERT INTO `t_pri_group` VALUES ('20150422154800429RNP', '50001');
+INSERT INTO `t_pri_group` VALUES ('20150422154800429RNP', '50002');
+INSERT INTO `t_pri_group` VALUES ('20150422154800429RNP', '50003');
+INSERT INTO `t_pri_group` VALUES ('20150422154800429RNP', '50004');
 
 -- ----------------------------
 -- Table structure for `t_scorerecord`
@@ -189,7 +231,6 @@ CREATE TABLE `t_scorerecord` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `createTime` datetime DEFAULT NULL,
   `detail` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `processTime` datetime DEFAULT NULL,
   `score` double DEFAULT NULL,
   `sign` bit(1) DEFAULT NULL,
   `visible` bit(1) DEFAULT NULL,
@@ -203,7 +244,7 @@ CREATE TABLE `t_scorerecord` (
   CONSTRAINT `FK7C7C46186A028AF2` FOREIGN KEY (`taskRecord_id`) REFERENCES `t_taskrecord` (`id`),
   CONSTRAINT `FK7C7C4618B621419E` FOREIGN KEY (`trophyRecord_id`) REFERENCES `t_trophyrecord` (`id`),
   CONSTRAINT `FK7C7C4618ECDE9696` FOREIGN KEY (`account_id`) REFERENCES `t_account` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_scorerecord
@@ -303,15 +344,17 @@ CREATE TABLE `t_systemprivilege` (
 -- Records of t_systemprivilege
 -- ----------------------------
 INSERT INTO `t_systemprivilege` VALUES ('10001', '1', '工单分配', 'manage/task/job_list.action');
-INSERT INTO `t_systemprivilege` VALUES ('20001', '2', '用户查看', 'manage/account/user_list.action1');
+INSERT INTO `t_systemprivilege` VALUES ('20001', '2', '用户查看', 'manage/account/user_list.action');
 INSERT INTO `t_systemprivilege` VALUES ('20002', '2', '积分中心', 'manage/credit/scoreRecord_list.action');
+INSERT INTO `t_systemprivilege` VALUES ('20003', '2', '兑换管理', 'manage/credit/trophyRecord_list.action');
 INSERT INTO `t_systemprivilege` VALUES ('30001', '3', '奖品列表', 'manage/credit/trophy_list.action');
 INSERT INTO `t_systemprivilege` VALUES ('30002', '3', '奖品添加', 'manage/credit/trophy_addUI.action');
 INSERT INTO `t_systemprivilege` VALUES ('30003', '3', '奖品分类管理', 'manage/credit/trophyType_list.action');
 INSERT INTO `t_systemprivilege` VALUES ('40001', '4', '系统帐号', 'manage/account/account_list.action');
 INSERT INTO `t_systemprivilege` VALUES ('40002', '4', '消息管理', 'manage/extra/message_list.action');
-INSERT INTO `t_systemprivilege` VALUES ('40003', '4', '意见反馈', 'manage/account/notfound.html');
-INSERT INTO `t_systemprivilege` VALUES ('40004', '4', '角色定义', 'manage/account/blank.html');
+INSERT INTO `t_systemprivilege` VALUES ('40003', '4', '意见反馈', 'manage/extra/sense_list.action');
+INSERT INTO `t_systemprivilege` VALUES ('40004', '4', '角色定义', 'manage/account/group_list.action');
+INSERT INTO `t_systemprivilege` VALUES ('40005', '4', 'App版本管理', 'manage/extra/appversion_list.action');
 INSERT INTO `t_systemprivilege` VALUES ('50001', '5', '工单设置', 'manage/extra/config_show.action#scid=match');
 INSERT INTO `t_systemprivilege` VALUES ('50002', '5', '积分说明', 'manage/extra/config_show.action#scid=manual');
 INSERT INTO `t_systemprivilege` VALUES ('50003', '5', '关于我们', 'manage/extra/config_show.action#scid=about');
@@ -416,6 +459,7 @@ CREATE TABLE `t_trophyrecord` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `number` int(11) DEFAULT NULL,
   `postTime` datetime DEFAULT NULL,
+  `processTime` datetime DEFAULT NULL,
   `score` double DEFAULT NULL,
   `sign` bit(1) DEFAULT NULL,
   `visible` bit(1) DEFAULT NULL,
@@ -426,7 +470,7 @@ CREATE TABLE `t_trophyrecord` (
   KEY `FK6BD0946CECDE9696` (`account_id`),
   CONSTRAINT `FK6BD0946CC590DE1E` FOREIGN KEY (`trophy_id`) REFERENCES `t_trophy` (`id`),
   CONSTRAINT `FK6BD0946CECDE9696` FOREIGN KEY (`account_id`) REFERENCES `t_account` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_trophyrecord
@@ -442,8 +486,9 @@ CREATE TABLE `t_trophytype` (
   `od` int(11) DEFAULT NULL,
   `visible` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10002 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_trophytype
 -- ----------------------------
+INSERT INTO `t_trophytype` VALUES ('10001', '充值卡', '1', '');

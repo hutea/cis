@@ -50,7 +50,7 @@
 		<default-interceptor-ref name="depStack" />
 		<global-results>
 			<result name="error">/error.jsp</result>
-			<result name="unauth">/WEB-INF/page/unAuth.jsp</result>
+			<result name="unauth">/WEB-INF/page/common/unAuth.jsp</result>
 		</global-results>
 	</package>
 

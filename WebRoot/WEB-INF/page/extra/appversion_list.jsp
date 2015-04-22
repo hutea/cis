@@ -101,11 +101,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     		</div>
                     		
                     		<div class="col-sm-6 col-md-3" style="border: 1px solid #d3d3d3;padding-top: 8px">
-                    			<form  action ="${pageContext.request.contextPath}/manage/extra/appversion_add.action" enctype="multipart/form-data" method="post" >
+                    			<form id="myform" action ="${pageContext.request.contextPath}/manage/extra/appversion_add.action" enctype="multipart/form-data" method="post" >
                     				<div class="form-group">
                     					<label class="col-md-3 control-label">版本号</label>
                     					<div class="col-md-8">
-                    						<input type="text" class="form-control" name="appVersion.version" />
+                    						<input type="text" class="form-control" name="appVersion.version" onkeypress="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onkeyup="if(!this.value.match(/^[\+\-]?\d*?\.?\d*?$/))this.value=this.t_value;else this.t_value=this.value;if(this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))this.o_value=this.value" onblur="if(!this.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))this.value=this.o_value;else{if(this.value.match(/^\.\d+$/))this.value=0+this.value;if(this.value.match(/^\.$/))this.value=0;this.o_value=this.value}" />
+                    						<span></span>
                     					</div>
                     				</div>
                     				<div class="form-group">
@@ -121,6 +122,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     					<label class="col-md-3 control-label">上传文件</label>
                     					<div class="col-md-8">
 								     		 <input type="file" name="app" class="form-control"> 
+								     		 <span></span>
                     					</div>
                     				</div>
                     				
@@ -158,6 +160,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/raphael-2.1.0.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap-wizard.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/select2.min.js"></script>
+
+		<!-- 验证框架 -->
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/appversion.js"></script>
 
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>

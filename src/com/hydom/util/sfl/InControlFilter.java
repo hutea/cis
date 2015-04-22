@@ -23,17 +23,15 @@ import com.hydom.util.WebUtil;
 public class InControlFilter implements Filter {
 
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse res,
-			FilterChain chain) throws IOException, ServletException {
-//		HttpServletRequest request = (HttpServletRequest) req;
-//
-//		Account account = WebUtil.getlogonAccount(request);
-//		if (account == null) {
-//			HttpServletResponse response = (HttpServletResponse) res;
-//			response.sendRedirect(request.getContextPath()
-//					+ "/auth/loginUI.action");
-//			return;
-//		}
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+			throws IOException, ServletException {
+		HttpServletRequest request = (HttpServletRequest) req;
+		Account account = WebUtil.getlogonAccount(request);
+		if (account == null) {
+			HttpServletResponse response = (HttpServletResponse) res;
+			response.sendRedirect(request.getContextPath() + "/signin.jsp");
+			return;
+		}
 		chain.doFilter(req, res);
 	}
 
