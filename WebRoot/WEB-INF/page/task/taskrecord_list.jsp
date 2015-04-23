@@ -89,7 +89,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                            		 <td><fmt:formatDate value="${entry.matchTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td><c:if test="${entry.postTime==null}">未提交</c:if><fmt:formatDate value="${entry.postTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
                            		 <td>${entry.sign==null?'未计算':entry.sign==1?'识别正确':'识别错误'}</td> 
-                           		 <td>${entry.identState==0?'超时':entry.postTime==null?'未提交':''}</td> 
+                           		 <td>${entry.identState==0?'超时':entry.postTime==null?'未提交':'未超时'}</td> 
                         		 <td><a href='javascript:show(${entry.id})'>查看笔迹</a> 
                            	  	</tr>
                            	  </c:forEach>

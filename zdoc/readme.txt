@@ -7,7 +7,7 @@
 ****************************************************
 
 部署流程
-1.设置Tomcat编码为UTF-8
+1.设置Tomcat编码为UTF-8【重要】
 ${CATALINA_HOME}/conf/server.xml文件设置
 #################################################
 <Connector port="8080" protocol="HTTP/1.1"  
@@ -16,7 +16,7 @@ connectionTimeout="20000" redirectPort="8443" />
 #################################################
 
 2.创建数据库cis
-（1）字符集：utf8 -- UTF-8 Unicode
+（1）字符集：utf8 -- UTF-8 Unicode【重要】
 （2）排序规则建议：utf8_unicode_ci
 
 3.运行 “初始化.sql”脚本文件
@@ -32,7 +32,12 @@ maxIdle=100
 minIdle=100
 #################################################
 
-5.发布war包到Tomcat容器
-6.启动Tomcat，访问：http://localhost:8080/cis/   
+5.日志文件配置
+log4j.properties
+（1）异常日志默认放在${cis.root}/WEB-INF/log/exception.log
+（2）其它日志放在G:/server目录下，如果不存在这样的目录，请修改相关配置。【重要】
+
+6.发布war包到Tomcat容器
+7.启动Tomcat，访问：http://localhost:8080/cis/   
 帐号：admin 密码：123456
 ****************************************************

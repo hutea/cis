@@ -107,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									    </div>
 									  </div>
 						        <div class="panel-footer" style="padding: 10px 20px;">
-										于<fmt:formatDate value="${loginAccount.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/> 
+										于 <small><fmt:formatDate value="${loginAccount.lastSigninTime}" pattern="yyyy-MM-dd HH:mm:ss"/></small> 
 										在 <small title="登录IP：${loginAccount.lastSignIp}">${loginAccount.lastSignPosition}</small> 登录 
 								    </div>
 						        </div>

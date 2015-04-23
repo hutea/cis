@@ -16,7 +16,7 @@ public class IpLook {
 	 * 根据ip得到具体的地址
 	 * 
 	 * @param ip
-	 * @return：成都联通(119.6.100.88)
+	 * @return：
 	 */
 	public static String sinaIpLookup(String ip) {
 		try {
@@ -47,7 +47,7 @@ public class IpLook {
 					sb.append(ipInfo.getProvince() + ipInfo.getCity() + "(" + ipInfo.getIsp() + ip
 							+ ")");
 				} else {
-					sb.append("局域网地址" + ip);
+					sb.append("局域网" + ip);
 				}
 			}
 		}
@@ -58,7 +58,7 @@ public class IpLook {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String ip = sinaIpLookup("118.225.65.89");
+		String ip = sinaIpLookup("8.25.65.89");
 		System.out.println(ip);
 
 	}
