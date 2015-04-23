@@ -30,10 +30,12 @@ import com.hydom.credit.service.ScoreRecordService;
 import com.hydom.credit.service.TrophyRecordService;
 import com.hydom.credit.service.TrophyService;
 import com.hydom.dao.PageView;
+import com.hydom.extra.ebean.AppVersion;
 import com.hydom.extra.ebean.Message;
 import com.hydom.extra.ebean.MessageDeleteRecord;
 import com.hydom.extra.ebean.Sense;
 import com.hydom.extra.ebean.SystemConfig;
+import com.hydom.extra.service.AppVersionService;
 import com.hydom.extra.service.MessageDeleteRecordService;
 import com.hydom.extra.service.MessageService;
 import com.hydom.extra.service.SenseService;
@@ -73,6 +75,8 @@ public class AppServer {
 	private MessageDeleteRecordService messageDeleteRecordService;
 	@Resource
 	private ScoreRecordService scoreRecordService;
+	@Resource
+	private AppVersionService appVersionService;
 
 	private Log log = LogFactory.getLog("appServerLog");
 
@@ -98,6 +102,8 @@ public class AppServer {
 	private String jsonStr;//
 	private int page = 1;
 	private int maxresult = 10;
+	private double version;
+	private int type;
 
 	/**
 	 * 注册
@@ -798,9 +804,24 @@ public class AppServer {
 	 * @return
 	 */
 	public String update() {
-		log.info("App【软件更新】：" + "用户ID=" + uid);
+		log.info("App【软件更新】：" + "用户ID=" + uid + "version=" + version + " type=" + type);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		dataMap.put("result", 0);
+		try {
+			AppVersion apv = appVersionService.isUpdate(version);
+			if (apv != null) {
+				dataMap.put("result", 1);
+				dataMap.put("upgrade", 1);
+				dataMap.put("url", apv.getFilePath());
+			} else {
+				dataMap.put("result", 1);
+				dataMap.put("upgrade", 0);
+				dataMap.put("url", "");
+			}
+		} catch (Exception e) {
+			dataMap.put("result", 1);
+			dataMap.put("upgrade", 0);
+			dataMap.put("url", "");
+		}
 		dataFillStream(dataMap);
 		return "success";
 	}
@@ -1051,6 +1072,22 @@ public class AppServer {
 
 	public void setMaxresult(int maxresult) {
 		this.maxresult = maxresult;
+	}
+
+	public double getVersion() {
+		return version;
+	}
+
+	public void setVersion(double version) {
+		this.version = version;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 }
