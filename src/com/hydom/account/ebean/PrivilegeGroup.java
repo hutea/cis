@@ -24,7 +24,7 @@ import javax.persistence.TemporalType;
  * 
  */
 @Entity
-@Table(name = "t_privilegeGroup")
+@Table(name = "t_privilegegroup")
 public class PrivilegeGroup {
 	@Id
 	@Column

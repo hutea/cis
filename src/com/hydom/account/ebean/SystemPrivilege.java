@@ -17,7 +17,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name = "t_systemPrivilege")
+@Table(name = "t_systemprivilege")
 public class SystemPrivilege {
 	@Id
 	@Column

@@ -14,7 +14,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name = "t_trophyType")
+@Table(name = "t_trophytype")
 public class TrophyType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

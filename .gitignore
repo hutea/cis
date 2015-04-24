@@ -4,7 +4,7 @@
 *.class
 
 
-#.settingsĿ¼
+#.settings
 .jsdtscope
 org.eclipse.core.resources.prefs
 org.eclipse.jdt.core.prefs

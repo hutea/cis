@@ -811,7 +811,7 @@ public class AppServer {
 			if (apv != null) {
 				dataMap.put("result", 1);
 				dataMap.put("upgrade", 1);
-				dataMap.put("url", apv.getFilePath());
+				dataMap.put("url", apv.getFilePath().substring(4));
 			} else {
 				dataMap.put("result", 1);
 				dataMap.put("upgrade", 0);
