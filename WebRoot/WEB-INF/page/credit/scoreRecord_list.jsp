@@ -75,7 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                          <s:hidden name="m" />
                           <div style="margin-bottom: 10px;"> 
                          	<span class="text-primary hidden" >查询选项 </span>
-                         	<input type="text" style="width: 220px;display: inline-block;" name="query_uid" value="${query_uid>0?query_uid:''}" class="form-control"  placeholder="用户ID"  >
+                         	<input type="text" style="width: 220px;display: inline-block;" name="query_uid" value="${query_uid}" class="form-control"  placeholder="用户ID"  >
                          	<input type="text" style="width: 220px;display: inline-block;" name="query_phone" value="${query_phone}" class="form-control"  placeholder="手机号"  >
                          	<input type="text" style="width: 220px;display: inline-block;height: 38px;" name="query_createTime" value="${query_createTime}" class="Wdate"   onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" placeholder="积分变化时间"  >
                          	<input type="button" style="margin: 0 50px;"  class="btn btn-primary" onclick="javascript:confirmQuery()"  value="查 询"  >

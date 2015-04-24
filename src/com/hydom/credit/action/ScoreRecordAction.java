@@ -35,7 +35,7 @@ public class ScoreRecordAction {
 	private long srid;
 	private long accid;
 	private int m = 2;// 识别选中导航菜单
-	private long query_uid;
+	private String query_uid;
 	private String query_phone;
 	private String query_createTime;
 
@@ -48,9 +48,14 @@ public class ScoreRecordAction {
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);
 
-		if (query_uid > 0) {
-			jpql.append(" and o.account.id =?" + (params.size() + 1));
-			params.add(query_uid);
+		if (query_uid != null && "".equals(query_uid)) {
+			try {
+				long uid = Long.parseLong(query_uid);
+				jpql.append(" and o.account.id =?" + (params.size() + 1));
+				params.add(uid);
+			} catch (Exception e) {
+
+			}
 		}
 		if (query_phone != null && !"".equals(query_phone)) {
 			jpql.append(" and o.account.phone like ?" + (params.size() + 1));
@@ -224,11 +229,11 @@ public class ScoreRecordAction {
 		this.accid = accid;
 	}
 
-	public long getQuery_uid() {
+	public String getQuery_uid() {
 		return query_uid;
 	}
 
-	public void setQuery_uid(long queryUid) {
+	public void setQuery_uid(String queryUid) {
 		query_uid = queryUid;
 	}
 
