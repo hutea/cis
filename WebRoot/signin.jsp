@@ -43,8 +43,8 @@
                         <img src="${pageContext.request.contextPath}/resource/chain/images/logo-primary.png" alt="Chain Logo" >
                     </div>
                     <br />
-                    <h4 class="text-center mb5">准星云</h4>
-                    <p class="text-center">系统帐户登录</p>
+                    <h4 class="text-center mb5" >后台管理系统</h4>
+                    <p class="text-center">帐号登录</p>
                     
                     <div class="mb30"></div>
 
@@ -75,7 +75,7 @@
                     
                 </div><!-- panel-body -->
                 <div class="panel-footer">
-                    <a href="#" class="btn btn-primary btn-block">准星云</a>
+                    <a href="#" class="btn btn-primary btn-block">摇钱数</a>
                 </div><!-- panel-footer -->
             </div><!-- panel -->
         </section>

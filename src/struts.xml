@@ -16,8 +16,8 @@
 	<package name="signin_up" namespace="/" extends="struts-default">
 		<action name="signin" class="loginAndExitAction" method="signin">
 			<result type="redirectAction">
-				<param name="actionName">index</param>
-				<param name="namespace">manage</param>
+				<param name="actionName">job_list</param>
+				<param name="namespace">/manage/task</param>
 			</result>
 			<result name="fail">/signin.jsp</result>
 		</action>

@@ -115,7 +115,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements Tas
 			double samePerson = ((Long) countResult[1]).doubleValue();// 计算出相同答案的人数:转成double型，防止(3/5=0)情况
 			double currentPercent = (samePerson / task.getMatchedNum());// 当前比例
 			if (currentPercent >= task.getAccuracy()) {// 达到正确比例
-				log.info("---->达到正确比例");
+				log.info(task.getTaskId()+"-->达到正确比例");
 				Date now = new Date();
 				task.setResult((String) countResult[0]);// 设置结果
 				task.setRation(currentPercent);// 设置：计算实际比例
@@ -130,7 +130,7 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements Tas
 				update_TaskRecordSign(task.getId(), (String) countResult[0]);
 				jobService.postJob(job.getId());// 反馈工单
 			} else if (task.getMatchedNum() >= task.getMatchNum()) {// 已分配人数达到分配上限
-				log.info("---->已分配人数达到分配上限");
+				log.info(task.getTaskId()+"-->已分配人数达到分配上限");
 				Date now = new Date();
 				task.setResult((String) countResult[0]);// 设置结果：当前结果
 				task.setRation(currentPercent);// 设置：计算实际比例
@@ -151,14 +151,13 @@ public class TaskRecordServiceBean extends DAOSupport<TaskRecord> implements Tas
 				if ((moreNum + task.getMatchedNum()) > task.getMatchNum()) {// （再次分配人数+已分配人数）>分配上限
 					canNum = task.getMatchNum() - task.getMatchedNum();
 				}
-				System.out.println("canNum=" + canNum + " postNum=" + task.getPostNum());
 				task.setCanNum(canNum);// 设置再次分配的人数
 				task.setPostNum(task.getPostNum() + canNum);// 设置提交总数应达到的值
 				task.setResultNum(task.getResultNum() + 1);// 对返回了识别结果的人数+1
 				taskService.update(task);
 			}
 		} else {
-			System.out.println("---->实际提交数未达到指定的提交数");
+			log.info(task.getTaskId()+"-->实际提交数未达到指定的提交数");
 			task.setResultNum(task.getResultNum() + 1);// 对返回了识别结果的人数+1
 			taskService.update(task);
 		}

@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>Chain Responsive Bootstrap3 Admin</title>
+        <title>奖品列表</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
@@ -65,7 +65,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
                                     <li>trophy list</li>
                                 </ul>
-                                <h4>奖品查看</h4>
+                                <h4>奖品列表</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->

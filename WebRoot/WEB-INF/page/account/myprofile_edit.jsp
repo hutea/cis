@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>系统帐号修改</title>
+        <title>帐号设置</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
@@ -51,16 +51,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="media-body">
                                 <ul class="breadcrumb">
                                     <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
-                                    <li>account edit</li>
+                                    <li>account settings</li>
                                 </ul>
-                                <h4>系统帐号修改</h4>
+                                <h4>帐号设置</h4>
                             </div>
                         </div><!-- media -->
                     </div><!-- pageheader -->
                     
                     <div class="contentpanel">
                     	<div class="content-m" >
-                         <div>帐号修改</div>
+                         <div>帐号设置</div>
                          <div style="border-bottom: 1px solid #d5d5d5;margin-bottom: 10px;">&nbsp</div>
                          <s:form action="myProfileEdit" id="myform" name="myform" namespace="/manage/account" method="post"  > 
 	    					<s:hidden name="accid" />

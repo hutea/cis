@@ -29,6 +29,8 @@ public class SystemConfig {
 	private Long valueLong; // long值
 	@Column
 	private Double valueDouble; // double值
+	@Column
+	private String valueString;// 简要内容
 	@Lob
 	private String valueText;// 纯文本
 	@Lob
@@ -48,6 +50,14 @@ public class SystemConfig {
 
 	public void setValueShort(Short valueShort) {
 		this.valueShort = valueShort;
+	}
+
+	public String getValueString() {
+		return valueString;
+	}
+
+	public void setValueString(String valueString) {
+		this.valueString = valueString;
 	}
 
 	public Integer getValueInt() {

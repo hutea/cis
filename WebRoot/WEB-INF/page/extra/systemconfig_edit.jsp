@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>Chain Responsive Bootstrap3 Admin</title>
+        <title>系统参数设置</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
@@ -111,7 +111,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								    <div class="col-sm-9">
 									    <div class="input-group">
 									      <div class="input-group-addon">百分比</div>
-								     	 <input style="text-align: right;" id="valueDouble" name="config.valueDouble" type="text"  value="${percent}"  class="form-control" title="${config.valueDouble*100}%" >
+								     	 <input style="text-align: right;" id="valueDouble" name="config.valueDouble" type="text"  value="${percent}"  class="form-control" >
 									      <div class="input-group-addon">%</div>
 									    </div>
 								    </div>
@@ -173,6 +173,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 	<div style="line-height: 50px;">
     					 		<span>联系我们</span>
     					 	</div>
+    					 	<div style="margin-bottom: 10px;">
+    					 		  <label>客服电话</label>
+							      <input name="config.valueString" style="line-height: 30px;padding: 1px 8px;" type="text"  value="${config.valueString}" placeholder="客服电话" >
+						   	</div>
     					 	<div style="line-height: 50px;">
     					 		<textarea name="config.valueContent" cols="50" rows="8" style="width:500px;height:200px;visibility:hidden;">
     					 			${config.valueContent }

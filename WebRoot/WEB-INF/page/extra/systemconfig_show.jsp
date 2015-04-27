@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta name="description" content="">
         
         <meta name="author" content="">
-        <title>Chain Responsive Bootstrap3 Admin</title>
+        <title>系统参数</title>
         <link href="${pageContext.request.contextPath}/resource/css/common.css" rel="stylesheet" />
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/resource/chain/css/morris.css" rel="stylesheet">
@@ -121,6 +121,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					 <div id="" <c:if test="${scid!='phone'}">style="display: none"</c:if>  >
     					 	<div style="line-height: 50px;">
     					 		<span>联系我们</span>
+    					 	</div >
+    					 	<div style="line-height: 50px;border-bottom: 1px solid eeefef;">
+								<span>客服电话：</span>
+								<ins><strong>${config.valueString}</strong></ins>
     					 	</div >
     					 	<div style="line-height: 50px;">
     					 		<span class="sycon">${config.valueContent}</span>

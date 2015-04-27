@@ -234,6 +234,8 @@ public class AppServer {
 				dataMap.put("result", 8);
 			} else if (record.getPostTime() != null) {// 提交过
 				dataMap.put("result", 13);// 重复提交
+			} else if (result_str == null || "".equals(result_str)) {
+				dataMap.put("result", 0);// 内容为空
 			} else {
 				int result = taskRecordService.processTaskRecord(tid, result_str);
 				dataMap.put("result", result);
@@ -279,11 +281,13 @@ public class AppServer {
 		PageView<TaskRecord> pageView = new PageView<TaskRecord>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
 		orderby.put("id", "desc");
-		StringBuffer jpql = new StringBuffer("o.visible=?1 and o.account.id=?2 and o.sign=?3");
+		StringBuffer jpql = new StringBuffer(
+				"o.visible=?1 and o.account.id=?2 and o.sign=?3 and o.identState=?4");
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);
 		params.add(uid);
 		params.add(sign);
+		params.add(1);
 		pageView.setQueryResult(taskRecordService.getScrollData(pageView.getFirstResult(),
 				maxresult, jpql.toString(), params.toArray(), orderby));
 		List<TaskRecord> records = pageView.getRecords();
@@ -304,7 +308,11 @@ public class AppServer {
 			/** 处理MetricPoint对象END **/
 			map.put("sign", tr.getSign());
 			map.put("score", tr.getScore() == null ? 0 : tr.getScore());
-			map.put("post_time", sdf.format(tr.getPostTime()));
+			try{
+				map.put("post_time", sdf.format(tr.getPostTime()));
+			}catch (Exception e) {
+				continue;
+			}
 			map.put("image", lineList);
 			map.put("result_str", tr.getResult());
 			map.put("right_str", tr.getTask().getResult());
@@ -700,6 +708,11 @@ public class AppServer {
 		return "success";
 	}
 
+	/**
+	 * 删除消息
+	 * 
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public String deleteMessage() {
 		log.info("App【删除消息】：" + "jsonStr=" + jsonStr);
@@ -742,13 +755,13 @@ public class AppServer {
 	}
 
 	/**
-	 * 获取积分说明，关于我们，客户电话
+	 * 获取积分说明，关于我们，客户电话 【作废】
 	 * 
 	 * @return
 	 */
 	public String fetchAbout() {
 		log.info("App【获取关于等信息】：" + "用户ID=" + uid);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		try {
 			dataMap.put("manual", systemConfigService.find("manual").getValueText());
 		} catch (Exception e) {
@@ -760,7 +773,7 @@ public class AppServer {
 			dataMap.put("about", "");
 		}
 		try {
-			dataMap.put("phone", systemConfigService.find("phone").getValueText());
+			dataMap.put("phone", systemConfigService.find("phone").getValueString());
 		} catch (Exception e) {
 			dataMap.put("phone", "");
 		}
@@ -768,9 +781,40 @@ public class AppServer {
 		return "success";
 	}
 
+	/**
+	 * 获取客服电话
+	 * 
+	 * @return
+	 */
+	public String fetchPhone() {
+		log.info("App【获取关于等信息】：" + "用户ID=" + uid);
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		dataMap.put("result", 1);
+		try {
+			dataMap.put("phone", systemConfigService.find("phone").getValueString());
+		} catch (Exception e) {
+			dataMap.put("phone", "");
+		}
+		dataFillStream(dataMap);
+		return "success";
+	}
+
+	/**
+	 * 积分说明返回的页面
+	 */
 	public String manual() {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		SystemConfig config = systemConfigService.find("manual");
+		request.setAttribute("config", config);
+		return "success";
+	}
+
+	/**
+	 * 关于我们返回的页面
+	 */
+	public String about() {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		SystemConfig config = systemConfigService.find("about");
 		request.setAttribute("config", config);
 		return "success";
 	}

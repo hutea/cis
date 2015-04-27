@@ -51,6 +51,7 @@ public class SystemConfigAction {
 		entity.setValueInt(config.getValueInt());
 		entity.setValueLong(config.getValueLong());
 		entity.setValueShort(config.getValueShort());
+		entity.setValueString(config.getValueString());
 		entity.setValueText(WebUtil.HtmltoText(config.getValueContent()));
 		entity.setValueDouble(config.getValueDouble());
 		if ("match".equals(scid)) {// 
