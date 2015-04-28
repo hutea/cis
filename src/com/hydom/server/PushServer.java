@@ -29,10 +29,10 @@ public class PushServer {
 	public static final String TAG = "tag_api";
 
 	public static void main(String[] args) {
-		sendPush("test title", "test content",1000l);
+		sendPush("test title", "test content", 1000l);
 	}
 
-	public static void sendPush(String title, String content,long timeToLive) {
+	public static void sendPush(String title, String content, long timeToLive) {
 		// HttpProxy proxy = new HttpProxy("localhost", 3128);
 		// Can use this https proxy: https://github.com/Exa-Networks/exaproxy
 		JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
@@ -55,14 +55,12 @@ public class PushServer {
 	}
 
 	public static PushPayload buildPayload(String title, String content, long timeToLive) {
-		// return PushPayload.alertAll(ALERT);
-		return PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(
-				Audience.all()).setNotification(
-				Notification.newBuilder().setAlert(content).addPlatformNotification(
-						AndroidNotification.newBuilder().setTitle(title).build())
-						.addPlatformNotification(
-								IosNotification.newBuilder().incrBadge(1).build())
-						.build()).setOptions(
-				Options.newBuilder().setTimeToLive(timeToLive).build()).build();
+		return PushPayload.newBuilder().setPlatform(Platform.all()).setAudience(Audience.all())
+				.setNotification(
+						Notification.newBuilder().setAlert(content).addPlatformNotification(
+								AndroidNotification.newBuilder().setTitle(title).build())
+								.addPlatformNotification(
+										IosNotification.newBuilder().setBadge(1).build()).build())
+				.setOptions(Options.newBuilder().setTimeToLive(timeToLive).build()).build();
 	}
 }

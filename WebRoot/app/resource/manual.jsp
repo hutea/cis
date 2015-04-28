@@ -10,6 +10,10 @@
 <html>
 	<head>
 		<title>积分说明</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<link href="${pageContext.request.contextPath}/resource/chain/css/bootstrap.min.css" rel="stylesheet">
+		<script src="${pageContext.request.contextPath}/resource/chain/js/jquery-1.11.1.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resource/chain/js/bootstrap.min.js"></script>
 	</head>
 
 	<body>

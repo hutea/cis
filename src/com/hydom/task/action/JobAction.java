@@ -38,6 +38,7 @@ public class JobAction {
 		request = ServletActionContext.getRequest();
 		PageView<Job> pageView = new PageView<Job>(maxresult, page);
 		LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
+		orderby.put("feedback", "asc");
 		orderby.put("id", "asc");
 		StringBuffer jpql = new StringBuffer("o.visible=?1 ");
 		List<Object> params = new ArrayList<Object>();

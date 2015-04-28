@@ -45,6 +45,7 @@ import com.hydom.task.ebean.TaskRecord;
 import com.hydom.task.service.TaskRecordService;
 import com.hydom.util.HelperUtil;
 import com.hydom.util.StringGenerator;
+import com.hydom.util.WebUtil;
 
 /**
  * 负责与客户端进行数据交互
@@ -308,9 +309,9 @@ public class AppServer {
 			/** 处理MetricPoint对象END **/
 			map.put("sign", tr.getSign());
 			map.put("score", tr.getScore() == null ? 0 : tr.getScore());
-			try{
+			try {
 				map.put("post_time", sdf.format(tr.getPostTime()));
-			}catch (Exception e) {
+			} catch (Exception e) {
 				continue;
 			}
 			map.put("image", lineList);
@@ -353,11 +354,16 @@ public class AppServer {
 				Map<String, Object> map = new LinkedHashMap<String, Object>();
 				map.put("tid", tr.getId());
 				map.put("name", tr.getName() + "");
-				map.put("detail", tr.getDetail() + "");
+				map.put("detail", WebUtil.htmlReplaceReverse(WebUtil.HtmltoText(tr.getDetail())));
 				map.put("stock", tr.getStock());
 				map.put("score", tr.getScore());
 				map.put("type", tr.getTrophyType().getName() + "");
-				map.put("image", tr.getImage() + "");
+				try {
+					map.put("image", tr.getImage().substring(4));
+				} catch (Exception e) {
+					map.put("image", "");
+				}
+
 				list.add(map);
 			}
 			if (list.size() > 0) {
@@ -452,9 +458,14 @@ public class AppServer {
 			Map<String, Object> map = new LinkedHashMap<String, Object>();
 			map.put("tid", tr.getTrophy().getId());
 			map.put("name", tr.getTrophy().getName());
-			map.put("image", tr.getTrophy().getImage());
+			try {
+				map.put("image", tr.getTrophy().getImage().substring(4));
+			} catch (Exception e) {
+				map.put("image", "");
+			}
 			map.put("type", tr.getTrophy().getTrophyType().getName());
-			map.put("detail", tr.getTrophy().getDetail());
+			map.put("detail", WebUtil.htmlReplaceReverse(WebUtil.HtmltoText(tr.getTrophy()
+					.getDetail())));
 			map.put("rid", tr.getId());
 			map.put("score", tr.getScore());
 			map.put("post_time", sdf.format(tr.getPostTime()));
