@@ -22,7 +22,7 @@ public interface ShortMessageService extends DAO<ShortMessage> {
 	 * 通过手机找到最近一条发送短信的验证码
 	 * 
 	 * @param phone
-	 * @return
+	 * @return:如果超时，返回：“CODETIMEOUT”
 	 */
 	public String findCode(String phone);
 

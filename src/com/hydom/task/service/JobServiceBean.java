@@ -60,7 +60,7 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 	@SuppressWarnings( { "unchecked" })
 	@Override
 	public void feedbackTimer() {
-		log.info("DataServer【失败工单定义提交开始】");
+		log.info("DataServer【提交失败工单重新提交开始】");
 		List<Job> jobs = em
 				.createQuery(
 						"select o from Job o where o.visible=?1 and feedback=?2 and o.taskFinishCount=o.taskCount")
@@ -71,7 +71,7 @@ public class JobServiceBean extends DAOSupport<Job> implements JobService {
 				this.update(job);
 			}
 		}
-		log.info("DataServer【失败工单定义提交结束】，共计：" + jobs.size());
+		log.info("DataServer【提交失败工单重新提交结束】，共计：" + jobs.size());
 	}
 
 	/**

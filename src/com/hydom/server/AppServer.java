@@ -115,7 +115,8 @@ public class AppServer {
 		log.info("App【用户注册】：" + "用户名=" + username + " 密码=" + password + " 验证码=" + code);
 		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		try {
-			if (code != null && code.equals(shortMessageService.find(username).getCode())) { // 验证码通过
+			String syscode = shortMessageService.findCode(username);
+			if (code != null && code.equals(syscode)) { // 验证码通过
 				if (!HelperUtil.isPhoneNumber(username)) {// 手机号格式不正确
 					dataMap.put("result", 10);
 				} else if (password.length() > 12 || password.length() < 6) {// 密码长度不符合规范
@@ -127,7 +128,11 @@ public class AppServer {
 					dataMap.put("result", 1);
 				}
 			} else {
-				dataMap.put("result", 2);// 验证码错误
+				if ("CODETIMEOUT".equals(syscode)) {
+					dataMap.put("result", 15);// 验证码超时
+				} else {
+					dataMap.put("result", 2);// 验证码错误
+				}
 			}
 		} catch (Exception e) {
 			dataMap.put("result", 0);
@@ -630,7 +635,11 @@ public class AppServer {
 					dataMap.put("result", 6);// 用户名不存在
 				}
 			} else {
-				dataMap.put("result", 2); // 验证码错误
+				if ("CODETIMEOUT".equals(sysCode)) {
+					dataMap.put("result", 15);// 验证码超时
+				} else {
+					dataMap.put("result", 2);// 验证码错误
+				}
 			}
 		} catch (Exception e) {
 			dataMap.put("result", 0);

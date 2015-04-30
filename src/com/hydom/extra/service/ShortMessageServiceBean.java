@@ -78,7 +78,11 @@ public class ShortMessageServiceBean extends DAOSupport<ShortMessage> implements
 	@Override
 	public String findCode(String phone) {
 		try {
-			return this.find(phone).getCode();
+			ShortMessage shotMessage = this.find(phone);
+			if (System.currentTimeMillis() - shotMessage.getSendTime().getTime() > 3 * 60 * 1000) {// ³¬Ê±
+				return "CODETIMEOUT";
+			}
+			return shotMessage.getCode();
 		} catch (Exception e) {
 			return null;
 		}

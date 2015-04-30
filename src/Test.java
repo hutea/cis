@@ -1,4 +1,5 @@
 import java.lang.reflect.Type;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +16,53 @@ public class Test {
 	// style="stroke:rgb(99,99,99);stroke-width:2" />
 
 	public static void main(String[] args) {
-		for(int i =0 ;i<10; i++){
-			if(i%2==0){
-				continue;
+		byte[][] bts = getHexSplits("0000000000000000", "ffffffffffffffff", 10);
+		System.out.println(bts.length);
+		for (byte[] bt : bts) {
+			StringBuffer sb = new StringBuffer();
+			for (byte b : bt) {
+				//System.out.println(b);
+				sb.append(b+" ");
 			}
-			System.out.println(i); 
+			System.out.println("HEX:"+sb);
 		}
+	}
+
+	public static byte[][] getHexSplits(String startKey, String endKey, int numRegions) {
+		byte[][] splits = new byte[numRegions - 1][];
+		BigInteger lowestKey = new BigInteger(startKey, 16);
+		System.out.println("lk="+lowestKey);
+		BigInteger highestKey = new BigInteger(endKey, 16);
+		System.out.println("hk="+highestKey);
+		BigInteger range = highestKey.subtract(lowestKey);
+		System.out.println("range="+highestKey);
+		BigInteger regionIncrement = range.divide(BigInteger.valueOf(numRegions));
+		System.out.println("regionIncrement="+regionIncrement);
+		lowestKey = lowestKey.add(regionIncrement);
+		for (int i = 0; i < numRegions - 1; i++) {
+			BigInteger key = lowestKey.add(regionIncrement.multiply(BigInteger.valueOf(i)));
+			byte[] b = String.format("%016x", key).getBytes();
+			splits[i] = b;
+		}
+		return splits;
+	}
+	public static byte[][] getHexSplits1(String startKey, String endKey, int numRegions) {
+		byte[][] splits = new byte[numRegions - 1][];
+		BigInteger lowestKey = new BigInteger(startKey, 16);
+		System.out.println("lk="+lowestKey);
+		BigInteger highestKey = new BigInteger(endKey, 16);
+		System.out.println("hk="+highestKey);
+		BigInteger range = highestKey.subtract(lowestKey);
+		System.out.println("range="+highestKey);
+		BigInteger regionIncrement = range.divide(BigInteger.valueOf(numRegions));
+		System.out.println("regionIncrement="+regionIncrement);
+		lowestKey = lowestKey.add(regionIncrement);
+		for (int i = 0; i < numRegions - 1; i++) {
+			BigInteger key = lowestKey.add(regionIncrement.multiply(BigInteger.valueOf(i)));
+			byte[] b = String.format("%016x", key).getBytes();
+			splits[i] = b;
+		}
+		return splits;
 	}
 
 	public static String getdata() {
