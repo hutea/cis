@@ -7,13 +7,13 @@
                         </a>
                         <div class="media-body">
                             <h4 class="media-heading">${loginAccount.nickname}</h4>
-                            <small class="text-muted" style="font-size: 12px;"></smal><fmt:formatDate value="${loginAccount.lastSigninTime}" pattern="HH:mm:ss dd/MM/yyyy"/></small>
+                            <small class="text-muted" style="font-size: 12px;"><fmt:formatDate value="${loginAccount.lastSigninTime}" pattern="HH:mm:ss dd/MM/yyyy"/></small>
                         </div>
                     </div><!-- media -->
                     
                     <h3 class="leftpanel-title">Navigation</h3>
                     <ul class="nav nav-pills nav-stacked">
-                        <li <c:if test="${m==null}">class="active"</c:if>><a href="<s:url action="index" namespace="/manage" />"><i class="fa fa-home"></i> <span>首页</span></a></li>
+                        <li <c:if test="${m==null}">class="active"</c:if> ><a href='<s:url action="index" namespace="/manage" />'><i class="fa fa-home"></i> <span>首页</span></a></li>
                        
                         <li <c:if test="${param.m==1||m==1}">class="active parent"</c:if>  class="parent" ><a href=""><i class="fa fa-bars"></i> <span>工单管理</span></a>
                             <ul class="children">

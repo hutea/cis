@@ -108,7 +108,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                        	<div class="fenye"><%@ include file="/WEB-INF/page/common/fenye.jsp" %></div>
                             <!-- code block hydom -->
                         
-                        
                     </div><!-- contentpanel -->
                     <div class="bottomwrapper" >
 						<%@ include file="/WEB-INF/page/common/bottom.jsp" %>

@@ -541,15 +541,15 @@ public class AppServer {
 			Date todayEndDate = HelperUtil.addDays(todayStartDate, 1);
 			if (account != null) {
 				dataMap.put("result", 1);
-				dataMap.put("score", account.getScore());
-				dataMap.put("tnum", taskRecordService.calcToday(uid, 1));
-				dataMap.put("tnumper", taskRecordService.calcTodayExceedPercent(uid));
+				dataMap.put("score", account.getScore());// 用户总积分
+				dataMap.put("tnum", taskRecordService.calcToday(uid, 1));// 今日识别成功次数
+				dataMap.put("tnumper", taskRecordService.calcTodayExceedPercent(uid));// 今日识别成功超过其他用户的百分比
 				dataMap.put("tscore", taskRecordService
-						.calcScore(uid, todayStartDate, todayEndDate));
-				dataMap.put("tscoreper", taskRecordService.calcTodayExceedPercent(uid));
+						.calcScore(uid, todayStartDate, todayEndDate));// 今日积分
+				dataMap.put("tscoreper", taskRecordService.calcTodayExceedPercent(uid));// 今日积分超过其他用户的百分比
 				dataMap.put("mscore", taskRecordService.calcScore(uid, HelperUtil
-						.firstDayThisMonth(), HelperUtil.lastDayThisMonth()));
-				dataMap.put("mper", taskRecordService.calcMonthPercent(uid));
+						.firstDayThisMonth(), HelperUtil.lastDayThisMonth()));// 本月积分
+				dataMap.put("mper", taskRecordService.calcMonthPercent(uid));// 本月通过率
 				dataFillStream(dataMap);
 			} else {
 				dataMap.put("result", 9);// 用户ID不存在
