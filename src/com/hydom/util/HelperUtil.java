@@ -34,12 +34,12 @@ public class HelperUtil {
 	}
 
 	/**
-	 * 对原始日期增加天数
+	 * 对原始日期增加[或减少]天数
 	 * 
 	 * @param srcDate
 	 *            ：原始日期
 	 * @param day
-	 *            ：要增加的天数
+	 *            ：增加的天数：为正值;减少的天数：为负值
 	 * @return
 	 */
 	public static Date addDays(Date srcDate, int day) {
@@ -59,7 +59,8 @@ public class HelperUtil {
 	/***
 	 * 获取上一月的日期
 	 * 
-	 * @param srcDate：2015-03-21
+	 * @param srcDate
+	 *            ：2015-03-21
 	 * @return：2015-2-21
 	 */
 	public static Date dayLastMoth(Date srcDate) {
@@ -121,5 +122,8 @@ public class HelperUtil {
 	}
 
 	public static void main(String[] args) {
+		Date now = new Date();
+		Date day = addDays(now, -1);
+		System.out.println(day);
 	}
 }

@@ -24,9 +24,11 @@ import com.google.gson.Gson;
 import com.hydom.account.ebean.Account;
 import com.hydom.account.service.AccountService;
 import com.hydom.credit.ebean.ScoreRecord;
+import com.hydom.credit.ebean.ScoreTop;
 import com.hydom.credit.ebean.Trophy;
 import com.hydom.credit.ebean.TrophyRecord;
 import com.hydom.credit.service.ScoreRecordService;
+import com.hydom.credit.service.ScoreTopService;
 import com.hydom.credit.service.TrophyRecordService;
 import com.hydom.credit.service.TrophyService;
 import com.hydom.dao.PageView;
@@ -78,6 +80,8 @@ public class AppServer {
 	private ScoreRecordService scoreRecordService;
 	@Resource
 	private AppVersionService appVersionService;
+	@Resource
+	private ScoreTopService scoreTopService;
 
 	private Log log = LogFactory.getLog("appServerLog");
 
@@ -574,6 +578,80 @@ public class AppServer {
 		}
 		dataFillStream(dataMap);
 		return "success";
+	}
+
+	/**
+	 * 获取当天积分榜单
+	 * 
+	 * @return
+	 */
+	public String todayTop() {
+		log.info("App【统计用户积分信息】：" + "用户ID=" + uid);
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
+		try {
+			Account account = accountService.find(uid);
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String todayStr = sdf.format(now);
+			Date todayStartDate = sdf.parse(todayStr);
+			Date todayEndDate = HelperUtil.addDays(todayStartDate, 1);
+			dataMap.put("score", taskRecordService.calcScore(uid, todayStartDate, todayEndDate));// 今日用户积分
+			Trophy trophy = trophyService.newest();
+			if (trophy != null) {
+				dataMap.put("lacksore", trophy.getScore() - account.getScore() + "");
+				dataMap.put("tname", trophy.getName());
+			} else {
+				dataMap.put("lacksore", "none");
+				dataMap.put("tname", "");
+			}
+			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+			List<ScoreTop> topList = scoreTopService.listTheDay(new Date());
+			for (ScoreTop top : topList) {
+				Map<String, Object> map = new LinkedHashMap<String, Object>();
+				String nickName = top.getAccount().getNickname();
+				if (nickName != null && !"".equals(nickName)) {
+					map.put("name", nickName);
+				} else {
+					String phone = top.getAccount().getPhone();
+					map.put("name", phone.substring(0, 4) + "****" + phone.substring(7, 11));
+				}
+				map.put("score", top.getScore());
+				map.put("cp", cp(top));
+				list.add(map);
+			}
+			dataMap.put("list", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			dataMap.put("score", 0);
+			dataMap.put("lacksore", "none");
+			dataMap.put("tname", "");
+			dataMap.put("list", new ArrayList<Map<String, Object>>());
+		}
+		dataFillStream(dataMap);
+		return "success";
+	}
+
+	/**
+	 * 也昨日相比，帐户排名变化情况
+	 * 
+	 * @param accout
+	 * @return：-1下降；0持平； 1上升
+	 */
+	private int cp(ScoreTop top) {
+		Date now = new Date();
+		List<ScoreTop> yesterdayList = scoreTopService.listTheDay(HelperUtil.addDays(now, -1));
+		for (ScoreTop st : yesterdayList) {
+			if (st.getAccount().getId() == top.getAccount().getId()) {
+				if (st.getLv() > top.getLv()) {// 昨日排名小于
+					return 1;
+				} else if (st.getLv() < top.getLv()) {
+					return -1;
+				} else {
+					return 0;
+				}
+			}
+		}
+		return 1;
 	}
 
 	/**

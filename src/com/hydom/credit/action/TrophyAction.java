@@ -55,8 +55,8 @@ public class TrophyAction {
 		StringBuffer jpql = new StringBuffer("o.visible=?1 ");
 		List<Object> params = new ArrayList<Object>();
 		params.add(true);
-		pageView.setQueryResult(trophyService.getScrollData(pageView.getFirstResult(),
-				maxresult, jpql.toString(), params.toArray(), orderby));
+		pageView.setQueryResult(trophyService.getScrollData(pageView.getFirstResult(), maxresult,
+				jpql.toString(), params.toArray(), orderby));
 		request.setAttribute("pageView", pageView);
 		return "success";
 	}
@@ -94,8 +94,7 @@ public class TrophyAction {
 		if (img != null && img.length() > 0) {// ÐÞ¸ÄÍ¼Æ¬
 			// É¾³ýÔ­Í¼
 			String oripath = entity.getImage();
-			File oriFile = new File(ServletActionContext.getServletContext().getRealPath(
-					oripath));
+			File oriFile = new File(ServletActionContext.getServletContext().getRealPath(oripath));
 			if (!oriFile.delete()) {
 				log.info("É¾³ýÍ¼Æ¬Ê§°Ü£¬ÇëÊÖ¶¯É¾³ý£¬É¾³ýÂ·¾¶£º" + oriFile.getAbsolutePath());
 			}
@@ -126,13 +125,11 @@ public class TrophyAction {
 
 	private String saveAccessory(File accessory, String accessoryFileName) {
 		String savePath = null;
-		if (accessory != null && accessoryFileName != null
-				&& !"".equals(accessoryFileName)) {
+		if (accessory != null && accessoryFileName != null && !"".equals(accessoryFileName)) {
 			String saveDir = ServletActionContext.getServletContext().getRealPath(
 					"/app/resource/system/tropy");
-			String suffix = accessoryFileName.substring(
-					accessoryFileName.lastIndexOf("."), accessoryFileName.length())
-					.toLowerCase();
+			String suffix = accessoryFileName.substring(accessoryFileName.lastIndexOf("."),
+					accessoryFileName.length()).toLowerCase();
 			String fileName = new Date().getTime() + suffix;
 			savePath = "app/resource/system/tropy/" + fileName;
 			File file = new File(saveDir);

@@ -14,11 +14,16 @@ public class ScoreRecordServiceBean extends DAOSupport<ScoreRecord> implements S
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> top(Date startDate, Date endDate, int maxresult) {
-		return em
-				.createQuery(
-						"select s.account,sum(s.score)from ScoreRecord s where s.createTime>?1 and screateTime<?2 group by t.account order by sum(s.score) desc")
-				.setParameter(1, startDate).setParameter(2, 1).setMaxResults(maxresult)
-				.getResultList();
+		try {
+			return  em
+					.createQuery(
+							"select s.account,sum(s.score) from ScoreRecord s where s.createTime>?1 and s.createTime<?2 group by s.account order by sum(s.score) desc")
+					.setParameter(1, startDate).setParameter(2, endDate).setMaxResults(maxresult)
+					.getResultList();
+		} catch (Exception e) { 
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

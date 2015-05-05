@@ -35,6 +35,9 @@ public class ScoreTop {
 	@Temporal(TemporalType.DATE)
 	private Date genDate;// 榜单日期
 
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updateDate;// 最后的更新日期
+
 	@Column
 	private int lv; // 榜单排名
 
@@ -80,6 +83,14 @@ public class ScoreTop {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 }

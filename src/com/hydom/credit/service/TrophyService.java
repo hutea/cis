@@ -14,4 +14,11 @@ public interface TrophyService extends DAO<Trophy> {
 	 */
 	public List<Trophy> list();
 
+	/**
+	 * 获取最新添加的奖品记录
+	 * 
+	 * @return
+	 */
+	public Trophy newest();
+
 }
