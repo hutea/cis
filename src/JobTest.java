@@ -10,16 +10,16 @@ import com.hydom.util.StringGenerator;
 public class JobTest {
 
 	public static void main(String[] args) {
-		process_1();
-		// process_2();
+		//process_1();
+		 process_2();
 	}
 
 	public static void process_2() {
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 10; i++) {
 			long s = System.currentTimeMillis();
-			PhoneThread p1 = new PhoneThread(4, "正确123");
-			PhoneThread p2 = new PhoneThread(5, "正确123");
-			PhoneThread p3 = new PhoneThread(6, "正确123");
+			PhoneThread p1 = new PhoneThread(10004, "正确123");
+			PhoneThread p2 = new PhoneThread(10005, "正确123");
+			PhoneThread p3 = new PhoneThread(10006, "正确123");
 			p1.run();
 			p2.run();
 			p3.run();
@@ -29,19 +29,19 @@ public class JobTest {
 	}
 
 	public static void process_1() {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 5; i++) {
 			long s = System.currentTimeMillis();
 			if (i % 2 != 0) {
-				PhoneThread p1 = new PhoneThread(1, "正确123");
-				PhoneThread p2 = new PhoneThread(2, "正确123");
-				PhoneThread p3 = new PhoneThread(3, "正确123");
+				PhoneThread p1 = new PhoneThread(10001, "正确123");
+				PhoneThread p2 = new PhoneThread(10002, "正确123");
+				PhoneThread p3 = new PhoneThread(10003, "正确123");
 				p1.run();
 				p2.run();
 				p3.run();
 			} else {
-				PhoneThread p1 = new PhoneThread(1, "正确123");
-				PhoneThread p2 = new PhoneThread(2, "xyz");
-				PhoneThread p3 = new PhoneThread(3, "test");
+				PhoneThread p1 = new PhoneThread(10001, "正确123");
+				PhoneThread p2 = new PhoneThread(10002, "xyz");
+				PhoneThread p3 = new PhoneThread(10003, "test");
 				p1.run();
 				p2.run();
 				p3.run();

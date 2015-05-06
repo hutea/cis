@@ -107,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				        <div class="row" style="margin-bottom: 10px;">
 				            <div class="col-md-12">
 				                <form class="form-inline" id="myform" action="${pageContext.request.contextPath}/manage/credit/trophyType_add.action" method="post" >
-				                     <input type="text" name="type.name" class="form-control" name="" placeholder="奖品类别名称">
+				                     <input type="text" name="type.name" class="form-control" placeholder="奖品类别名称">
                         			 <span></span>
                         			 <input type="submit" class="btn btn-primary" name="" value="提交">
 				                </form>

@@ -25,7 +25,7 @@ public class WebUtil {
 	}
 
 	/***************************************************************************
-	 * 获取URI的路径,如路径为http://www.xunbao.com/action/post.htm?method=add,
+	 * 获取URI的路径,如路径为http://www.taobao.com/action/post.htm?method=add,
 	 * 得到的值为"/action/post.htm"
 	 * 
 	 * @param request

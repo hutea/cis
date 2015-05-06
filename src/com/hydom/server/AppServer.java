@@ -196,7 +196,7 @@ public class AppServer {
 		log.info("App【获取分配题目】：" + "uid=" + uid);
 		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		TaskRecord taskRecord = taskRecordService.fetchTaskRecord(uid);
+		TaskRecord taskRecord =taskRecordService.fetchTaskRecord(uid);
 		if (taskRecord != null) {
 			dataMap.put("tid", taskRecord.getId());
 			// 处理MetricPoint对象
@@ -597,6 +597,7 @@ public class AppServer {
 			Date todayEndDate = HelperUtil.addDays(todayStartDate, 1);
 			dataMap.put("score", taskRecordService.calcScore(uid, todayStartDate, todayEndDate));// 今日用户积分
 			Trophy trophy = trophyService.newest();
+			dataMap.put("result", 1);
 			if (trophy != null) {
 				dataMap.put("lacksore", trophy.getScore() - account.getScore() + "");
 				dataMap.put("tname", trophy.getName());
@@ -621,7 +622,8 @@ public class AppServer {
 			}
 			dataMap.put("list", list);
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
+			dataMap.put("result", 0);
 			dataMap.put("score", 0);
 			dataMap.put("lacksore", "none");
 			dataMap.put("tname", "");

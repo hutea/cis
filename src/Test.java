@@ -3,6 +3,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -16,16 +17,8 @@ public class Test {
 	// style="stroke:rgb(99,99,99);stroke-width:2" />
 
 	public static void main(String[] args) {
-		byte[][] bts = getHexSplits("0000000000000000", "ffffffffffffffff", 10);
-		System.out.println(bts.length);
-		for (byte[] bt : bts) {
-			StringBuffer sb = new StringBuffer();
-			for (byte b : bt) {
-				//System.out.println(b);
-				sb.append(b+" ");
-			}
-			System.out.println("HEX:"+sb);
-		}
+		System.out.println(UUID.randomUUID());
+		System.out.println(UUID.fromString("b720660c-25cd-464e-8e7f-7f1995213ca3"));
 	}
 
 	public static byte[][] getHexSplits(String startKey, String endKey, int numRegions) {
