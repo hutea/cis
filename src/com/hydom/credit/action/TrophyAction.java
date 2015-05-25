@@ -90,6 +90,8 @@ public class TrophyAction {
 		entity.setStock(trophy.getStock());
 		entity.setScore(trophy.getScore());
 		entity.setMoney(trophy.getMoney());
+		entity.setDetail(trophy.getDetail());
+		entity.setDetailText(WebUtil.HtmltoText(trophy.getDetail()));
 		entity.setTrophyType(trophyTypeService.find(typeid));
 		if (img != null && img.length() > 0) {// �޸�ͼƬ
 			// ɾ��ԭͼ

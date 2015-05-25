@@ -127,7 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     				</div>
                     				
 									<div class="form-group">
-										<div class="col-md-6 col-md-push-5">
+										<div class="col-md-12 text-center">
 											<button type="reset" class="btn btn-primary">重置</button>
 											<button type="submit" class="btn btn-primary">确认</button>
 										</div>

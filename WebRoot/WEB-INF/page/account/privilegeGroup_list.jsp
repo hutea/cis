@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/page/common/taglib.jsp" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -101,11 +102,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                           	  	<tr id="tr_${entry.id}">
 		                           		 <td>${s.index+1}</td> 
 		                           		 <td>${entry.id}</td> 
-		                           		 <td>${entry.name}</td> 
+		                           		 <td>
+		                           		 	<a class="pls" href="#" data-toggle="tooltip"  data-placement="bottom"  data-trigger="focus" 
+								      		data-content="
+								      		<c:forEach items="${entry.privileges}"  var="p" >
+													【${p.name}】    
+											</c:forEach> 
+											" >${entry.name}
+											</a>
+		                           		 </td> 
 		                           		 <td><fmt:formatDate value="${entry.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>  </td> 
 		                           		 <td>
-		                           		 <a href='<s:url action="group_editUI" namespace="/manage/account" />?gid=${entry.id}'>修改</a>
-		                           		 <a href="javascript:del('${entry.id}')">删除</a>
+		                           		 <c:if test="${!entry.initSign}" >
+		                           			 <a href='<s:url action="group_editUI" namespace="/manage/account" />?gid=${entry.id}'>修改</a>
+		                           			 <a href="javascript:del('${entry.id}')">删除</a>
+		                           		 </c:if>
+		                           		 <c:if test="${entry.initSign}" >
+		                           			 <span title="不能进行修改或删除">系统初始角色</span>
+		                           		 </c:if>
 		                           		 </td> 
 		                           	  	</tr>
 		                           	  </c:forEach>
@@ -163,7 +177,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                   					</div>
                     				</div>
 									<div class="form-group">
-										<div class="col-md-6 col-md-push-5">
+										<div class="col-md-12 text-center">
 											<button type="reset" class="btn btn-primary">重置</button>
 											<button type="submit" class="btn btn-primary">确认</button>
 										</div>
@@ -204,5 +218,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
+        <script type="text/javascript">
+			$('[data-toggle="tooltip"]').popover();
+		</script>
     </body>
 </html>

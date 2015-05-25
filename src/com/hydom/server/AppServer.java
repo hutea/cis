@@ -196,7 +196,7 @@ public class AppServer {
 		log.info("App【获取分配题目】：" + "uid=" + uid);
 		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		TaskRecord taskRecord =taskRecordService.fetchTaskRecord(uid);
+		TaskRecord taskRecord = taskRecordService.fetchTaskRecord(uid);
 		if (taskRecord != null) {
 			dataMap.put("tid", taskRecord.getId());
 			// 处理MetricPoint对象
@@ -398,11 +398,17 @@ public class AppServer {
 	public String exchangeTrophy() {
 		log.info("App【提交奖品兑换信息】：" + "用户ID=" + uid + "奖品ID=" + tid + "奖品数量=" + num);
 		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
-		Account account = accountService.find(uid);
 		Trophy trophy = trophyService.find(tid);
+		Account account = accountService.find(uid);
+		if (!account.getVisible() || !trophy.getVisible()) {// 奖品被删除，或者用户被删除
+			dataMap.put("result", 0); // 返回未知错误 奖品被删除，或者用户被删除
+			dataMap.put("rid", "");
+			dataFillStream(dataMap);
+			return "success";
+		}
 		double theScore = num * trophy.getScore(); // 本次兑换需要的积分
 		if (theScore > account.getScore()) {// 如果用户积分不足够兑换，直接返回
-			dataMap.put("result", "14"); // 积分不足
+			dataMap.put("result", 14); // 积分不足
 			dataMap.put("rid", "");
 			dataFillStream(dataMap);
 			return "success";

@@ -22,7 +22,7 @@ public class Job {
 	@Column
 	private Long recycleTime; //超时时间
 	@Column
-	private Double accuracy;
+	private Double accuracy;//指定的正确
 	@Column
 	private Integer matchNum;// 分配上限
 	@Column
