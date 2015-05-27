@@ -19,7 +19,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Chain Responsive Bootstrap3 Admin</title>
+        <title>摇钱数 登录</title>
 
         <link href="${pageContext.request.contextPath}/resource/chain/css/style.default.css" rel="stylesheet">
 		<style type="text/css">
