@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
@@ -23,6 +24,7 @@ import com.hydom.account.service.AccountService;
 import com.hydom.account.service.PrivilegeGroupService;
 import com.hydom.dao.PageView;
 import com.hydom.util.HelperUtil;
+import com.hydom.util.WebUtil;
 
 @Controller
 @Scope(value = "prototype")
@@ -47,6 +49,7 @@ public class AccountAction {
 	private String[] gids;
 
 	private String username;
+	private String oripwd;
 
 	public String list() {
 		request = ServletActionContext.getRequest();
@@ -179,11 +182,20 @@ public class AccountAction {
 			return "fail";
 		}
 		Account entity = accountService.find(loginAccount.getId());
-		entity.setPassword(account.getPassword());
-		entity.setPhone(account.getPhone());
-		entity.setNickname(account.getNickname());
-		accountService.update(entity);
-		session.setAttribute("loginAccount", entity);
+		if (oripwd != null && oripwd.equals(entity.getPassword())) {
+			entity.setPassword(account.getPassword());
+			entity.setPhone(account.getPhone());
+			entity.setNickname(account.getNickname());
+			accountService.update(entity);
+			session.setAttribute("loginAccount", entity);
+			HttpServletResponse response = ServletActionContext.getResponse();
+			WebUtil.delCookie(request, response, "username");
+			WebUtil.delCookie(request, response, "password");
+			WebUtil.delCookie(request, response, "rememberMe");
+		} else {
+			request.setAttribute("error", "‘≠√‹¬Î ‰»Î¥ÌŒÛ");
+			return "oripwdError";
+		}
 		return "success";
 	}
 
@@ -265,6 +277,14 @@ public class AccountAction {
 
 	public void setGids(String[] gids) {
 		this.gids = gids;
+	}
+
+	public String getOripwd() {
+		return oripwd;
+	}
+
+	public void setOripwd(String oripwd) {
+		this.oripwd = oripwd;
 	}
 
 }

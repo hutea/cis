@@ -5,6 +5,11 @@ $(function() {
 		ignore: ".ignore",
 		errorClass : "errorStyle",
 		submitHandler : function(form) {
+			var pwdBeforeMd5= document.getElementById("password").value;
+			document.getElementById("password").value = hex_md5(pwdBeforeMd5);
+			if(	document.getElementById("oripwd")!=null){
+				document.getElementById("oripwd").value = hex_md5(document.getElementById("oripwd").value);
+			}
 			form.submit();
 		},
 		rules : {

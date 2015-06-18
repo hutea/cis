@@ -73,9 +73,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								    </div>
 								  </div>
 		    					 <div class="form-group">
-								    <label  class="col-sm-3 control-label">密码</label>
+								    <label  class="col-sm-3 control-label">原密码</label>
 								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${loginAccount.password}" name="account.password"  placeholder="密码">
+								      <input type="text" class="form-control" id="oripwd" name="oripwd" >
+								   	  <span style="color: red;">${error}</span>
+								    </div>
+								  </div>
+		    					 <div class="form-group">
+								    <label  class="col-sm-3 control-label">新密码</label>
+								    <div class="col-sm-9">
+								      <input type="text" class="form-control" id="password" name="account.password"  placeholder="">
 								   	  <span></span>
 								    </div>
 								  </div>
@@ -131,6 +138,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
   	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
   	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/account.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/md5.js"></script>
 		
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
     	<script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>

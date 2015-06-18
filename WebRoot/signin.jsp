@@ -50,6 +50,7 @@
 
                     <form action="signin.action" method="post" id="myform">
                         <div><p id="ser" class="text-center" style="color: red;">${error}</p></div>
+                        <input type="hidden" id="remberPwd" value="${pwd}">
                         <div class="input-group mb15">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                             <input type="text" class="form-control" placeholder="Username" name="username" value="${uname }">
@@ -91,6 +92,7 @@
 		<!-- 验证框架 -->
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
   	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/md5.js"></script>
 		<script type="text/javascript">
 		/*页面校验*/
 		$(function() {
@@ -98,6 +100,12 @@
 				debug : true,
 				errorClass : "errorStyle",
 				submitHandler : function(form) {
+					var pwdRember = document.getElementById("remberPwd").value;
+					if(pwdRember!=null && ''!=pwdRember){
+						form.password.value = pwdRember;
+					}else{
+						form.password.value = hex_md5(form.password.value);
+					}
 					form.submit();
 				},
 				rules : {

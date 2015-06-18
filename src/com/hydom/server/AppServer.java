@@ -46,6 +46,7 @@ import com.hydom.extra.service.SystemConfigService;
 import com.hydom.task.ebean.TaskRecord;
 import com.hydom.task.service.TaskRecordService;
 import com.hydom.util.HelperUtil;
+import com.hydom.util.MD5;
 import com.hydom.util.StringGenerator;
 import com.hydom.util.WebUtil;
 
@@ -123,10 +124,8 @@ public class AppServer {
 			if (code != null && code.equals(syscode)) { // 验证码通过
 				if (!HelperUtil.isPhoneNumber(username)) {// 手机号格式不正确
 					dataMap.put("result", 10);
-				} else if (password.length() > 12 || password.length() < 6) {// 密码长度不符合规范
-					dataMap.put("result", 11);
 				} else {
-					Account account = new Account(username, password, username);
+					Account account = new Account(username,password, username);
 					accountService.save(account);
 					account.setType(1);// 设置为普通用户
 					dataMap.put("result", 1);
@@ -139,7 +138,7 @@ public class AppServer {
 				}
 			}
 		} catch (Exception e) {
-			dataMap.put("result", 0);
+			dataMap.put("result", 3);// 用户名已存在
 		}
 		dataFillStream(dataMap);
 		return "success";
@@ -750,7 +749,7 @@ public class AppServer {
 				accountService.update(account);
 				dataMap.put("result", 1);
 			} else {
-				dataMap.put("result", 0);
+				dataMap.put("result", 5);
 			}
 		} else {
 			dataMap.put("result", 9); // 用户ID不存在

@@ -89,7 +89,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">密码</label>
 								    <div class="col-sm-9">
-								      <input type="text" class="form-control" name="account.password"  placeholder="密码">
+								      <input type="text" id="password" class="form-control" name="account.password"  placeholder="密码">
 								      <span></span>
 								    </div>
 								  </div>
@@ -149,9 +149,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="${pageContext.request.contextPath}/resource/chain/js/retina.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/jquery.cookies.js"></script>
         
-        <script src="${pageContext.request.contextPath}/resource/chain/js/flot/jquery.flot.min.js"></script>
-        <script src="${pageContext.request.contextPath}/resource/chain/js/flot/jquery.flot.resize.min.js"></script>
-        <script src="${pageContext.request.contextPath}/resource/chain/js/flot/jquery.flot.spline.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/jquery.sparkline.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/morris.min.js"></script>
         <script src="${pageContext.request.contextPath}/resource/chain/js/raphael-2.1.0.min.js"></script>
@@ -162,9 +159,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
   	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
   	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/account.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/md5.js"></script>
 		
-        <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
-        <script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
 		<script type="text/javascript">
 			$('[data-toggle="tooltip"]').popover();
 		</script>

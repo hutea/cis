@@ -41,3 +41,6 @@ log4j.properties
 7.启动Tomcat，访问：http://localhost:8080/cis/   
 帐号：admin 密码：123456
 ****************************************************
+
+数据密码MD5重设：
+UPDATE t_account set `password`=MD5(`password`)

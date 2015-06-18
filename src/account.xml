@@ -47,6 +47,9 @@
 			<result type="redirectAction">
 				<param name="actionName">myProfile</param>
 			</result>
+			<result name="oripwdError" type="chain">
+				<param name="actionName">myProfileEditUI</param>
+			</result>
 			<result name="fail">/signin.jsp</result>
 		</action>
 		<!-- 权限组管理 -->

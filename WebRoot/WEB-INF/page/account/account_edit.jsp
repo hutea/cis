@@ -74,7 +74,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    					 <div class="form-group">
 								    <label  class="col-sm-3 control-label">密码</label>
 								    <div class="col-sm-9">
-								      <input type="text" class="form-control" value="${account.password}" name="account.password"  placeholder="密码">
+								      <input type="text" class="form-control" id="password" name="account.password"  placeholder="原密码已加密">
 								   	  <span></span>
 								    </div>
 								  </div>
@@ -146,6 +146,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
   	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery.maskedinput-1.0.js"></script>
   	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/validate/account.js"></script>
+  	    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/md5.js"></script>
+  	    
 		
         <script src="${pageContext.request.contextPath}/resource/chain/js/custom.js"></script>
     	<script src="${pageContext.request.contextPath}/resource/chain/js/dashboard.js"></script>
