@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : 本地连接
 Source Server Version : 50623
 Source Host           : localhost:3306
-Source Database       : cisdev
+Source Database       : cis
 
 Target Server Type    : MYSQL
 Target Server Version : 50623
 File Encoding         : 65001
 
-Date: 2015-04-22 17:38:50
+Date: 2015-06-19 11:07:06
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,7 +44,7 @@ CREATE TABLE `t_account` (
 -- ----------------------------
 -- Records of t_account
 -- ----------------------------
-INSERT INTO `t_account` VALUES ('10001', null, null, '2015-04-22 15:50:33', null, '未知地点(127.0.0.1)', '2015-04-22 15:53:00', '2015-04-22 15:52:59', 'Admin', '123456', null, '12345678900', '0', null, '2', 'admin', '');
+INSERT INTO `t_account` VALUES ('10001', null, null, '2015-04-22 15:50:33', null, '未知地点(127.0.0.1)', '2015-04-22 15:53:00', '2015-04-22 15:52:59', 'Admin', 'e10adc3949ba59abbe56e057f20f883e', null, '12345678900', '0', null, '2', 'admin', '');
 
 -- ----------------------------
 -- Table structure for `t_account_group`
@@ -251,6 +251,26 @@ CREATE TABLE `t_scorerecord` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `t_scoretop`
+-- ----------------------------
+DROP TABLE IF EXISTS `t_scoretop`;
+CREATE TABLE `t_scoretop` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `genDate` date DEFAULT NULL,
+  `lv` int(11) DEFAULT NULL,
+  `score` double DEFAULT NULL,
+  `updateDate` datetime DEFAULT NULL,
+  `account_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK99BC94EEECDE9696` (`account_id`),
+  CONSTRAINT `FK99BC94EEECDE9696` FOREIGN KEY (`account_id`) REFERENCES `t_account` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of t_scoretop
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `t_sense`
 -- ----------------------------
 DROP TABLE IF EXISTS `t_sense`;
@@ -316,16 +336,17 @@ CREATE TABLE `t_systemconfig` (
   `valueLong` bigint(20) DEFAULT NULL,
   `valueShort` smallint(6) DEFAULT NULL,
   `valueText` longtext COLLATE utf8_unicode_ci,
+  `valueString` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of t_systemconfig
 -- ----------------------------
-INSERT INTO `t_systemconfig` VALUES ('about', '<strong> \r\n<p>\r\n	<span style=\"color:#003366;\"><span style=\"font-size:medium;\"><strong><span style=\"font-family:宋体;\"><span style=\"font-family:Arial;\">公司介绍</span></span></strong><span style=\"font-family:宋体;\"><span style=\"font-family:Arial;\">：</span></span></span></span><span style=\"color:#003366;\"><span style=\"font-size:small;\"><span style=\"font-family:宋体;\"><br />\r\n&nbsp; &nbsp; </span></span><span style=\"font-size:small;\"><span style=\"font-family:宋体;\">清华大学苏研院大数据处理中心以聚云浩海（苏州）信息科技有限公司，这一企业化运作平台，将相关技术成果转换为产品，同时提供了高质量的实施服务以及高水\r\n准的运营维护服务。这一企业化运作模式在当前国内大数据领域成功探索出了一条新途径，并已经获得国家政府职能部门以及多家大型国家支柱型企业的认可。<span>&nbsp;<br />\r\n</span></span></span><span style=\"font-size:small;\"><span style=\"font-family:宋体;\">&nbsp;&nbsp;&nbsp;\r\n聚云浩海（苏州）信息科技有限公司怀揣着打破国外信息技术垄断、弯道追赶的理想，坚定地走着一条民族、自主与创新之路，并在实践中严谨而深入的进行着技术\r\n创新、机制创新、企业文化创新与管理理念创新。公司目前已拥有六十人的研发团队，其中硕士及以上学历的研发人员占比超过<span>70%</span>。<br />\r\n</span></span><b><span style=\"font-size:12pt;font-family:宋体;\"><br />\r\n<span style=\"font-size:medium;\"></span></span></b></span> \r\n</p>\r\n</strong>', null, null, null, null, null);
-INSERT INTO `t_systemconfig` VALUES ('manual', '这里可以填写相关的积分兑换说明事项<br />', '3', null, null, null, null);
-INSERT INTO `t_systemconfig` VALUES ('match', null, '0.6', '6', '300000', '3', null);
-INSERT INTO `t_systemconfig` VALUES ('phone', '<p>\r\n	地址：成都市青羊区一环路西一段148号颐景商务楼403-409\r\n</p>\r\n<p>\r\n	电话：86-28-87011623\r\n          传真：86-28-87047300\r\n</p>\r\n<p>\r\n	邮箱：service@tsinghuabigdata.com\r\n</p>', null, null, null, null, null);
+INSERT INTO `t_systemconfig` VALUES ('about', '<strong> \r\n<p>\r\n	<span style=\"color:#003366;\"><span style=\"font-size:medium;\"><strong><span style=\"font-family:宋体;\"><span style=\"font-family:Arial;\">公司介绍</span></span></strong><span style=\"font-family:宋体;\"><span style=\"font-family:Arial;\">：</span></span></span></span><span style=\"color:#003366;\"><span style=\"font-size:small;\"><span style=\"font-family:宋体;\"><br />\r\n&nbsp; &nbsp; </span></span><span style=\"font-size:small;\"><span style=\"font-family:宋体;\">清华大学苏研院大数据处理中心以聚云浩海（苏州）信息科技有限公司，这一企业化运作平台，将相关技术成果转换为产品，同时提供了高质量的实施服务以及高水\r\n准的运营维护服务。这一企业化运作模式在当前国内大数据领域成功探索出了一条新途径，并已经获得国家政府职能部门以及多家大型国家支柱型企业的认可。<span>&nbsp;<br />\r\n</span></span></span><span style=\"font-size:small;\"><span style=\"font-family:宋体;\">&nbsp;&nbsp;&nbsp;\r\n聚云浩海（苏州）信息科技有限公司怀揣着打破国外信息技术垄断、弯道追赶的理想，坚定地走着一条民族、自主与创新之路，并在实践中严谨而深入的进行着技术\r\n创新、机制创新、企业文化创新与管理理念创新。公司目前已拥有六十人的研发团队，其中硕士及以上学历的研发人员占比超过<span>70%</span>。<br />\r\n</span></span><b><span style=\"font-size:12pt;font-family:宋体;\"><br />\r\n<span style=\"font-size:medium;\"></span></span></b></span> \r\n</p>\r\n</strong>', null, null, null, null, null, null);
+INSERT INTO `t_systemconfig` VALUES ('manual', '这里可以填写相关的积分兑换说明事项<br />', '3', null, null, null, null, null);
+INSERT INTO `t_systemconfig` VALUES ('match', null, '0.6', '6', '300000', '3', null, null);
+INSERT INTO `t_systemconfig` VALUES ('phone', '<p>\r\n	地址：成都市青羊区一环路西一段148号颐景商务楼403-409\r\n</p>\r\n<p>\r\n	电话：86-28-87011623\r\n          传真：86-28-87047300\r\n</p>\r\n<p>\r\n	邮箱：service@tsinghuabigdata.com\r\n</p>', null, null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for `t_systemprivilege`
