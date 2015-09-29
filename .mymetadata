@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="cis"
+  id="myeclipse.1456880594001"
+  context-root="/cis"
+  j2ee-spec="5.0"
+  archive="cis.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
